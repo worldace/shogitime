@@ -181,6 +181,12 @@ $s.描画 = function(手数){
 
     //指し手
     $s.指し手.selectedIndex = 手数;
+    
+    //名前
+    if($s.先手名.名前 && $s.後手名.名前){
+        $s[先手+'名'].textContent = '▲' + $s.先手名.名前;
+        $s[後手+'名'].textContent = '△' + $s.後手名.名前;
+    }
 };
 
 
@@ -320,6 +326,10 @@ $s.kif.解析 = function(kif){
         $s.kif.局面図の解析(局面図);
         $s.kif.持ち駒の解析(対局情報['先手の持駒'], '先手')
         $s.kif.持ち駒の解析(対局情報['後手の持駒'], '後手')
+    }
+    if(対局情報['先手'] && 対局情報['後手']){
+        $s.先手名.名前 = 対局情報['先手'];
+        $s.後手名.名前 = 対局情報['後手'];
     }
 };
 
@@ -476,6 +486,7 @@ $s.スタートアップ();
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
+  <div class="将棋タイム-後手名"></div>
   <div class="将棋タイム-局面">
     <div class="将棋タイム-後手駒台">
       <div class="将棋タイム-後手駒台-歩" data-num="0"></div>
@@ -497,6 +508,7 @@ $s.スタートアップ();
       <div class="将棋タイム-先手駒台-歩" data-num="0"></div>
     </div>
   </div>
+  <div class="将棋タイム-先手名"></div>
   <div class="将棋タイム-コントロールパネル">
     <div class="将棋タイム-最初に移動ボタン"></div>
     <div class="将棋タイム-前に移動ボタン"></div>
@@ -521,6 +533,22 @@ $s.スタートアップ();
 .将棋タイム *{
     box-sizing: border-box;
 }
+.将棋タイム-先手名{
+    width: 100%;
+    text-align: right;
+    font-size: 14px;
+    font-family: meiryo, sans-serif;
+}
+.将棋タイム-後手名{
+    width: 100%;
+    font-size: 14px;
+    font-family: meiryo, sans-serif;
+}
+.将棋タイム-先手名:empty,
+.将棋タイム-先手名:empty{
+    display: none;
+}
+
 
 .将棋タイム-局面{
     display: flex;
