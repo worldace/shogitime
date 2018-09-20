@@ -36,9 +36,9 @@ $s.スタートアップ = function (){
 $s.メイン = function (){
     $s.kif.解析(args.kif);
     $s.局面.全構築();
-    $s.指し手.構築();
+    $s.指し手.HTML作成();
 
-    if($s.局面.length === 1){
+    if($s.局面.一覧.length === 1){
         $s.コントロールパネル.style.display = 'none';
     }
     if(args.reverse !== false){
@@ -50,10 +50,7 @@ $s.メイン = function (){
 };
 
 
-$s.指し手.一覧 = [{}];
-
-
-$s.局面 = [{
+$s.局面.一覧 = [{
     '先手持ち駒': {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0},
     '後手持ち駒': {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0},
     '駒':{
@@ -96,7 +93,7 @@ $s.局面.コピー = function(from){
 
 $s.局面.全構築 = function(){
     for(var i = 1; i < $s.指し手.一覧.length; i++){
-        $s.局面.push( $s.局面.構築($s.指し手.一覧[i], $s.局面[i-1]) );
+        $s.局面.一覧.push( $s.局面.構築($s.指し手.一覧[i], $s.局面.一覧[i-1]) );
     }
 };
 
@@ -146,7 +143,7 @@ $s.局面.構築 = function(指し手, 前局面){
 
 $s.描画 = function(手数){
     手数 = $s.描画.手数正規化(手数);
-    var 局面 = $s.局面[手数];
+    var 局面 = $s.局面.一覧[手数];
 
     //最終手x,yを求める
     var 最終手X = null;
@@ -189,13 +186,13 @@ $s.描画 = function(手数){
 
 $s.描画.手数正規化 = function(手数){
     if(手数 < 0){
-        手数 = $s.局面.length + 手数;
+        手数 = $s.局面.一覧.length + 手数;
         if(手数 < 0){
             手数 = 0;
         }
     }
-    if(手数 >= $s.局面.length){
-        手数 = $s.局面.length - 1;
+    if(手数 >= $s.局面.一覧.length){
+        手数 = $s.局面.一覧.length - 1;
     }
     return 手数;
 };
@@ -238,7 +235,7 @@ $s.前に移動ボタン.addEventListener('click', function(event){
 
 $s.次に移動ボタン.addEventListener('click', function(event){
     var 現在の手数 = $s.指し手.selectedIndex || 0;
-    if(現在の手数 >= $s.局面.length - 1){
+    if(現在の手数 >= $s.局面.一覧.length - 1){
         return;
     }
     $s.描画(現在の手数 + 1);
@@ -254,7 +251,7 @@ $s.次に移動ボタン.addEventListener('wheel', function(event){
         $s.描画(現在の手数 - 1);
     }
     else{
-        if(現在の手数 >= $s.局面.length - 1){
+        if(現在の手数 >= $s.局面.一覧.length - 1){
             return;
         }
         $s.描画(現在の手数 + 1);
@@ -267,7 +264,10 @@ $s.最後に移動ボタン.addEventListener('click', function(event){
 });
 
 
-$s.指し手.構築 = function (){
+$s.指し手.一覧 = [{}];
+
+
+$s.指し手.HTML作成 = function (){
     for(var i = 1; i < $s.指し手.一覧.length; i++){
         var option = document.createElement('option');
         option.textContent = $s.指し手.一覧[i]['手数'] + ' ' + $s.指し手.一覧[i]['表記'];
@@ -372,7 +372,7 @@ $s.kif.持ち駒の解析 = function(str, 先手){
         return;
     }
     var 漢数字 = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9, '十':10, '十一':11, '十二':12, '十三':13, '十四':14, '十五':15, '十六':16, '十七':17, '十八':18};
-    var 持ち駒 = (先手 === '先手') ? $s.局面[0]['先手持ち駒'] : $s.局面[0]['後手持ち駒'];
+    var 持ち駒 = (先手 === '先手') ? $s.局面.一覧[0]['先手持ち駒'] : $s.局面.一覧[0]['後手持ち駒'];
     var kif持ち駒 = str.split(/\s/);
 
     for(var i = 0; i < kif持ち駒.length; i++){
@@ -421,7 +421,7 @@ $s.kif.局面図の解析 = function(局面図配列){
         }
     }
 
-    $s.局面[0]['駒'] = 局面;
+    $s.局面.一覧[0]['駒'] = 局面;
 };
 
 
@@ -476,7 +476,7 @@ $s.スタートアップ();
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
-  <div class="将棋タイム-対局">
+  <div class="将棋タイム-局面">
     <div class="将棋タイム-後手駒台">
       <div class="将棋タイム-後手駒台-歩" data-num="0"></div>
       <div class="将棋タイム-後手駒台-香" data-num="0"></div>
@@ -522,7 +522,7 @@ $s.スタートアップ();
     box-sizing: border-box;
 }
 
-.将棋タイム-対局{
+.将棋タイム-局面{
     display: flex;
 }
 
