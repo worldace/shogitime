@@ -19,10 +19,10 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 https://github.com/worldace/shogitime/archive/master.zip
 
 
-[2] 「shogipark.js」を読み込みます。HTMLのどこに記述してもOK
+[2] 「shogitime.js」を読み込みます。HTMLのどこに記述してもOK
 
 
-<script src="shogipark.js"></script>
+<script src="shogitime.js"></script>
 
 
 [3] 次のようなタグを用意し「KIF形式のテキスト」または「KIFファイルのURL」を貼り付けます
