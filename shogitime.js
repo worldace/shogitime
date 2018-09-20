@@ -36,10 +36,10 @@ $s.スタートアップ = function (){
 $s.メイン = function (){
     $s.kif.解析(args.kif);
     $s.局面.全構築();
-    $s.棋譜表示.構築();
+    $s.指し手.構築();
 
     if($s.局面.length === 1){
-        $s.コンパネ.style.display = 'none';
+        $s.コントロールパネル.style.display = 'none';
     }
     if(args.reverse !== false){
         $s.将棋盤.setAttribute('data-reverse', '1');
@@ -50,7 +50,7 @@ $s.メイン = function (){
 };
 
 
-$s.指し手 = [{}];
+$s.指し手.一覧 = [{}];
 
 
 $s.局面 = [{
@@ -95,8 +95,8 @@ $s.局面.コピー = function(from){
 
 
 $s.局面.全構築 = function(){
-    for(var i = 1; i < $s.指し手.length; i++){
-        $s.局面.push( $s.局面.構築($s.指し手[i], $s.局面[i-1]) );
+    for(var i = 1; i < $s.指し手.一覧.length; i++){
+        $s.局面.push( $s.局面.構築($s.指し手.一覧[i], $s.局面[i-1]) );
     }
 };
 
@@ -152,8 +152,8 @@ $s.描画 = function(手数){
     var 最終手X = null;
     var 最終手Y = null;
     if(手数 !== 0){
-        最終手X = $s.指し手[手数]['後X'];
-        最終手Y = $s.指し手[手数]['後Y'];
+        最終手X = $s.指し手.一覧[手数]['後X'];
+        最終手Y = $s.指し手.一覧[手数]['後Y'];
     }
 
     //反転
@@ -182,8 +182,8 @@ $s.描画 = function(手数){
         $s[後手+'駒台_'+駒].setAttribute("data-num", 局面['後手持ち駒'][駒]);
     }
 
-    //棋譜表示
-    $s.棋譜表示.selectedIndex = 手数;
+    //指し手
+    $s.指し手.selectedIndex = 手数;
 };
 
 
@@ -228,7 +228,7 @@ $s.最初に移動ボタン.addEventListener('click', function(event){
 
 
 $s.前に移動ボタン.addEventListener('click', function(event){
-    var 現在の手数 = $s.棋譜表示.selectedIndex || 0;
+    var 現在の手数 = $s.指し手.selectedIndex || 0;
     if(現在の手数 < 1){
         return;
     }
@@ -237,7 +237,7 @@ $s.前に移動ボタン.addEventListener('click', function(event){
 
 
 $s.次に移動ボタン.addEventListener('click', function(event){
-    var 現在の手数 = $s.棋譜表示.selectedIndex || 0;
+    var 現在の手数 = $s.指し手.selectedIndex || 0;
     if(現在の手数 >= $s.局面.length - 1){
         return;
     }
@@ -246,7 +246,7 @@ $s.次に移動ボタン.addEventListener('click', function(event){
 
 
 $s.次に移動ボタン.addEventListener('wheel', function(event){
-    var 現在の手数 = $s.棋譜表示.selectedIndex || 0;
+    var 現在の手数 = $s.指し手.selectedIndex || 0;
     if(event.deltaY < 0){
         if(現在の手数 < 1){
             return;
@@ -267,17 +267,17 @@ $s.最後に移動ボタン.addEventListener('click', function(event){
 });
 
 
-$s.棋譜表示.構築 = function (){
-    for(var i = 1; i < $s.指し手.length; i++){
+$s.指し手.構築 = function (){
+    for(var i = 1; i < $s.指し手.一覧.length; i++){
         var option = document.createElement('option');
-        option.textContent = $s.指し手[i]['手数'] + ' ' + $s.指し手[i]['表記'];
-        $s.棋譜表示.appendChild(option);
+        option.textContent = $s.指し手.一覧[i]['手数'] + ' ' + $s.指し手.一覧[i]['表記'];
+        $s.指し手.appendChild(option);
     }
 };
 
 
-$s.棋譜表示.addEventListener('change', function(event){
-    $s.描画($s.棋譜表示.selectedIndex || 0);
+$s.指し手.addEventListener('change', function(event){
+    $s.描画($s.指し手.selectedIndex || 0);
 });
 
 
@@ -288,7 +288,7 @@ $s.反転ボタン.addEventListener('click', function(event){
     else{
         $s.将棋盤.setAttribute('data-reverse', '1');
     }
-    $s.描画($s.棋譜表示.selectedIndex || 0);
+    $s.描画($s.指し手.selectedIndex || 0);
 });
 
 
@@ -355,12 +355,12 @@ $s.kif.指し手の解析 = function(kif){
             '駒'  : 解析[3].replace(/[打成]$/, '').replace('成銀', '全').replace('成桂', '圭').replace('成香', '杏'),
             '前X' : Number(解析[5] || 0),
             '前Y' : Number(解析[6] || 0),
-            '後X' : (解析[1] === '同') ? $s.指し手[手数-1]['後X'] : 全数字[解析[1]],
-            '後Y' : (解析[1] === '同') ? $s.指し手[手数-1]['後Y'] : 漢数字[解析[2]],
+            '後X' : (解析[1] === '同') ? $s.指し手.一覧[手数-1]['後X'] : 全数字[解析[1]],
+            '後Y' : (解析[1] === '同') ? $s.指し手.一覧[手数-1]['後Y'] : 漢数字[解析[2]],
             '成り': /成$/.test(解析[3]),
             '表記': ((手数 % 2 === 1) ? '▲' : '△') + 解析[0],
         };
-        $s.指し手.push(指し手);
+        $s.指し手.一覧.push(指し手);
     }
 };
 
@@ -497,12 +497,12 @@ $s.スタートアップ();
       <div class="将棋タイム-先手駒台-歩" data-num="0"></div>
     </div>
   </div>
-  <div class="将棋タイム-コンパネ">
+  <div class="将棋タイム-コントロールパネル">
     <div class="将棋タイム-最初に移動ボタン"></div>
     <div class="将棋タイム-前に移動ボタン"></div>
     <div class="将棋タイム-次に移動ボタン"></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
-    <select class="将棋タイム-棋譜表示"><option selected>開始局面</option></select>
+    <select class="将棋タイム-指し手"><option selected>開始局面</option></select>
     <div class="将棋タイム-反転ボタン"></div>
   </div>
 </div>
@@ -875,13 +875,13 @@ $s.スタートアップ();
 }
 
 
-.将棋タイム-コンパネ{
+.将棋タイム-コントロールパネル{
     width: 100%;
     display: flex;
     justify-content:center;
     margin-top: 3px;
 }
-.将棋タイム-コンパネ > div{
+.将棋タイム-コントロールパネル > div{
     border: solid 1px #ccc;
     border-radius: 3px;
     width: 40px;
@@ -908,7 +908,7 @@ $s.スタートアップ();
 .将棋タイム-最後に移動ボタン{
     background-image: url('step-forward.png');
 }
-.将棋タイム-棋譜表示{
+.将棋タイム-指し手{
     margin: 0 8px;
 }
 .将棋タイム-反転ボタン{
