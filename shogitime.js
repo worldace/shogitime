@@ -14,6 +14,10 @@ $s.スタートアップ = function (){
     args.start   = Number(args.start || 0);
     args.reverse = args.reverse || false;
 
+    if(args.comment){
+        args.comment = document.querySelector(args.comment);
+    }
+
     if(args.kif.match(/^https?:/)){
         var xhr = new XMLHttpRequest();
         xhr.open('GET', args.kif);
@@ -34,7 +38,7 @@ $s.スタートアップ = function (){
 
 
 $s.メイン = function (){
-    $s.kif.解析(args.kif);
+    $s.kif.解析(args.kif);console.log($s.指し手.一覧);
     $s.局面.全構築();
     $s.指し手.HTML作成();
 
@@ -187,6 +191,11 @@ $s.描画 = function(手数){
         $s[先手+'名'].textContent = '▲' + $s.先手名.名前;
         $s[後手+'名'].textContent = '△' + $s.後手名.名前;
     }
+    
+    //コメント
+    if(args.comment){
+        args.comment.textContent = $s.指し手.一覧[手数]['コメント'];
+    }
 };
 
 
@@ -270,7 +279,7 @@ $s.最後に移動ボタン.addEventListener('click', function(event){
 });
 
 
-$s.指し手.一覧 = [{}];
+$s.指し手.一覧 = [{手数:0, コメント:''}];
 
 
 $s.指し手.HTML作成 = function (){
@@ -337,14 +346,19 @@ $s.kif.解析 = function(kif){
 $s.kif.指し手の解析 = function(kif){
     var 全数字 = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9};
     var 漢数字 = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9};
+    var 手数   = 0;
 
     for(var i = 0; i < kif.length; i++){
-        if(kif[i].match(/^[\*\&\#]/)){ //コメント行
+        if(kif[i].match(/^[\&\#]/)){ //コメント行
             continue;
         }
-        var 行       = kif[i].trim().split(/ +/);
-        var 手数     = 行[0] || '';
-        var 現在の手 = 行[1] || '';
+        if(kif[i].indexOf('*') === 0){ //指し手コメント
+            $s.指し手.一覧[手数]['コメント'] += kif[i].replace(/^\*/, '') + '\n';
+            continue;
+        }
+        var 項目 = kif[i].trim().split(/ +/);
+        手数     = 項目[0] || '';
+        var 現在の手 = 項目[1] || '';
         if(!手数.match(/^[1-9]/)){
             break;
         }
@@ -369,6 +383,7 @@ $s.kif.指し手の解析 = function(kif){
             '後Y' : (解析[1] === '同') ? $s.指し手.一覧[手数-1]['後Y'] : 漢数字[解析[2]],
             '成り': /成$/.test(解析[3]),
             '表記': ((手数 % 2 === 1) ? '▲' : '△') + 解析[0],
+            'コメント': '',
         };
         $s.指し手.一覧.push(指し手);
     }
@@ -965,6 +980,7 @@ document.addEventListener('DOMContentLoaded', function(event){
             kif: pre[i].textContent,
             start: pre[i].getAttribute("start"),
             reverse: pre[i].hasAttribute("reverse"),
+            comment: pre[i].getAttribute("comment"),
         });
     }
 });
