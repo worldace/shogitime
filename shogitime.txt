@@ -138,7 +138,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 例えば、次のような表示部をあなたが用意した場合
 
-<div id="example"></div>
+<textarea id="example"></textarea>
 
 タグにcomment属性を追加し、値に表示部を指し示すCSSセレクタを記述すると
 そこに指し手コメントを表示します
