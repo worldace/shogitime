@@ -693,7 +693,7 @@ $s.スタートアップ();
 }
 
 .将棋タイム-駒[data-koma='と']{
-    background-image: url('.png');
+    background-image: url('と.png');
 }
 .将棋タイム-駒[data-koma='と'][data-last]{
     background-image: url('と.png'), url('最終手.png');
