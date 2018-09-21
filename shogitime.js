@@ -258,6 +258,7 @@ $s.次に移動ボタン.addEventListener('click', function(event){
 
 
 $s.次に移動ボタン.addEventListener('wheel', function(event){
+    event.preventDefault();
     var 現在の手数 = $s.指し手.selectedIndex || 0;
     if(event.deltaY < 0){
         if(現在の手数 < 1){
