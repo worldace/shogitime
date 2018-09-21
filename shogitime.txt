@@ -25,7 +25,7 @@ https://github.com/worldace/shogitime/archive/master.zip
 <script src="shogitime.js"></script>
 
 
-[3] 次のようなタグを用意し「KIF形式のテキスト」を貼り付けます
+[3] 次のようなタグを用意し、中に「KIF形式のテキスト」を貼り付けます
 
 <script type="kif">
 ここにKIF形式のテキストを貼り付ける
@@ -38,11 +38,12 @@ http://example.jp/example.kif
 </script>
 
 
-これで、このタグが自動的にHTMLに変換されます。
+これだけで、このタグが自動的にHTMLに変換されます。
 
 
-※KIFファイルは原則として、サイトと同一サーバに置く必要があります。(CORS制限)
-※KIFファイルの文字コードがUTF-8の場合、ファイルの拡張子を「.kifu」にする必要があります
+※「KIFファイルのURL」を貼り付ける場合の注意点
+・KIFファイルは原則として、サイトと同一サーバに置く必要があります。(CORS制限)
+・KIFファイルの文字コードがUTF-8の場合、ファイルの拡張子を「.kifu」にする必要があります
 
 
 
@@ -118,7 +119,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 ◆開始時に任意の手数から始める
 
-タグにstart属性を追加します。
+scriptタグにstart属性を追加します。
 例えば5手目から開始したい場合は、次のようにします
 
 <script type="kif" start="5">
@@ -129,7 +130,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 ◆開始時に盤を反転して始める
 
-タグにreverse属性を追加します
+scriptタグにreverse属性を追加します
 
 <script type="kif" reverse>
 
@@ -144,7 +145,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 <textarea id="example"></textarea>
 
-タグにcomment属性を追加し、値に表示部を指し示すCSSセレクタを記述すると
+scriptタグにcomment属性を追加し、値に表示部を指し示すCSSセレクタを記述すると
 そこに指し手コメントを表示します
 
 <script type="kif" comment="#example">
