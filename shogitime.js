@@ -38,7 +38,7 @@ $s.スタートアップ = function (){
 
 
 $s.メイン = function (){
-    $s.kif.解析(args.kif);console.log($s.指し手.一覧);
+    $s.kif.解析(args.kif);
     $s.局面.全構築();
     $s.指し手.HTML作成();
 
