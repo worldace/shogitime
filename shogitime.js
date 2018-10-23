@@ -149,14 +149,6 @@ $s.描画 = function(手数){
     手数 = $s.描画.手数正規化(手数);
     var 局面 = $s.局面.一覧[手数];
 
-    //最終手x,yを求める
-    var 最終手X = null;
-    var 最終手Y = null;
-    if(手数 !== 0){
-        最終手X = $s.指し手.一覧[手数]['後X'];
-        最終手Y = $s.指し手.一覧[手数]['後Y'];
-    }
-
     //反転
     var 反転 = $s.将棋盤.hasAttribute('data-reverse');
     var 先手 = (反転) ? '後手' : '先手';
@@ -165,11 +157,27 @@ $s.描画 = function(手数){
     //初期化
     $s.将棋盤.innerHTML = '';
 
+    //最終手x,yを求める
+    if(手数 !== 0){
+        var 最終手X = $s.指し手.一覧[手数]['後X'];
+        var 最終手Y = $s.指し手.一覧[手数]['後Y'];
+        if(反転){
+            最終手X = 10 - 最終手X;
+            最終手Y = 10 - 最終手Y;
+        }
+        var div = document.createElement('div');
+        div.className = '将棋タイム-最終手';
+        div.dataset.x = 最終手X;
+        div.dataset.y = 最終手Y;
+        $s.将棋盤.appendChild(div);
+    }
+
+
     //駒配置
     for(var y in 局面['駒']){
         for(var x in 局面['駒'][y]){
             if(局面['駒'][y][x]){
-                $s.描画.駒配置(局面['駒'][y][x], x, y, (x == 最終手X && y == 最終手Y), 反転);
+                $s.描画.駒配置(局面['駒'][y][x], x, y, 反転);
             }
         }
     }
@@ -213,7 +221,7 @@ $s.描画.手数正規化 = function(手数){
 };
 
 
-$s.描画.駒配置 = function(駒, x, y, last, 反転){
+$s.描画.駒配置 = function(駒, x, y, 反転){
     if(反転){
         x = 10 - x;
         y = 10 - y;
@@ -225,9 +233,6 @@ $s.描画.駒配置 = function(駒, x, y, last, 反転){
     div.dataset.koma = 駒;
     div.dataset.x = x;
     div.dataset.y = y;
-    if(last){
-        div.dataset.last = 1;
-    }
     $s.将棋盤.appendChild(div);
 };
 
@@ -377,7 +382,7 @@ $s.kif.指し手の解析 = function(kif){
 
         var 指し手 = {
             '手数': 手数,
-            '駒'  : 解析[3].replace(/[打成]$/, '').replace('成銀', '全').replace('成桂', '圭').replace('成香', '杏'),
+            '駒'  : 解析[3].replace(/[打成]$/, '').replace('成銀', '全').replace('成桂', '圭').replace('成香', '杏').replace('王', '玉').replace('竜', '龍'),
             '前X' : Number(解析[5] || 0),
             '前Y' : Number(解析[6] || 0),
             '後X' : (解析[1] === '同') ? $s.指し手.一覧[手数-1]['後X'] : 全数字[解析[1]],
@@ -678,243 +683,170 @@ $s.スタートアップ();
     height: 48px;
     background-repeat: no-repeat;
     position: absolute;
+    z-index: 2;
+}
+.将棋タイム-最終手{
+    width: 43px;
+    height: 48px;
+    background-image: url('最終手.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
 }
 
 .将棋タイム-駒[data-koma='歩']{
     background-image: url('歩.png');
 }
-.将棋タイム-駒[data-koma='歩'][data-last]{
-    background-image: url('歩.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='歩_']{
     background-image: url('歩_.png');
-}
-.将棋タイム-駒[data-koma='歩_'][data-last]{
-    background-image: url('歩_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='と']{
     background-image: url('と.png');
 }
-.将棋タイム-駒[data-koma='と'][data-last]{
-    background-image: url('と.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='と_']{
     background-image: url('と_.png');
 }
-.将棋タイム-駒[data-koma='と_'][data-last]{
-    background-image: url('と_.png'), url('最終手.png');
-}
+
 
 .将棋タイム-駒[data-koma='香']{
     background-image: url('香.png');
 }
-.将棋タイム-駒[data-koma='香'][data-last]{
-    background-image: url('香.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='香_']{
     background-image: url('香_.png');
-}
-.将棋タイム-駒[data-koma='香_'][data-last]{
-    background-image: url('香_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='杏']{
     background-image: url('杏.png');
 }
-.将棋タイム-駒[data-koma='杏'][data-last]{
-    background-image: url('杏.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='杏_']{
     background-image: url('杏_.png');
-}
-.将棋タイム-駒[data-koma='杏_'][data-last]{
-    background-image: url('杏_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='桂']{
     background-image: url('桂.png');
 }
-.将棋タイム-駒[data-koma='桂'][data-last]{
-    background-image: url('桂.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='桂_']{
     background-image: url('桂_.png');
-}
-.将棋タイム-駒[data-koma='桂_'][data-last]{
-    background-image: url('桂_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='圭']{
     background-image: url('圭.png');
 }
-.将棋タイム-駒[data-koma='圭'][data-last]{
-    background-image: url('圭.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='圭_']{
     background-image: url('圭_.png');
-}
-.将棋タイム-駒[data-koma='圭_'][data-last]{
-    background-image: url('圭_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='銀']{
     background-image: url('銀.png');
 }
-.将棋タイム-駒[data-koma='銀'][data-last]{
-    background-image: url('銀.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='銀_']{
     background-image: url('銀_.png');
-}
-.将棋タイム-駒[data-koma='銀_'][data-last]{
-    background-image: url('銀_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='全']{
     background-image: url('全.png');
 }
-.将棋タイム-駒[data-koma='全'][data-last]{
-    background-image: url('全.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='全_']{
     background-image: url('全_.png');
-}
-.将棋タイム-駒[data-koma='全_'][data-last]{
-    background-image: url('全_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='金']{
     background-image: url('金.png');
 }
-.将棋タイム-駒[data-koma='金'][data-last]{
-    background-image: url('金.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='金_']{
     background-image: url('金_.png');
-}
-.将棋タイム-駒[data-koma='金_'][data-last]{
-    background-image: url('金_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='角']{
     background-image: url('角.png');
 }
-.将棋タイム-駒[data-koma='角'][data-last]{
-    background-image: url('角.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='角_']{
     background-image: url('角_.png');
-}
-.将棋タイム-駒[data-koma='角_'][data-last]{
-    background-image: url('角_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='馬']{
     background-image: url('馬.png');
 }
-.将棋タイム-駒[data-koma='馬'][data-last]{
-    background-image: url('馬.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='馬_']{
     background-image: url('馬_.png');
-}
-.将棋タイム-駒[data-koma='馬_'][data-last]{
-    background-image: url('馬_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='飛']{
     background-image: url('飛.png');
 }
-.将棋タイム-駒[data-koma='飛'][data-last]{
-    background-image: url('飛.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='飛_']{
     background-image: url('飛_.png');
-}
-.将棋タイム-駒[data-koma='飛_'][data-last]{
-    background-image: url('飛_.png'), url('最終手.png');
 }
 
 .将棋タイム-駒[data-koma='龍']{
     background-image: url('龍.png');
 }
-.将棋タイム-駒[data-koma='龍'][data-last]{
-    background-image: url('龍.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='龍_']{
     background-image: url('龍_.png');
 }
-.将棋タイム-駒[data-koma='龍_'][data-last]{
-    background-image: url('龍_.png'), url('最終手.png');
-}
+
 
 .将棋タイム-駒[data-koma='玉']{
     background-image: url('玉.png');
 }
-.将棋タイム-駒[data-koma='玉'][data-last]{
-    background-image: url('玉.png'), url('最終手.png');
-}
 .将棋タイム-駒[data-koma='玉_']{
     background-image: url('玉_.png');
 }
-.将棋タイム-駒[data-koma='玉_'][data-last]{
-    background-image: url('玉_.png'), url('最終手.png');
-}
 
 
-.将棋タイム-駒[data-x='1']{
+.将棋タイム [data-x='1']{
     left: 355px;
 }
-.将棋タイム-駒[data-x='2']{
+.将棋タイム [data-x='2']{
     left: 312px;
 }
-.将棋タイム-駒[data-x='3']{
+.将棋タイム [data-x='3']{
     left: 269px;
 }
-.将棋タイム-駒[data-x='4']{
+.将棋タイム [data-x='4']{
     left: 226px;
 }
-.将棋タイム-駒[data-x='5']{
+.将棋タイム [data-x='5']{
     left: 183px;
 }
-.将棋タイム-駒[data-x='6']{
+.将棋タイム [data-x='6']{
     left: 140px;
 }
-.将棋タイム-駒[data-x='7']{
+.将棋タイム [data-x='7']{
     left: 97px;
 }
-.将棋タイム-駒[data-x='8']{
+.将棋タイム [data-x='8']{
     left: 54px;
 }
-.将棋タイム-駒[data-x='9']{
+.将棋タイム [data-x='9']{
     left: 11px;
 }
-.将棋タイム-駒[data-y='1']{
+.将棋タイム [data-y='1']{
     top: 11px;
 }
-.将棋タイム-駒[data-y='2']{
+.将棋タイム [data-y='2']{
     top: 59px;
 }
-.将棋タイム-駒[data-y='3']{
+.将棋タイム [data-y='3']{
     top: 107px;
 }
-.将棋タイム-駒[data-y='4']{
+.将棋タイム [data-y='4']{
     top: 155px;
 }
-.将棋タイム-駒[data-y='5']{
+.将棋タイム [data-y='5']{
     top: 203px;
 }
-.将棋タイム-駒[data-y='6']{
+.将棋タイム [data-y='6']{
     top: 251px;
 }
-.将棋タイム-駒[data-y='7']{
+.将棋タイム [data-y='7']{
     top: 299px;
 }
-.将棋タイム-駒[data-y='8']{
+.将棋タイム [data-y='8']{
     top: 347px;
 }
-.将棋タイム-駒[data-y='9']{
+.将棋タイム [data-y='9']{
     top: 395px;
 }
 
