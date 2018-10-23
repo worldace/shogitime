@@ -510,23 +510,23 @@ $s.スタートアップ();
   <div class="将棋タイム-後手名"></div>
   <div class="将棋タイム-局面">
     <div class="将棋タイム-後手駒台">
-      <div class="将棋タイム-後手駒台-歩" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-香" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-桂" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-銀" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-金" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-角" data-num="0"></div>
-      <div class="将棋タイム-後手駒台-飛" data-num="0"></div>
+      <div class="将棋タイム-後手駒台-歩" data-num="0" data-koma="歩_"></div>
+      <div class="将棋タイム-後手駒台-香" data-num="0" data-koma="香_"></div>
+      <div class="将棋タイム-後手駒台-桂" data-num="0" data-koma="桂_"></div>
+      <div class="将棋タイム-後手駒台-銀" data-num="0" data-koma="銀_"></div>
+      <div class="将棋タイム-後手駒台-金" data-num="0" data-koma="金_"></div>
+      <div class="将棋タイム-後手駒台-角" data-num="0" data-koma="角_"></div>
+      <div class="将棋タイム-後手駒台-飛" data-num="0" data-koma="飛_"></div>
     </div>
     <div class="将棋タイム-将棋盤"></div>
     <div class="将棋タイム-先手駒台">
-      <div class="将棋タイム-先手駒台-飛" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-角" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-金" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-銀" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-桂" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-香" data-num="0"></div>
-      <div class="将棋タイム-先手駒台-歩" data-num="0"></div>
+      <div class="将棋タイム-先手駒台-飛" data-num="0" data-koma="飛"></div>
+      <div class="将棋タイム-先手駒台-角" data-num="0" data-koma="角"></div>
+      <div class="将棋タイム-先手駒台-金" data-num="0" data-koma="金"></div>
+      <div class="将棋タイム-先手駒台-銀" data-num="0" data-koma="銀"></div>
+      <div class="将棋タイム-先手駒台-桂" data-num="0" data-koma="桂"></div>
+      <div class="将棋タイム-先手駒台-香" data-num="0" data-koma="香"></div>
+      <div class="将棋タイム-先手駒台-歩" data-num="0" data-koma="歩"></div>
     </div>
   </div>
   <div class="将棋タイム-先手名"></div>
@@ -620,51 +620,6 @@ $s.スタートアップ();
     text-shadow: none;
 }
 
-.将棋タイム-先手駒台-歩{
-    background-image: url('歩.png');
-}
-.将棋タイム-先手駒台-香{
-    background-image: url('香.png');
-}
-.将棋タイム-先手駒台-桂{
-    background-image: url('桂.png');
-}
-.将棋タイム-先手駒台-銀{
-    background-image: url('銀.png');
-}
-.将棋タイム-先手駒台-金{
-    background-image: url('金.png');
-}
-.将棋タイム-先手駒台-角{
-    background-image: url('角.png');
-}
-.将棋タイム-先手駒台-飛{
-    background-image: url('飛.png');
-}
-
-
-.将棋タイム-後手駒台-歩{
-    background-image: url('歩_.png');
-}
-.将棋タイム-後手駒台-香{
-    background-image: url('香_.png');
-}
-.将棋タイム-後手駒台-桂{
-    background-image: url('桂_.png');
-}
-.将棋タイム-後手駒台-銀{
-    background-image: url('銀_.png');
-}
-.将棋タイム-後手駒台-金{
-    background-image: url('金_.png');
-}
-.将棋タイム-後手駒台-角{
-    background-image: url('角_.png');
-}
-.将棋タイム-後手駒台-飛{
-    background-image: url('飛_.png');
-}
-
 
 .将棋タイム-将棋盤{
     width: 410px;
@@ -694,103 +649,103 @@ $s.スタートアップ();
     z-index: 1;
 }
 
-.将棋タイム-駒[data-koma='歩']{
+.将棋タイム [data-koma='歩']{
     background-image: url('歩.png');
 }
-.将棋タイム-駒[data-koma='歩_']{
+.将棋タイム [data-koma='歩_']{
     background-image: url('歩_.png');
 }
 
-.将棋タイム-駒[data-koma='と']{
+.将棋タイム [data-koma='と']{
     background-image: url('と.png');
 }
-.将棋タイム-駒[data-koma='と_']{
+.将棋タイム [data-koma='と_']{
     background-image: url('と_.png');
 }
 
 
-.将棋タイム-駒[data-koma='香']{
+.将棋タイム [data-koma='香']{
     background-image: url('香.png');
 }
-.将棋タイム-駒[data-koma='香_']{
+.将棋タイム [data-koma='香_']{
     background-image: url('香_.png');
 }
 
-.将棋タイム-駒[data-koma='杏']{
+.将棋タイム [data-koma='杏']{
     background-image: url('杏.png');
 }
-.将棋タイム-駒[data-koma='杏_']{
+.将棋タイム [data-koma='杏_']{
     background-image: url('杏_.png');
 }
 
-.将棋タイム-駒[data-koma='桂']{
+.将棋タイム [data-koma='桂']{
     background-image: url('桂.png');
 }
-.将棋タイム-駒[data-koma='桂_']{
+.将棋タイム [data-koma='桂_']{
     background-image: url('桂_.png');
 }
 
-.将棋タイム-駒[data-koma='圭']{
+.将棋タイム [data-koma='圭']{
     background-image: url('圭.png');
 }
-.将棋タイム-駒[data-koma='圭_']{
+.将棋タイム [data-koma='圭_']{
     background-image: url('圭_.png');
 }
 
-.将棋タイム-駒[data-koma='銀']{
+.将棋タイム [data-koma='銀']{
     background-image: url('銀.png');
 }
-.将棋タイム-駒[data-koma='銀_']{
+.将棋タイム [data-koma='銀_']{
     background-image: url('銀_.png');
 }
 
-.将棋タイム-駒[data-koma='全']{
+.将棋タイム [data-koma='全']{
     background-image: url('全.png');
 }
-.将棋タイム-駒[data-koma='全_']{
+.将棋タイム [data-koma='全_']{
     background-image: url('全_.png');
 }
 
-.将棋タイム-駒[data-koma='金']{
+.将棋タイム [data-koma='金']{
     background-image: url('金.png');
 }
-.将棋タイム-駒[data-koma='金_']{
+.将棋タイム [data-koma='金_']{
     background-image: url('金_.png');
 }
 
-.将棋タイム-駒[data-koma='角']{
+.将棋タイム [data-koma='角']{
     background-image: url('角.png');
 }
-.将棋タイム-駒[data-koma='角_']{
+.将棋タイム [data-koma='角_']{
     background-image: url('角_.png');
 }
 
-.将棋タイム-駒[data-koma='馬']{
+.将棋タイム [data-koma='馬']{
     background-image: url('馬.png');
 }
-.将棋タイム-駒[data-koma='馬_']{
+.将棋タイム [data-koma='馬_']{
     background-image: url('馬_.png');
 }
 
-.将棋タイム-駒[data-koma='飛']{
+.将棋タイム [data-koma='飛']{
     background-image: url('飛.png');
 }
-.将棋タイム-駒[data-koma='飛_']{
+.将棋タイム [data-koma='飛_']{
     background-image: url('飛_.png');
 }
 
-.将棋タイム-駒[data-koma='龍']{
+.将棋タイム [data-koma='龍']{
     background-image: url('龍.png');
 }
-.将棋タイム-駒[data-koma='龍_']{
+.将棋タイム [data-koma='龍_']{
     background-image: url('龍_.png');
 }
 
 
-.将棋タイム-駒[data-koma='玉']{
+.将棋タイム [data-koma='玉']{
     background-image: url('玉.png');
 }
-.将棋タイム-駒[data-koma='玉_']{
+.将棋タイム [data-koma='玉_']{
     background-image: url('玉_.png');
 }
 
