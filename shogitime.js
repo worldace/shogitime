@@ -18,6 +18,16 @@ $s.スタートアップ = function (){
         args.comment = document.querySelector(args.comment);
     }
 
+    if(args.green){
+        args.green = args.green.split(',');
+    }
+    if(args.red){
+        args.red = args.red.split(',');
+    }
+    if(args.blue){
+        args.blue = args.blue.split(',');
+    }
+
     if(args.kif.match(/^https?:/)){
         var xhr = new XMLHttpRequest();
         xhr.open('GET', args.kif);
@@ -170,6 +180,35 @@ $s.描画 = function(手数){
         div.dataset.x = 最終手X;
         div.dataset.y = 最終手Y;
         $s.将棋盤.appendChild(div);
+    }
+    else{
+        if(Array.isArray(args.green)){
+            for(var i = 0; i < args.green.length; i++){
+                var div = document.createElement('div');
+                div.className = '将棋タイム-緑';
+                div.dataset.x = args.green[i].substring(0, 1);
+                div.dataset.y = args.green[i].substring(1, 2);
+                $s.将棋盤.appendChild(div);
+            }
+        }
+        if(Array.isArray(args.red)){
+            for(var i = 0; i < args.red.length; i++){
+                var div = document.createElement('div');
+                div.className = '将棋タイム-赤';
+                div.dataset.x = args.red[i].substring(0, 1);
+                div.dataset.y = args.red[i].substring(1, 2);
+                $s.将棋盤.appendChild(div);
+            }
+        }
+        if(Array.isArray(args.blue)){
+            for(var i = 0; i < args.blue.length; i++){
+                var div = document.createElement('div');
+                div.className = '将棋タイム-青';
+                div.dataset.x = args.blue[i].substring(0, 1);
+                div.dataset.y = args.blue[i].substring(1, 2);
+                $s.将棋盤.appendChild(div);
+            }
+        }
     }
 
 
@@ -640,10 +679,26 @@ $s.スタートアップ();
     position: absolute;
     z-index: 2;
 }
-.将棋タイム-最終手{
+.将棋タイム-最終手,.将棋タイム-青{
     width: 43px;
     height: 48px;
-    background-image: url('最終手.png');
+    background-image: url('青.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
+}
+.将棋タイム-緑{
+    width: 43px;
+    height: 48px;
+    background-image: url('緑.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
+}
+.将棋タイム-赤{
+    width: 43px;
+    height: 48px;
+    background-image: url('赤.png');
     background-repeat: no-repeat;
     position: absolute;
     z-index: 1;
@@ -869,6 +924,9 @@ document.addEventListener('DOMContentLoaded', function(event){
             start: pre[i].getAttribute("start"),
             reverse: pre[i].hasAttribute("reverse"),
             comment: pre[i].getAttribute("comment"),
+            green: pre[i].getAttribute("green"),
+            red: pre[i].getAttribute("red"),
+            blue: pre[i].getAttribute("blue"),
         });
     }
 });
