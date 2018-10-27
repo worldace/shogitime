@@ -1,6 +1,6 @@
 function 将棋タイム(args){
 
-var $s = new bloc(将棋タイム.HTML);
+var $s = 将棋タイム.bloc(将棋タイム.HTML);
 
 
 $s.スタートアップ = function (){
@@ -495,7 +495,15 @@ $s.kif.局面図の解析 = function(局面図配列){
 };
 
 
-function bloc(root){
+
+
+$s.スタートアップ();
+
+}
+
+
+
+将棋タイム.bloc = function(root, self){
     var splitter = '-';
 
     if(typeof root === 'string'){
@@ -508,7 +516,12 @@ function bloc(root){
             root = document.querySelector(root);
         }
     }
-    this.root = root;
+
+    if(self === undefined){
+        self = {};
+    }
+
+    self.root = root;
 
     var blocName = root.classList[0] || '';
     if(blocName === ''){
@@ -529,20 +542,15 @@ function bloc(root){
         if(firstName !== blocName){
             continue;
         }
-        if(this.hasOwnProperty(lastName)){
+        if(self.hasOwnProperty(lastName)){
             throw '識別名が重複しています: ' + className;
         }
 
-        this[lastName] = elements[i];
+        self[lastName] = elements[i];
     }
-}
-
-
-$s.スタートアップ();
-
-}
-
-
+    
+    return self;
+};
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
