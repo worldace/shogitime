@@ -96,7 +96,6 @@ $s.局面.全構築 = function(){
 
 
 
-
 $s.描画 = function(手数){
     手数 = 将棋タイム.手数正規化(手数, $s.局面.一覧.length);
     var 局面 = $s.局面.一覧[手数];
@@ -125,31 +124,13 @@ $s.描画 = function(手数){
     }
     else{
         if(Array.isArray(args.green)){
-            for(var i = 0; i < args.green.length; i++){
-                var div = document.createElement('div');
-                div.className = '将棋タイム-緑';
-                div.dataset.x = args.green[i].substring(0, 1);
-                div.dataset.y = args.green[i].substring(1, 2);
-                $s.将棋盤.appendChild(div);
-            }
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.green, '緑') );
         }
         if(Array.isArray(args.red)){
-            for(var i = 0; i < args.red.length; i++){
-                var div = document.createElement('div');
-                div.className = '将棋タイム-赤';
-                div.dataset.x = args.red[i].substring(0, 1);
-                div.dataset.y = args.red[i].substring(1, 2);
-                $s.将棋盤.appendChild(div);
-            }
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.red, '赤') );
         }
         if(Array.isArray(args.blue)){
-            for(var i = 0; i < args.blue.length; i++){
-                var div = document.createElement('div');
-                div.className = '将棋タイム-青';
-                div.dataset.x = args.blue[i].substring(0, 1);
-                div.dataset.y = args.blue[i].substring(1, 2);
-                $s.将棋盤.appendChild(div);
-            }
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.blue, '青') );
         }
     }
 
@@ -290,6 +271,7 @@ $s.kif.解析 = function(kif){
             break;
         }
     }
+
     if(対局情報['先手の持駒'] && 対局情報['後手の持駒']){
         $s.局面.一覧[0]['駒']         = 将棋タイム.kif解析_局面図(局面図);
         $s.局面.一覧[0]['先手持ち駒'] = 将棋タイム.kif解析_持ち駒(対局情報['先手の持駒']);
@@ -452,6 +434,20 @@ $s.スタートアップ();
     div.dataset.y = y;
 
     return div;
+};
+
+
+将棋タイム.マスハイライトDOM作成 = function(color, 色名){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 0; i < color.length; i++){
+        var div = document.createElement('div');
+        div.className = '将棋タイム-' + 色名;
+        div.dataset.x = color[i].substring(0, 1);
+        div.dataset.y = color[i].substring(1, 2);
+        fragment.appendChild(div);
+    }
+    return fragment;
 };
 
 
