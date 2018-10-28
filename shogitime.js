@@ -1,9 +1,5 @@
 function 将棋タイム(args){
 
-var $s = 将棋タイム.bloc(将棋タイム.HTML);
-
-
-$s.スタートアップ = function (){
     if(!(args.el instanceof Element)){
         throw '将棋タイムの起動オプション「el」にはDOM要素を指定してください ＞ 将棋タイム({el:DOM要素})';
     }
@@ -37,21 +33,24 @@ $s.スタートアップ = function (){
         }
         xhr.onload = function(e) {
             args.kif = xhr.responseText;
-            $s.メイン();
+            将棋タイム.メイン(args);
         };
         xhr.send();
    }
     else{
-        $s.メイン();
+        将棋タイム.メイン(args);
     }
-};
+}
 
 
-$s.メイン = function (){
+
+将棋タイム.メイン = function (args){
+    var $s = 将棋タイム.bloc(将棋タイム.HTML);
+
     var 解析結果 = 将棋タイム.kif解析(args.kif);
     $s.局面.一覧 = [{
-        '先手持ち駒': 解析結果['先手の持駒'],
-        '後手持ち駒': 解析結果['後手の持駒'],
+        '先手の持駒': 解析結果['先手の持駒'],
+        '後手の持駒': 解析結果['後手の持駒'],
         '駒': 解析結果['駒'],
     }];
     $s.指し手.一覧 = 解析結果['指し手'];
@@ -60,7 +59,13 @@ $s.メイン = function (){
 
 
     将棋タイム.局面全構築($s.指し手.一覧, $s.局面.一覧);
+
     $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
+    $s.指し手.コメント表示部DOM = args.comment;
+
+    $s.将棋盤.ハイライト緑 = args.green;
+    $s.将棋盤.ハイライト赤 = args.red;
+    $s.将棋盤.ハイライト青 = args.blue;
 
     if($s.局面.一覧.length === 1){
         $s.コントロールパネル.style.display = 'none';
@@ -69,15 +74,20 @@ $s.メイン = function (){
         $s.将棋盤.setAttribute('data-reverse', '1');
     }
 
-    $s.描画(args.start);
+    $s.最初に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.最初に移動ボタン_click, $s: $s});
+    $s.前に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.前に移動ボタン_click, $s: $s});
+    $s.次に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.次に移動ボタン_click, $s: $s});
+    $s.次に移動ボタン.addEventListener('wheel', {handleEvent: 将棋タイム.次に移動ボタン_wheel, $s: $s});
+    $s.最後に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.最後に移動ボタン_click, $s: $s});
+    $s.指し手.addEventListener('change', {handleEvent: 将棋タイム.指し手_change, $s: $s});
+    $s.反転ボタン.addEventListener('click', {handleEvent: 将棋タイム.反転ボタン_click, $s: $s});
+
+    将棋タイム.描画($s, args.start);
     args.el.parentNode.replaceChild($s.root, args.el);
 };
 
 
-
-
-
-$s.描画 = function(手数){
+将棋タイム.描画 = function($s, 手数){
     手数 = 将棋タイム.手数正規化(手数, $s.局面.一覧.length);
     var 局面 = $s.局面.一覧[手数];
 
@@ -104,14 +114,14 @@ $s.描画 = function(手数){
         $s.将棋盤.appendChild(div);
     }
     else{
-        if(Array.isArray(args.green)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.green, '緑') );
+        if(Array.isArray($s.将棋盤.ハイライト緑)){
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト緑, '緑') );
         }
-        if(Array.isArray(args.red)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.red, '赤') );
+        if(Array.isArray($s.将棋盤.ハイライト赤)){
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト赤, '赤') );
         }
-        if(Array.isArray(args.blue)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成(args.blue, '青') );
+        if(Array.isArray($s.将棋盤.ハイライト青)){
+            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト青, '青') );
         }
     }
 
@@ -125,13 +135,13 @@ $s.描画 = function(手数){
         }
     }
 
-    //先手持ち駒配置
-    for(var 駒 in 局面['先手持ち駒']){
-        $s[先手+'駒台_'+駒].setAttribute("data-num", 局面['先手持ち駒'][駒]);
+    //先手持駒配置
+    for(var 駒 in 局面['先手の持駒']){
+        $s[先手+'駒台_'+駒].setAttribute("data-num", 局面['先手の持駒'][駒]);
     }
-    //後手持ち駒配置
-    for(var 駒 in 局面['後手持ち駒']){
-        $s[後手+'駒台_'+駒].setAttribute("data-num", 局面['後手持ち駒'][駒]);
+    //後手持駒配置
+    for(var 駒 in 局面['後手の持駒']){
+        $s[後手+'駒台_'+駒].setAttribute("data-num", 局面['後手の持駒'][駒]);
     }
 
     //指し手
@@ -144,79 +154,15 @@ $s.描画 = function(手数){
     }
     
     //コメント
-    if(args.comment){
-        args.comment.textContent = $s.指し手.一覧[手数]['コメント'];
+    if($s.指し手.コメント表示部DOM){
+        $s.指し手.コメント表示部DOM.textContent = $s.指し手.一覧[手数]['コメント'];
     }
 };
 
 
-$s.最初に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.最初に移動ボタン_click, $s: $s});
-$s.前に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.前に移動ボタン_click, $s: $s});
-$s.次に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.次に移動ボタン_click, $s: $s});
-$s.次に移動ボタン.addEventListener('wheel', {handleEvent: 将棋タイム.次に移動ボタン_wheel, $s: $s});
-$s.最後に移動ボタン.addEventListener('click', {handleEvent: 将棋タイム.最後に移動ボタン_click, $s: $s});
-$s.指し手.addEventListener('change', {handleEvent: 将棋タイム.指し手_change, $s: $s});
-$s.反転ボタン.addEventListener('click', {handleEvent: 将棋タイム.反転ボタン_click, $s: $s});
 
 
-
-$s.スタートアップ();
-
-}
-
-
-
-将棋タイム.bloc = function(root, self){
-    var splitter = '-';
-
-    if(typeof root === 'string'){
-        if(root.match(/^</)){
-            var tmpdiv = document.createElement('div');
-            tmpdiv.innerHTML = root;
-            root = tmpdiv.firstElementChild;
-        }
-        else{
-            root = document.querySelector(root);
-        }
-    }
-
-    if(self === undefined){
-        self = {};
-    }
-
-    self.root = root;
-
-    var blocName = root.classList[0] || '';
-    if(blocName === ''){
-        throw 'ブロック名が存在しません';
-    }
-    if(blocName.indexOf(splitter) !== -1){
-        throw 'ブロック名に ' + splitter + ' は使用できません: ' + blocName;
-    }
-
-    var elements = root.querySelectorAll("*");
-
-    for(var i = 0; i < elements.length; i++){
-        var className = elements[i].classList[0] || '';
-        var name      = className.split(splitter);
-        var firstName = name.shift();
-        var lastName  = name.join('_');
-
-        if(firstName !== blocName){
-            continue;
-        }
-        if(self.hasOwnProperty(lastName)){
-            throw '識別名が重複しています: ' + className;
-        }
-
-        self[lastName] = elements[i];
-    }
-    
-    return self;
-};
-
-
-将棋タイム.初期持ち駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
+将棋タイム.初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
 
 
 将棋タイム.初期局面 = {
@@ -244,15 +190,6 @@ $s.スタートアップ();
     '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
 };
 
-
-
-将棋タイム.オブジェクトコピー = function(from){
-    var to = {};
-    for(var key in from){
-        to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
-    }
-    return to;
-};
 
 
 将棋タイム.手数正規化 = function(手数, 全手数){
@@ -284,7 +221,7 @@ $s.スタートアップ();
     var 駒   = 指し手['駒'];
     
     if(指し手['前X'] === 0){ //打の場合
-        局面[手番+'持ち駒'][駒]--;
+        局面[手番+'の持駒'][駒]--;
     }
     else{ //移動の場合
         局面['駒'][指し手['前Y']][指し手['前X']] = null;
@@ -297,7 +234,7 @@ $s.スタートアップ();
             else if(取った駒 === 'と') 取った駒 = '歩';
             else if(取った駒 === '龍') 取った駒 = '飛';
             else if(取った駒 === '馬') 取った駒 = '角';
-            局面[手番+'持ち駒'][取った駒]++;
+            局面[手番+'の持駒'][取った駒]++;
         }
     }
 
@@ -387,13 +324,13 @@ $s.スタートアップ();
 
     if(解析結果['先手の持駒'] && 解析結果['後手の持駒']){
         解析結果['駒']         = 将棋タイム.kif解析_局面図(局面図);
-        解析結果['先手の持駒'] = 将棋タイム.kif解析_持ち駒(解析結果['先手の持駒']);
-        解析結果['後手の持駒'] = 将棋タイム.kif解析_持ち駒(解析結果['後手の持駒']);
+        解析結果['先手の持駒'] = 将棋タイム.kif解析_持駒(解析結果['先手の持駒']);
+        解析結果['後手の持駒'] = 将棋タイム.kif解析_持駒(解析結果['後手の持駒']);
     }
     else{
         解析結果['駒']         = 解析結果['駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期局面);
-        解析結果['先手の持駒'] = 解析結果['先手の持駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期持ち駒);
-        解析結果['後手の持駒'] = 解析結果['後手の持駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期持ち駒);
+        解析結果['先手の持駒'] = 解析結果['先手の持駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
+        解析結果['後手の持駒'] = 解析結果['後手の持駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
     }
 
     解析結果['指し手'] = 解析結果['指し手'] || [{手数:0, コメント:''}];
@@ -445,25 +382,25 @@ $s.スタートアップ();
 
 
 
-将棋タイム.kif解析_持ち駒 = function(str){
-    var 持ち駒 = 将棋タイム.オブジェクトコピー(将棋タイム.初期持ち駒);
+将棋タイム.kif解析_持駒 = function(str){
+    var 持駒 = 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
 
     str = str.trim();
     if(str === 'なし'){
-        return 持ち駒;
+        return 持駒;
     }
 
     var 漢数字 = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9, '十':10, '十一':11, '十二':12, '十三':13, '十四':14, '十五':15, '十六':16, '十七':17, '十八':18};
-    var kif持ち駒 = str.split(/\s/);
+    var kif    = str.split(/\s/);
 
-    for(var i = 0; i < kif持ち駒.length; i++){
-        var 駒 = kif持ち駒[i].substr(0, 1);
-        var 数 = kif持ち駒[i].substr(1);
+    for(var i = 0; i < kif.length; i++){
+        var 駒 = kif[i].substr(0, 1);
+        var 数 = kif[i].substr(1);
 
-        持ち駒[駒] = (数) ? 漢数字[数] : 1;
+        持駒[駒] = (数) ? 漢数字[数] : 1;
     }
 
-    return 持ち駒;
+    return 持駒;
 };
 
 
@@ -521,7 +458,7 @@ $s.スタートアップ();
 
 
 将棋タイム.最初に移動ボタン_click = function (event){
-    this.$s.描画(0);
+    将棋タイム.描画(this.$s, 0);
 };
 
 
@@ -530,7 +467,7 @@ $s.スタートアップ();
     if(現在の手数 < 1){
         return;
     }
-    this.$s.描画(現在の手数 - 1);
+    将棋タイム.描画(this.$s, 現在の手数 - 1);
 };
 
 
@@ -539,7 +476,7 @@ $s.スタートアップ();
     if(現在の手数 >= this.$s.局面.一覧.length - 1){
         return;
     }
-    this.$s.描画(現在の手数 + 1);
+    将棋タイム.描画(this.$s, 現在の手数 + 1);
 };
 
 
@@ -550,24 +487,25 @@ $s.スタートアップ();
         if(現在の手数 < 1){
             return;
         }
-        this.$s.描画(現在の手数 - 1);
+        現在の手数--;
     }
     else{
         if(現在の手数 >= this.$s.局面.一覧.length - 1){
             return;
         }
-        this.$s.描画(現在の手数 + 1);
+        現在の手数++;
     }
+    将棋タイム.描画(this.$s, 現在の手数);
 };
 
 
 将棋タイム.最後に移動ボタン_click = function(event){
-    this.$s.描画(-1);
+    将棋タイム.描画(this.$s, -1);
 };
 
 
 将棋タイム.指し手_change = function (event){
-    this.$s.描画(this.$s.指し手.selectedIndex || 0);
+    将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
 };
 
 
@@ -578,10 +516,67 @@ $s.スタートアップ();
     else{
         this.$s.将棋盤.setAttribute('data-reverse', '1');
     }
-    this.$s.描画(this.$s.指し手.selectedIndex || 0);
+    将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
 };
 
 
+将棋タイム.bloc = function(root, self){
+    var splitter = '-';
+
+    if(typeof root === 'string'){
+        if(root.match(/^</)){
+            var tmpdiv = document.createElement('div');
+            tmpdiv.innerHTML = root;
+            root = tmpdiv.firstElementChild;
+        }
+        else{
+            root = document.querySelector(root);
+        }
+    }
+
+    if(self === undefined){
+        self = {};
+    }
+
+    self.root = root;
+
+    var blocName = root.classList[0] || '';
+    if(blocName === ''){
+        throw 'ブロック名が存在しません';
+    }
+    if(blocName.indexOf(splitter) !== -1){
+        throw 'ブロック名に ' + splitter + ' は使用できません: ' + blocName;
+    }
+
+    var elements = root.querySelectorAll("*");
+
+    for(var i = 0; i < elements.length; i++){
+        var className = elements[i].classList[0] || '';
+        var name      = className.split(splitter);
+        var firstName = name.shift();
+        var lastName  = name.join('_');
+
+        if(firstName !== blocName){
+            continue;
+        }
+        if(self.hasOwnProperty(lastName)){
+            throw '識別名が重複しています: ' + className;
+        }
+
+        self[lastName] = elements[i];
+    }
+    
+    return self;
+};
+
+
+将棋タイム.オブジェクトコピー = function(from){
+    var to = {};
+    for(var key in from){
+        to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
+    }
+    return to;
+};
 
 
 
