@@ -81,28 +81,8 @@ $s.局面.一覧 = [{
 }];
 
 
-$s.局面.駒無し = function (){
-    return {
-            '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-            '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    };
-};
 
 
-$s.局面.コピー = function(from){
-    var to = {};
-    for(var key in from){
-        to[key] = (from[key] instanceof Object)  ?  $s.局面.コピー(from[key])  :  from[key];
-    }
-    return to;
-};
 
 
 $s.局面.全構築 = function(){
@@ -115,7 +95,7 @@ $s.局面.全構築 = function(){
 $s.局面.構築 = function(指し手, 前局面){
     // 指し手 = {'手数','駒','前X','前Y','後X','後Y','成り','表記'};
 
-    var 局面 = $s.局面.コピー(前局面);
+    var 局面 = 将棋タイム.オブジェクトコピー(前局面);
     var 手番 = (指し手['手数'] % 2) ? '先手' : '後手';
     var 駒   = 指し手['駒'];
     
@@ -156,7 +136,7 @@ $s.局面.構築 = function(指し手, 前局面){
 
 
 $s.描画 = function(手数){
-    手数 = $s.描画.手数正規化(手数);
+    手数 = 将棋タイム.手数正規化(手数, $s.局面.一覧.length);
     var 局面 = $s.局面.一覧[手数];
 
     //反転
@@ -243,20 +223,6 @@ $s.描画 = function(手数){
     if(args.comment){
         args.comment.textContent = $s.指し手.一覧[手数]['コメント'];
     }
-};
-
-
-$s.描画.手数正規化 = function(手数){
-    if(手数 < 0){
-        手数 = $s.局面.一覧.length + 手数;
-        if(手数 < 0){
-            手数 = 0;
-        }
-    }
-    if(手数 >= $s.局面.一覧.length){
-        手数 = $s.局面.一覧.length - 1;
-    }
-    return 手数;
 };
 
 
@@ -459,7 +425,7 @@ $s.kif.局面図の解析 = function(局面図配列){
         return;
     }
 
-    var 局面 = $s.局面.駒無し();
+    var 局面 = 将棋タイム.オブジェクトコピー(将棋タイム.駒無し局面);
     var 先手 = true;
     var x    = 10;
 
@@ -551,6 +517,47 @@ $s.スタートアップ();
     
     return self;
 };
+
+
+将棋タイム.駒無し局面 = {
+    '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+};
+
+
+
+将棋タイム.オブジェクトコピー = function(from){
+    var to = {};
+    for(var key in from){
+        to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
+    }
+    return to;
+};
+
+
+将棋タイム.手数正規化 = function(手数, 全手数){
+    if(手数 < 0){
+        手数 = 全手数 + 手数;
+        if(手数 < 0){
+            手数 = 0;
+        }
+    }
+    if(手数 >= 全手数){
+        手数 = 全手数 - 1;
+    }
+    return 手数;
+};
+
+
+
+
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
