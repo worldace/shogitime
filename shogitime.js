@@ -4,9 +4,6 @@ var $s = 将棋タイム.bloc(将棋タイム.HTML);
 
 
 $s.スタートアップ = function (){
-    args.kif = args.kif || '';
-    args.kif = args.kif.trim();
-
     if(!(args.el instanceof Element)){
         throw '将棋タイムの起動オプション「el」にはDOM要素を指定してください ＞ 将棋タイム({el:DOM要素})';
     }
@@ -28,6 +25,9 @@ $s.スタートアップ = function (){
         args.blue = args.blue.split(',');
     }
 
+    args.kif = args.kif || '';
+    args.kif = args.kif.trim();
+
     if(args.kif.match(/^https?:/)){
         var xhr = new XMLHttpRequest();
         xhr.open('GET', args.kif);
@@ -48,9 +48,9 @@ $s.スタートアップ = function (){
 
 
 $s.メイン = function (){
-    $s.kif.解析(args.kif);
+    $s.kif解析(args.kif);
     $s.局面.全構築();
-    $s.指し手.HTML作成();
+    $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
 
     if($s.局面.一覧.length === 1){
         $s.コントロールパネル.style.display = 'none';
@@ -172,10 +172,14 @@ $s.描画 = function(手数){
 
 
 
-
 $s.最初に移動ボタン.addEventListener('click', function(event){
     $s.描画(0);
 });
+/*
+$s.最初に移動ボタン.addEventListener('click', 将棋タイム.最初に移動ボタン_click);
+*/
+
+
 
 
 $s.前に移動ボタン.addEventListener('click', function(event){
@@ -222,15 +226,6 @@ $s.最後に移動ボタン.addEventListener('click', function(event){
 $s.指し手.一覧 = [{手数:0, コメント:''}];
 
 
-$s.指し手.HTML作成 = function (){
-    for(var i = 1; i < $s.指し手.一覧.length; i++){
-        var option = document.createElement('option');
-        option.textContent = $s.指し手.一覧[i]['手数'] + ' ' + $s.指し手.一覧[i]['表記'];
-        $s.指し手.appendChild(option);
-    }
-};
-
-
 $s.指し手.addEventListener('change', function(event){
     $s.描画($s.指し手.selectedIndex || 0);
 });
@@ -248,10 +243,9 @@ $s.反転ボタン.addEventListener('click', function(event){
 
 
 
-$s.kif = {};
+$s.kif解析 = function(kif){
+    var 解析結果 = {};
 
-
-$s.kif.解析 = function(kif){
     kif = kif.split(/\r?\n/);
     var 局面図   = [];
     var 対局情報 = {};
@@ -287,6 +281,10 @@ $s.kif.解析 = function(kif){
 $s.スタートアップ();
 
 }
+
+将棋タイム.最初に移動ボタン_click = function (event){
+    console.dir(this);
+};
 
 
 
@@ -449,6 +447,19 @@ $s.スタートアップ();
     }
     return fragment;
 };
+
+
+将棋タイム.指し手DOM作成 = function (全指し手){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 1; i < 全指し手.length; i++){
+        var option = document.createElement('option');
+        option.textContent = 全指し手[i]['手数'] + ' ' + 全指し手[i]['表記'];
+        fragment.appendChild(option);
+    }
+    return fragment;
+};
+
 
 
 
