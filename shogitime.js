@@ -1,4 +1,4 @@
-//
+
 function 将棋タイム(args){
     if(将棋タイム.引数確認(args) === false){
         return;
@@ -27,7 +27,7 @@ function 将棋タイム(args){
     args.el.parentNode.replaceChild($s.root, args.el);
 }
 
-//test
+
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
