@@ -1,4 +1,4 @@
-
+//
 function 将棋タイム(args){
     if(将棋タイム.引数確認(args) === false){
         return;
