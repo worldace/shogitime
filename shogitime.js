@@ -13,8 +13,6 @@ function 将棋タイム(args){
     $s.先手名.名前 = 解析結果['先手'];
     $s.後手名.名前 = 解析結果['後手'];
 
-    将棋タイム.局面全構築($s.指し手.一覧, $s.局面.一覧);
-
     $s.将棋盤.ハイライト緑 = args.green;
     $s.将棋盤.ハイライト赤 = args.red;
     $s.将棋盤.ハイライト青 = args.blue;
@@ -24,6 +22,7 @@ function 将棋タイム(args){
         $s.将棋盤.setAttribute('data-reverse', '1');
     }
 
+    将棋タイム.局面全構築($s.指し手.一覧, $s.局面.一覧);
     将棋タイム.描画($s, args.start, true);
     args.el.parentNode.replaceChild($s.root, args.el);
 }
@@ -464,8 +463,8 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画 = function($s, 手数, 初回){
-    if(初回 === true){
+将棋タイム.描画 = function($s, 手数, 初回描画){
+    if(初回描画 === true){
         $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
         if($s.局面.一覧.length === 1){
             $s.コントロールパネル.style.display = 'none';
