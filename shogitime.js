@@ -27,7 +27,7 @@ function 将棋タイム(args){
     args.el.parentNode.replaceChild($s.root, args.el);
 }
 
-
+//test
 
 将棋タイム.HTML = (function() {/*
 <div class="将棋タイム">
