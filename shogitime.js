@@ -18,7 +18,7 @@ function 将棋タイム(args){
     $b.将棋盤.ハイライト緑 = args.green;
     $b.将棋盤.ハイライト赤 = args.red;
     $b.将棋盤.ハイライト青 = args.blue;
-    $b.指し手.コメント表示部DOM = args.comment;
+    $b.指し手.コメントDOM  = args.comment;
 
     if(args.reverse !== false){
         $b.将棋盤.setAttribute('data-reverse', '1');
@@ -123,11 +123,7 @@ function 将棋タイム(args){
             最終手X = 10 - 最終手X;
             最終手Y = 10 - 最終手Y;
         }
-        var div = document.createElement('div');
-        div.className = '将棋タイム-最終手';
-        div.dataset.x = 最終手X;
-        div.dataset.y = 最終手Y;
-        $b.将棋盤.appendChild(div);
+        $b.将棋盤.appendChild( 将棋タイム.描画.最終手DOM作成(最終手X, 最終手Y) );
     }
     else{
         if(Array.isArray($b.将棋盤.ハイライト緑)){
@@ -170,8 +166,8 @@ function 将棋タイム(args){
     }
     
     //コメント
-    if($b.指し手.コメント表示部DOM){
-        $b.指し手.コメント表示部DOM.textContent = $b.指し手.一覧[手数]['コメント'];
+    if($b.指し手.コメントDOM){
+        $b.指し手.コメントDOM.textContent = $b.指し手.一覧[手数]['コメント'];
     }
 };
 
@@ -203,6 +199,17 @@ function 将棋タイム(args){
     div.dataset.x = x;
     div.dataset.y = y;
 
+    return div;
+};
+
+
+
+将棋タイム.描画.最終手DOM作成 = function (x, y){
+    var div = document.createElement('div');
+    div.className = '将棋タイム-最終手';
+    div.dataset.x = x;
+    div.dataset.y = y;
+    
     return div;
 };
 
