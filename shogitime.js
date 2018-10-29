@@ -5,12 +5,8 @@ function 将棋タイム(args){
 
     var $s = 将棋タイム.bloc(将棋タイム.HTML);
 
-    var 解析結果 = 将棋タイム.kif解析(args.kif);
-    $s.局面.一覧 = [{
-        '先手の持駒': 解析結果['先手の持駒'],
-        '後手の持駒': 解析結果['後手の持駒'],
-        '駒': 解析結果['駒'],
-    }];
+    var 解析結果   = 将棋タイム.kif解析(args.kif);
+    $s.局面.一覧   = [{'先手の持駒': 解析結果['先手の持駒'], '後手の持駒': 解析結果['後手の持駒'], '駒': 解析結果['駒']}];
     $s.指し手.一覧 = 解析結果['指し手'];
     $s.先手名.名前 = 解析結果['先手'];
     $s.後手名.名前 = 解析結果['後手'];
@@ -421,17 +417,17 @@ function 将棋タイム(args){
     style.innerHTML = 将棋タイム.CSS;
     document.head.insertBefore(style, document.head.firstElementChild);
 
-    var pre = document.querySelectorAll("script[type='kif']");
-    for(var i = 0; i < pre.length; i++){
+    var dom = document.querySelectorAll("script[type='kif']");
+    for(var i = 0; i < dom.length; i++){
         将棋タイム({
-            el: pre[i],
-            kif: pre[i].textContent,
-            start: pre[i].getAttribute("start"),
-            reverse: pre[i].hasAttribute("reverse"),
-            comment: pre[i].getAttribute("comment"),
-            green: pre[i].getAttribute("green"),
-            red: pre[i].getAttribute("red"),
-            blue: pre[i].getAttribute("blue"),
+            el: dom[i],
+            kif: dom[i].textContent,
+            start: dom[i].getAttribute("start"),
+            reverse: dom[i].hasAttribute("reverse"),
+            comment: dom[i].getAttribute("comment"),
+            green: dom[i].getAttribute("green"),
+            red: dom[i].getAttribute("red"),
+            blue: dom[i].getAttribute("blue"),
         });
     }
 };
@@ -672,14 +668,14 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.マスハイライトDOM作成 = function(color, 色名){
+将棋タイム.マスハイライトDOM作成 = function(マス, 色名){
     var fragment = document.createDocumentFragment();
 
-    for(var i = 0; i < color.length; i++){
+    for(var i = 0; i < マス.length; i++){
         var div = document.createElement('div');
         div.className = '将棋タイム-' + 色名;
-        div.dataset.x = color[i].substring(0, 1);
-        div.dataset.y = color[i].substring(1, 2);
+        div.dataset.x = マス[i].substring(0, 1);
+        div.dataset.y = マス[i].substring(1, 2);
         fragment.appendChild(div);
     }
     return fragment;
