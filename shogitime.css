@@ -1,0 +1,317 @@
+.将棋タイム{
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    width: 514px;
+}
+.将棋タイム *{
+    box-sizing: border-box;
+}
+.将棋タイム-先手名{
+    width: 100%;
+    text-align: right;
+    font-size: 14px;
+    font-family: meiryo, sans-serif;
+}
+.将棋タイム-後手名{
+    width: 100%;
+    font-size: 14px;
+    font-family: meiryo, sans-serif;
+}
+.将棋タイム-先手名:empty,
+.将棋タイム-先手名:empty{
+    display: none;
+}
+
+
+.将棋タイム-局面{
+    display: flex;
+}
+
+.将棋タイム-先手駒台{
+    width: 49px;
+    height: 340px;
+    background-image: url('盤.png');
+    align-self: flex-end;
+    padding: 2px 0;
+    display: flex;
+    flex-direction: column;
+}
+.将棋タイム-後手駒台{
+    width: 49px;
+    height: 340px;
+    background-image: url('盤.png');
+    padding: 2px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.将棋タイム-先手駒台 > div,
+.将棋タイム-後手駒台 > div{
+    width: 43px;
+    height: 48px;
+    background-repeat: no-repeat;
+    color: #fff;
+    text-shadow: -1px -1px #333, 1px -1px #333, -1px 1px #333, 1px 1px #333;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    text-align: right;
+    padding-top: 30px;
+}
+.将棋タイム-先手駒台 > div::after,
+.将棋タイム-後手駒台 > div::after{
+    content: attr(data-num);
+}
+
+.将棋タイム-先手駒台 > div[data-num='0'],
+.将棋タイム-後手駒台 > div[data-num='0']{
+    display: none;
+}
+.将棋タイム-先手駒台 > div[data-num='1'],
+.将棋タイム-後手駒台 > div[data-num='1']{
+    color: transparent;
+    text-shadow: none;
+}
+
+
+.将棋タイム-将棋盤{
+    width: 410px;
+    height: 454px;
+    background-image: url('マス.png'), url('盤.png');
+    position: relative;
+    margin: 0 3px;
+}
+
+.将棋タイム-将棋盤[data-reverse]{
+    background-image: url('マス_.png'), url('盤.png');
+}
+
+.将棋タイム-駒{
+    width: 43px;
+    height: 48px;
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 2;
+}
+.将棋タイム-最終手,.将棋タイム-青{
+    width: 43px;
+    height: 48px;
+    background-image: url('青.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
+}
+.将棋タイム-緑{
+    width: 43px;
+    height: 48px;
+    background-image: url('緑.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
+}
+.将棋タイム-赤{
+    width: 43px;
+    height: 48px;
+    background-image: url('赤.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 1;
+}
+
+.将棋タイム [data-koma='歩']{
+    background-image: url('歩.png');
+}
+.将棋タイム [data-koma='歩_']{
+    background-image: url('歩_.png');
+}
+
+.将棋タイム [data-koma='と']{
+    background-image: url('と.png');
+}
+.将棋タイム [data-koma='と_']{
+    background-image: url('と_.png');
+}
+
+
+.将棋タイム [data-koma='香']{
+    background-image: url('香.png');
+}
+.将棋タイム [data-koma='香_']{
+    background-image: url('香_.png');
+}
+
+.将棋タイム [data-koma='杏']{
+    background-image: url('杏.png');
+}
+.将棋タイム [data-koma='杏_']{
+    background-image: url('杏_.png');
+}
+
+.将棋タイム [data-koma='桂']{
+    background-image: url('桂.png');
+}
+.将棋タイム [data-koma='桂_']{
+    background-image: url('桂_.png');
+}
+
+.将棋タイム [data-koma='圭']{
+    background-image: url('圭.png');
+}
+.将棋タイム [data-koma='圭_']{
+    background-image: url('圭_.png');
+}
+
+.将棋タイム [data-koma='銀']{
+    background-image: url('銀.png');
+}
+.将棋タイム [data-koma='銀_']{
+    background-image: url('銀_.png');
+}
+
+.将棋タイム [data-koma='全']{
+    background-image: url('全.png');
+}
+.将棋タイム [data-koma='全_']{
+    background-image: url('全_.png');
+}
+
+.将棋タイム [data-koma='金']{
+    background-image: url('金.png');
+}
+.将棋タイム [data-koma='金_']{
+    background-image: url('金_.png');
+}
+
+.将棋タイム [data-koma='角']{
+    background-image: url('角.png');
+}
+.将棋タイム [data-koma='角_']{
+    background-image: url('角_.png');
+}
+
+.将棋タイム [data-koma='馬']{
+    background-image: url('馬.png');
+}
+.将棋タイム [data-koma='馬_']{
+    background-image: url('馬_.png');
+}
+
+.将棋タイム [data-koma='飛']{
+    background-image: url('飛.png');
+}
+.将棋タイム [data-koma='飛_']{
+    background-image: url('飛_.png');
+}
+
+.将棋タイム [data-koma='龍']{
+    background-image: url('龍.png');
+}
+.将棋タイム [data-koma='龍_']{
+    background-image: url('龍_.png');
+}
+
+
+.将棋タイム [data-koma='玉']{
+    background-image: url('玉.png');
+}
+.将棋タイム [data-koma='玉_']{
+    background-image: url('玉_.png');
+}
+
+
+.将棋タイム [data-x='1']{
+    left: 355px;
+}
+.将棋タイム [data-x='2']{
+    left: 312px;
+}
+.将棋タイム [data-x='3']{
+    left: 269px;
+}
+.将棋タイム [data-x='4']{
+    left: 226px;
+}
+.将棋タイム [data-x='5']{
+    left: 183px;
+}
+.将棋タイム [data-x='6']{
+    left: 140px;
+}
+.将棋タイム [data-x='7']{
+    left: 97px;
+}
+.将棋タイム [data-x='8']{
+    left: 54px;
+}
+.将棋タイム [data-x='9']{
+    left: 11px;
+}
+.将棋タイム [data-y='1']{
+    top: 11px;
+}
+.将棋タイム [data-y='2']{
+    top: 59px;
+}
+.将棋タイム [data-y='3']{
+    top: 107px;
+}
+.将棋タイム [data-y='4']{
+    top: 155px;
+}
+.将棋タイム [data-y='5']{
+    top: 203px;
+}
+.将棋タイム [data-y='6']{
+    top: 251px;
+}
+.将棋タイム [data-y='7']{
+    top: 299px;
+}
+.将棋タイム [data-y='8']{
+    top: 347px;
+}
+.将棋タイム [data-y='9']{
+    top: 395px;
+}
+
+
+.将棋タイム-コントロールパネル{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    margin-top: 3px;
+}
+.将棋タイム-コントロールパネル > div{
+    border: solid 1px #ccc;
+    border-radius: 3px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin: 0 3px;
+    cursor: pointer;
+    background-color: #fff;
+    background-position: center center;
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+}
+.将棋タイム-最初に移動ボタン{
+    background-image: url('step-forward_.png');
+}
+.将棋タイム-前に移動ボタン{
+    background-image: url('play_.png');
+}
+.将棋タイム-次に移動ボタン{
+    background-image: url('play.png');
+}
+.将棋タイム-最後に移動ボタン{
+    background-image: url('step-forward.png');
+}
+.将棋タイム-指し手{
+    margin: 0 8px;
+}
+.将棋タイム-反転ボタン{
+    background-image: url('refresh.png');
+}
