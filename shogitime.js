@@ -1,9 +1,11 @@
+
 function 将棋タイム(args){
     if(将棋タイム.引数確認(args) === false){
         return;
     }
 
     var $s = 将棋タイム.bloc(将棋タイム.HTML);
+    将棋タイム.イベント全登録($s);
 
     var 解析結果   = 将棋タイム.kif解析(args.kif);
     $s.局面.一覧   = [{'先手の持駒': 解析結果['先手の持駒'], '後手の持駒': 解析結果['後手の持駒'], '駒': 解析結果['駒']}];
@@ -11,25 +13,18 @@ function 将棋タイム(args){
     $s.先手名.名前 = 解析結果['先手'];
     $s.後手名.名前 = 解析結果['後手'];
 
-
     将棋タイム.局面全構築($s.指し手.一覧, $s.局面.一覧);
-
-    $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
-    $s.指し手.コメント表示部DOM = args.comment;
 
     $s.将棋盤.ハイライト緑 = args.green;
     $s.将棋盤.ハイライト赤 = args.red;
     $s.将棋盤.ハイライト青 = args.blue;
+    $s.指し手.コメント表示部DOM = args.comment;
 
-    if($s.局面.一覧.length === 1){
-        $s.コントロールパネル.style.display = 'none';
-    }
     if(args.reverse !== false){
         $s.将棋盤.setAttribute('data-reverse', '1');
     }
 
-    将棋タイム.イベント全登録($s);
-    将棋タイム.描画($s, args.start);
+    将棋タイム.描画($s, args.start, true);
     args.el.parentNode.replaceChild($s.root, args.el);
 }
 
@@ -469,7 +464,14 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画 = function($s, 手数){
+将棋タイム.描画 = function($s, 手数, 初回){
+    if(初回 === true){
+        $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
+        if($s.局面.一覧.length === 1){
+            $s.コントロールパネル.style.display = 'none';
+        }
+    }
+
     手数 = 将棋タイム.手数正規化(手数, $s.局面.一覧.length);
     var 局面 = $s.局面.一覧[手数];
 
