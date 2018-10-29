@@ -22,7 +22,7 @@ function 将棋タイム(args){
         $s.将棋盤.setAttribute('data-reverse', '1');
     }
 
-    将棋タイム.局面全構築($s.指し手.一覧, $s.局面.一覧);
+    将棋タイム.全局面構築($s.指し手.一覧, $s.局面.一覧);
     将棋タイム.描画($s, args.start, true);
     args.el.parentNode.replaceChild($s.root, args.el);
 }
@@ -465,13 +465,13 @@ function 将棋タイム(args){
 
 将棋タイム.描画 = function($s, 手数, 初回描画){
     if(初回描画 === true){
-        $s.指し手.appendChild( 将棋タイム.指し手DOM作成($s.指し手.一覧) );
+        $s.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($s.指し手.一覧) );
         if($s.局面.一覧.length === 1){
             $s.コントロールパネル.style.display = 'none';
         }
     }
 
-    手数 = 将棋タイム.手数正規化(手数, $s.局面.一覧.length);
+    手数 = 将棋タイム.描画.手数正規化(手数, $s.局面.一覧.length);
     var 局面 = $s.局面.一覧[手数];
 
     //反転
@@ -498,13 +498,13 @@ function 将棋タイム(args){
     }
     else{
         if(Array.isArray($s.将棋盤.ハイライト緑)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト緑, '緑') );
+            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト緑, '緑') );
         }
         if(Array.isArray($s.将棋盤.ハイライト赤)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト赤, '赤') );
+            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト赤, '赤') );
         }
         if(Array.isArray($s.将棋盤.ハイライト青)){
-            $s.将棋盤.appendChild( 将棋タイム.マスハイライトDOM作成($s.将棋盤.ハイライト青, '青') );
+            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト青, '青') );
         }
     }
 
@@ -513,7 +513,7 @@ function 将棋タイム(args){
     for(var y in 局面['駒']){
         for(var x in 局面['駒'][y]){
             if(局面['駒'][y][x]){
-                $s.将棋盤.appendChild( 将棋タイム.駒DOM作成(局面['駒'][y][x], x, y, 反転) );
+                $s.将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面['駒'][y][x], x, y, 反転) );
             }
         }
     }
@@ -544,39 +544,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
-
-
-
-将棋タイム.初期局面 = {
-    '1': {'1': '香_', '2': '桂_', '3': '銀_', '4': '金_', '5': '玉_', '6': '金_', '7': '銀_', '8': '桂_', '9': '香_'},
-    '2': {'1': null, '2': '角_', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '飛_', '9': null},
-    '3': {'1': '歩_', '2': '歩_', '3': '歩_', '4': '歩_', '5': '歩_', '6': '歩_', '7': '歩_', '8': '歩_', '9': '歩_'},
-    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '7': {'1': '歩', '2': '歩', '3': '歩', '4': '歩', '5': '歩', '6': '歩', '7': '歩', '8': '歩', '9': '歩'},
-    '8': {'1': null, '2': '飛', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '角', '9': null},
-    '9': {'1': '香', '2': '桂', '3': '銀', '4': '金', '5': '玉', '6': '金', '7': '銀', '8': '桂', '9': '香'},
-};
-
-
-
-将棋タイム.駒無し局面 = {
-    '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-};
-
-
-
-将棋タイム.手数正規化 = function(手数, 全手数){
+将棋タイム.描画.手数正規化 = function(手数, 全手数){
     if(手数 < 0){
         手数 = 全手数 + 手数;
         if(手数 < 0){
@@ -591,15 +559,61 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.局面全構築 = function(指し手一覧, 局面一覧){
+将棋タイム.描画.駒DOM作成 = function(駒, x, y, 反転){
+    if(反転){
+        x = 10 - x;
+        y = 10 - y;
+        駒 = (駒.match('_'))  ?  駒.replace('_', '')  :  駒 + '_';
+    }
+
+    var div = document.createElement('div');
+    div.className = '将棋タイム-駒';
+    div.dataset.koma = 駒;
+    div.dataset.x = x;
+    div.dataset.y = y;
+
+    return div;
+};
+
+
+
+将棋タイム.描画.マスハイライトDOM作成 = function(マス, 色名){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 0; i < マス.length; i++){
+        var div = document.createElement('div');
+        div.className = '将棋タイム-' + 色名;
+        div.dataset.x = マス[i].substring(0, 1);
+        div.dataset.y = マス[i].substring(1, 2);
+        fragment.appendChild(div);
+    }
+    return fragment;
+};
+
+
+
+将棋タイム.描画.指し手DOM作成 = function (全指し手){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 1; i < 全指し手.length; i++){
+        var option = document.createElement('option');
+        option.textContent = 全指し手[i]['手数'] + ' ' + 全指し手[i]['表記'];
+        fragment.appendChild(option);
+    }
+    return fragment;
+};
+
+
+
+将棋タイム.全局面構築 = function(指し手一覧, 局面一覧){
     for(var i = 1; i < 指し手一覧.length; i++){
-        局面一覧.push( 将棋タイム.局面構築(指し手一覧[i], 局面一覧[i-1]) );
+        局面一覧.push( 将棋タイム.全局面構築.任意局面(指し手一覧[i], 局面一覧[i-1]) );
     }
 };
 
 
 
-将棋タイム.局面構築 = function(指し手, 前局面){
+将棋タイム.全局面構築.任意局面 = function(指し手, 前局面){
     // 指し手 = {'手数','駒','前X','前Y','後X','後Y','成り','表記'};
 
     var 局面 = 将棋タイム.オブジェクトコピー(前局面);
@@ -643,52 +657,6 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.駒DOM作成 = function(駒, x, y, 反転){
-    if(反転){
-        x = 10 - x;
-        y = 10 - y;
-        駒 = (駒.match('_'))  ?  駒.replace('_', '')  :  駒 + '_';
-    }
-
-    var div = document.createElement('div');
-    div.className = '将棋タイム-駒';
-    div.dataset.koma = 駒;
-    div.dataset.x = x;
-    div.dataset.y = y;
-
-    return div;
-};
-
-
-
-将棋タイム.マスハイライトDOM作成 = function(マス, 色名){
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 0; i < マス.length; i++){
-        var div = document.createElement('div');
-        div.className = '将棋タイム-' + 色名;
-        div.dataset.x = マス[i].substring(0, 1);
-        div.dataset.y = マス[i].substring(1, 2);
-        fragment.appendChild(div);
-    }
-    return fragment;
-};
-
-
-
-将棋タイム.指し手DOM作成 = function (全指し手){
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 1; i < 全指し手.length; i++){
-        var option = document.createElement('option');
-        option.textContent = 全指し手[i]['手数'] + ' ' + 全指し手[i]['表記'];
-        fragment.appendChild(option);
-    }
-    return fragment;
-};
-
-
-
 将棋タイム.kif解析 = function(kif){
     var 解析結果 = {};
     var 局面図   = [];
@@ -707,15 +675,15 @@ function 将棋タイム(args){
             解析結果[info[0]] = info[1];
         }
         else if(kif[i].match(/^\s*1\s/) || kif[i].match(/^\*/)){
-            解析結果['指し手'] = 将棋タイム.kif解析_指し手(kif.slice(i));
+            解析結果['指し手'] = 将棋タイム.kif解析.指し手(kif.slice(i));
             break;
         }
     }
 
     if(解析結果['先手の持駒'] && 解析結果['後手の持駒']){
-        解析結果['駒']         = 将棋タイム.kif解析_局面図(局面図);
-        解析結果['先手の持駒'] = 将棋タイム.kif解析_持駒(解析結果['先手の持駒']);
-        解析結果['後手の持駒'] = 将棋タイム.kif解析_持駒(解析結果['後手の持駒']);
+        解析結果['駒']         = 将棋タイム.kif解析.局面図(局面図);
+        解析結果['先手の持駒'] = 将棋タイム.kif解析.持駒(解析結果['先手の持駒']);
+        解析結果['後手の持駒'] = 将棋タイム.kif解析.持駒(解析結果['後手の持駒']);
     }
     else{
         解析結果['駒']         = 解析結果['駒'] || 将棋タイム.オブジェクトコピー(将棋タイム.初期局面);
@@ -730,7 +698,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析_局面図 = function(局面図配列){
+将棋タイム.kif解析.局面図 = function(局面図配列){
     var 局面 = 将棋タイム.オブジェクトコピー(将棋タイム.駒無し局面);
 
     if(局面図配列.length !== 9){
@@ -773,7 +741,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析_持駒 = function(str){
+将棋タイム.kif解析.持駒 = function(str){
     var 持駒 = 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
 
     str = str.trim();
@@ -796,7 +764,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析_指し手 = function(kif){
+将棋タイム.kif解析.指し手 = function(kif){
     var 全指し手 = [{手数:0, コメント:''}];
 
     var 全数字 = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9};
@@ -988,6 +956,39 @@ function 将棋タイム(args){
         to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
     }
     return to;
+};
+
+
+
+
+将棋タイム.初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
+
+
+
+将棋タイム.初期局面 = {
+    '1': {'1': '香_', '2': '桂_', '3': '銀_', '4': '金_', '5': '玉_', '6': '金_', '7': '銀_', '8': '桂_', '9': '香_'},
+    '2': {'1': null, '2': '角_', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '飛_', '9': null},
+    '3': {'1': '歩_', '2': '歩_', '3': '歩_', '4': '歩_', '5': '歩_', '6': '歩_', '7': '歩_', '8': '歩_', '9': '歩_'},
+    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '7': {'1': '歩', '2': '歩', '3': '歩', '4': '歩', '5': '歩', '6': '歩', '7': '歩', '8': '歩', '9': '歩'},
+    '8': {'1': null, '2': '飛', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '角', '9': null},
+    '9': {'1': '香', '2': '桂', '3': '銀', '4': '金', '5': '玉', '6': '金', '7': '銀', '8': '桂', '9': '香'},
+};
+
+
+
+将棋タイム.駒無し局面 = {
+    '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
 };
 
 
