@@ -4,27 +4,27 @@ function 将棋タイム(args){
         return;
     }
 
-    var $s = 将棋タイム.bloc(将棋タイム.HTML);
-    将棋タイム.全イベント登録($s);
+    var $b = 将棋タイム.bloc(将棋タイム.HTML);
+    将棋タイム.全イベント登録($b);
 
     var 解析結果   = 将棋タイム.kif解析(args.kif);
-    $s.局面.一覧   = [{'先手の持駒': 解析結果['先手の持駒'], '後手の持駒': 解析結果['後手の持駒'], '駒': 解析結果['駒']}];
-    $s.指し手.一覧 = 解析結果['指し手'];
-    $s.先手名.名前 = 解析結果['先手'];
-    $s.後手名.名前 = 解析結果['後手'];
+    $b.局面.一覧   = [{'先手の持駒': 解析結果['先手の持駒'], '後手の持駒': 解析結果['後手の持駒'], '駒': 解析結果['駒']}];
+    $b.指し手.一覧 = 解析結果['指し手'];
+    $b.先手名.名前 = 解析結果['先手'];
+    $b.後手名.名前 = 解析結果['後手'];
 
-    $s.将棋盤.ハイライト緑 = args.green;
-    $s.将棋盤.ハイライト赤 = args.red;
-    $s.将棋盤.ハイライト青 = args.blue;
-    $s.指し手.コメント表示部DOM = args.comment;
+    $b.将棋盤.ハイライト緑 = args.green;
+    $b.将棋盤.ハイライト赤 = args.red;
+    $b.将棋盤.ハイライト青 = args.blue;
+    $b.指し手.コメント表示部DOM = args.comment;
 
     if(args.reverse !== false){
-        $s.将棋盤.setAttribute('data-reverse', '1');
+        $b.将棋盤.setAttribute('data-reverse', '1');
     }
 
-    将棋タイム.全局面構築($s.指し手.一覧, $s.局面.一覧);
-    将棋タイム.描画($s, args.start, true);
-    args.el.parentNode.replaceChild($s.root, args.el);
+    将棋タイム.全局面構築($b.指し手.一覧, $b.局面.一覧);
+    将棋タイム.描画($b, args.start, true);
+    args.el.parentNode.replaceChild($b.root, args.el);
 }
 
 
@@ -102,29 +102,29 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画 = function($s, 手数, 初回描画){
+将棋タイム.描画 = function($b, 手数, 初回描画){
     if(初回描画 === true){
-        $s.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($s.指し手.一覧) );
-        if($s.局面.一覧.length === 1){
-            $s.コントロールパネル.style.display = 'none';
+        $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.指し手.一覧) );
+        if($b.局面.一覧.length === 1){
+            $b.コントロールパネル.style.display = 'none';
         }
     }
 
-    手数 = 将棋タイム.描画.手数正規化(手数, $s.局面.一覧.length);
-    var 局面 = $s.局面.一覧[手数];
+    手数 = 将棋タイム.描画.手数正規化(手数, $b.局面.一覧.length);
+    var 局面 = $b.局面.一覧[手数];
 
     //反転
-    var 反転 = $s.将棋盤.hasAttribute('data-reverse');
+    var 反転 = $b.将棋盤.hasAttribute('data-reverse');
     var 先手 = (反転) ? '後手' : '先手';
     var 後手 = (反転) ? '先手' : '後手';
 
     //初期化
-    $s.将棋盤.innerHTML = '';
+    $b.将棋盤.innerHTML = '';
 
     //マスハイライト
     if(手数 !== 0){
-        var 最終手X = $s.指し手.一覧[手数]['後X'];
-        var 最終手Y = $s.指し手.一覧[手数]['後Y'];
+        var 最終手X = $b.指し手.一覧[手数]['後X'];
+        var 最終手Y = $b.指し手.一覧[手数]['後Y'];
         if(反転){
             最終手X = 10 - 最終手X;
             最終手Y = 10 - 最終手Y;
@@ -133,17 +133,17 @@ function 将棋タイム(args){
         div.className = '将棋タイム-最終手';
         div.dataset.x = 最終手X;
         div.dataset.y = 最終手Y;
-        $s.将棋盤.appendChild(div);
+        $b.将棋盤.appendChild(div);
     }
     else{
-        if(Array.isArray($s.将棋盤.ハイライト緑)){
-            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト緑, '緑') );
+        if(Array.isArray($b.将棋盤.ハイライト緑)){
+            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.将棋盤.ハイライト緑, '緑') );
         }
-        if(Array.isArray($s.将棋盤.ハイライト赤)){
-            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト赤, '赤') );
+        if(Array.isArray($b.将棋盤.ハイライト赤)){
+            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.将棋盤.ハイライト赤, '赤') );
         }
-        if(Array.isArray($s.将棋盤.ハイライト青)){
-            $s.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($s.将棋盤.ハイライト青, '青') );
+        if(Array.isArray($b.将棋盤.ハイライト青)){
+            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.将棋盤.ハイライト青, '青') );
         }
     }
 
@@ -152,33 +152,39 @@ function 将棋タイム(args){
     for(var y in 局面['駒']){
         for(var x in 局面['駒'][y]){
             if(局面['駒'][y][x]){
-                $s.将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面['駒'][y][x], x, y, 反転) );
+                $b.将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面['駒'][y][x], x, y, 反転) );
             }
         }
     }
 
     //先手持駒配置
     for(var 駒 in 局面['先手の持駒']){
-        $s[先手+'駒台_'+駒].setAttribute("data-num", 局面['先手の持駒'][駒]);
+        $b[先手+'駒台_'+駒].setAttribute("data-num", 局面['先手の持駒'][駒]);
     }
     //後手持駒配置
     for(var 駒 in 局面['後手の持駒']){
-        $s[後手+'駒台_'+駒].setAttribute("data-num", 局面['後手の持駒'][駒]);
+        $b[後手+'駒台_'+駒].setAttribute("data-num", 局面['後手の持駒'][駒]);
     }
 
     //指し手
-    $s.指し手.selectedIndex = 手数;
+    $b.指し手.selectedIndex = 手数;
     
     //名前
-    if($s.先手名.名前 && $s.後手名.名前){
-        $s[先手+'名'].textContent = '▲' + $s.先手名.名前;
-        $s[後手+'名'].textContent = '△' + $s.後手名.名前;
+    if($b.先手名.名前 && $b.後手名.名前){
+        $b[先手+'名'].textContent = '▲' + $b.先手名.名前;
+        $b[後手+'名'].textContent = '△' + $b.後手名.名前;
     }
     
     //コメント
-    if($s.指し手.コメント表示部DOM){
-        $s.指し手.コメント表示部DOM.textContent = $s.指し手.一覧[手数]['コメント'];
+    if($b.指し手.コメント表示部DOM){
+        $b.指し手.コメント表示部DOM.textContent = $b.指し手.一覧[手数]['コメント'];
     }
+};
+
+
+
+将棋タイム.描画.初回 = function ($b){
+    
 };
 
 
@@ -456,34 +462,34 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最初に移動ボタン_click = function (event){
-    将棋タイム.描画(this.$s, 0);
+    将棋タイム.描画(this.$b, 0);
 };
 
 
 
 将棋タイム.$前に移動ボタン_click = function (event){
-    var 現在の手数 = this.$s.指し手.selectedIndex || 0;
+    var 現在の手数 = this.$b.指し手.selectedIndex || 0;
     if(現在の手数 < 1){
         return;
     }
-    将棋タイム.描画(this.$s, 現在の手数 - 1);
+    将棋タイム.描画(this.$b, 現在の手数 - 1);
 };
 
 
 
 将棋タイム.$次に移動ボタン_click = function(event){
-    var 現在の手数 = this.$s.指し手.selectedIndex || 0;
-    if(現在の手数 >= this.$s.局面.一覧.length - 1){
+    var 現在の手数 = this.$b.指し手.selectedIndex || 0;
+    if(現在の手数 >= this.$b.局面.一覧.length - 1){
         return;
     }
-    将棋タイム.描画(this.$s, 現在の手数 + 1);
+    将棋タイム.描画(this.$b, 現在の手数 + 1);
 };
 
 
 
 将棋タイム.$次に移動ボタン_wheel = function(event){
     event.preventDefault();
-    var 現在の手数 = this.$s.指し手.selectedIndex || 0;
+    var 現在の手数 = this.$b.指し手.selectedIndex || 0;
     if(event.deltaY < 0){
         if(現在の手数 < 1){
             return;
@@ -491,36 +497,36 @@ function 将棋タイム(args){
         現在の手数--;
     }
     else{
-        if(現在の手数 >= this.$s.局面.一覧.length - 1){
+        if(現在の手数 >= this.$b.局面.一覧.length - 1){
             return;
         }
         現在の手数++;
     }
-    将棋タイム.描画(this.$s, 現在の手数);
+    将棋タイム.描画(this.$b, 現在の手数);
 };
 
 
 
 将棋タイム.$最後に移動ボタン_click = function(event){
-    将棋タイム.描画(this.$s, -1);
+    将棋タイム.描画(this.$b, -1);
 };
 
 
 
 将棋タイム.$指し手_change = function (event){
-    将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
+    将棋タイム.描画(this.$b, this.$b.指し手.selectedIndex || 0);
 };
 
 
 
 将棋タイム.$反転ボタン_click = function(event){
-    if(this.$s.将棋盤.hasAttribute('data-reverse')){
-        this.$s.将棋盤.removeAttribute('data-reverse');
+    if(this.$b.将棋盤.hasAttribute('data-reverse')){
+        this.$b.将棋盤.removeAttribute('data-reverse');
     }
     else{
-        this.$s.将棋盤.setAttribute('data-reverse', '1');
+        this.$b.将棋盤.setAttribute('data-reverse', '1');
     }
-    将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
+    将棋タイム.描画(this.$b, this.$b.指し手.selectedIndex || 0);
 };
 
 
@@ -574,7 +580,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.全イベント登録 = function ($s){
+将棋タイム.全イベント登録 = function ($b){
     for(var name in this){
         if(name.indexOf('$') !== 0){
             continue;
@@ -583,7 +589,7 @@ function 将棋タイム(args){
         var eventName = names.pop();
         var className = names.join('_');
 
-        $s[className].addEventListener(eventName, {'handleEvent': this[name], '$s': $s});
+        $b[className].addEventListener(eventName, {'handleEvent': this[name], '$b': $b});
     }
 };
 
