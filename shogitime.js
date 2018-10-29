@@ -407,6 +407,35 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.スタートアップ = function(event){
+    //shogitimeディレクトリのURLを求める
+    var currentScript = document.querySelector("script[src*='shogitime.js']");
+    将棋タイム.URL  = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
+
+    //CSSの「URL()」の内容を、相対パスからURLに変換する
+    将棋タイム.CSS  = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
+
+    var style = document.createElement('style');
+    style.innerHTML = 将棋タイム.CSS;
+    document.head.insertBefore(style, document.head.firstElementChild);
+
+    var pre = document.querySelectorAll("script[type='kif']");
+    for(var i = 0; i < pre.length; i++){
+        将棋タイム({
+            el: pre[i],
+            kif: pre[i].textContent,
+            start: pre[i].getAttribute("start"),
+            reverse: pre[i].hasAttribute("reverse"),
+            comment: pre[i].getAttribute("comment"),
+            green: pre[i].getAttribute("green"),
+            red: pre[i].getAttribute("red"),
+            blue: pre[i].getAttribute("blue"),
+        });
+    }
+};
+
+
+
 将棋タイム.引数確認 = function (args){
     args.kif = args.kif || '';
     args.kif = args.kif.trim();
@@ -884,8 +913,6 @@ function 将棋タイム(args){
 
 
 将棋タイム.bloc = function(root, self){
-    var splitter = '-';
-
     if(typeof root === 'string'){
         if(root.match(/^</)){
             var tmpdiv = document.createElement('div');
@@ -907,15 +934,15 @@ function 将棋タイム(args){
     if(blocName === ''){
         throw 'ブロック名が存在しません';
     }
-    if(blocName.indexOf(splitter) !== -1){
-        throw 'ブロック名に ' + splitter + ' は使用できません: ' + blocName;
+    if(blocName.indexOf('-') !== -1){
+        throw 'ブロック名にハイフンは使用できません: ' + blocName;
     }
 
     var elements = root.querySelectorAll("*");
 
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
-        var name      = className.split(splitter);
+        var name      = className.split('-');
         var firstName = name.shift();
         var lastName  = name.join('_');
 
@@ -942,30 +969,6 @@ function 将棋タイム(args){
 };
 
 
-document.addEventListener('DOMContentLoaded', function(event){
-    //shogitimeディレクトリのURLを求める
-    var currentScript = document.querySelector("script[src*='shogitime.js']");
-    将棋タイム.URL  = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
 
-    //CSSの「URL()」の内容を、相対パスからURLに変換する
-    将棋タイム.CSS  = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
-
-    var style = document.createElement('style');
-    style.innerHTML = 将棋タイム.CSS;
-    document.head.insertBefore(style, document.head.firstElementChild);
-
-    var pre = document.querySelectorAll("script[type='kif']");
-    for(var i = 0; i < pre.length; i++){
-        将棋タイム({
-            el: pre[i],
-            kif: pre[i].textContent,
-            start: pre[i].getAttribute("start"),
-            reverse: pre[i].hasAttribute("reverse"),
-            comment: pre[i].getAttribute("comment"),
-            green: pre[i].getAttribute("green"),
-            red: pre[i].getAttribute("red"),
-            blue: pre[i].getAttribute("blue"),
-        });
-    }
-});
+document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ)  :  将棋タイム.スタートアップ();
 
