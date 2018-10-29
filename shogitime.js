@@ -851,13 +851,13 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.最初に移動ボタン_click = function (event){
+将棋タイム.$最初に移動ボタン_click = function (event){
     将棋タイム.描画(this.$s, 0);
 };
 
 
 
-将棋タイム.前に移動ボタン_click = function (event){
+将棋タイム.$前に移動ボタン_click = function (event){
     var 現在の手数 = this.$s.指し手.selectedIndex || 0;
     if(現在の手数 < 1){
         return;
@@ -867,7 +867,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.次に移動ボタン_click = function(event){
+将棋タイム.$次に移動ボタン_click = function(event){
     var 現在の手数 = this.$s.指し手.selectedIndex || 0;
     if(現在の手数 >= this.$s.局面.一覧.length - 1){
         return;
@@ -877,7 +877,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.次に移動ボタン_wheel = function(event){
+将棋タイム.$次に移動ボタン_wheel = function(event){
     event.preventDefault();
     var 現在の手数 = this.$s.指し手.selectedIndex || 0;
     if(event.deltaY < 0){
@@ -897,19 +897,19 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.最後に移動ボタン_click = function(event){
+将棋タイム.$最後に移動ボタン_click = function(event){
     将棋タイム.描画(this.$s, -1);
 };
 
 
 
-将棋タイム.指し手_change = function (event){
+将棋タイム.$指し手_change = function (event){
     将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
 };
 
 
 
-将棋タイム.反転ボタン_click = function(event){
+将棋タイム.$反転ボタン_click = function(event){
     if(this.$s.将棋盤.hasAttribute('data-reverse')){
         this.$s.将棋盤.removeAttribute('data-reverse');
     }
