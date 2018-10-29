@@ -84,6 +84,7 @@ function 将棋タイム(args){
 
 
 
+
 将棋タイム.CSS = (function() {/*
 .将棋タイム{
     -ms-user-select: none;
@@ -407,6 +408,7 @@ function 将棋タイム(args){
 
 
 
+
 将棋タイム.スタートアップ = function(event){
     //shogitimeディレクトリのURLを求める
     var currentScript = document.querySelector("script[src*='shogitime.js']");
@@ -553,8 +555,8 @@ function 将棋タイム(args){
 
 
 
-
 将棋タイム.初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
+
 
 
 将棋タイム.初期局面 = {
@@ -568,6 +570,7 @@ function 将棋タイム(args){
     '8': {'1': null, '2': '飛', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '角', '9': null},
     '9': {'1': '香', '2': '桂', '3': '銀', '4': '金', '5': '玉', '6': '金', '7': '銀', '8': '桂', '9': '香'},
 };
+
 
 
 将棋タイム.駒無し局面 = {
@@ -598,11 +601,13 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.局面全構築 = function(指し手一覧, 局面一覧){
     for(var i = 1; i < 指し手一覧.length; i++){
         局面一覧.push( 将棋タイム.局面構築(指し手一覧[i], 局面一覧[i-1]) );
     }
 };
+
 
 
 将棋タイム.局面構築 = function(指し手, 前局面){
@@ -648,6 +653,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.駒DOM作成 = function(駒, x, y, 反転){
     if(反転){
         x = 10 - x;
@@ -665,6 +671,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.マスハイライトDOM作成 = function(color, 色名){
     var fragment = document.createDocumentFragment();
 
@@ -679,6 +686,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.指し手DOM作成 = function (全指し手){
     var fragment = document.createDocumentFragment();
 
@@ -689,6 +697,7 @@ function 将棋タイム(args){
     }
     return fragment;
 };
+
 
 
 将棋タイム.kif解析 = function(kif){
@@ -729,6 +738,7 @@ function 将棋タイム(args){
 
     return 解析結果;
 };
+
 
 
 将棋タイム.kif解析_局面図 = function(局面図配列){
@@ -797,7 +807,6 @@ function 将棋タイム(args){
 
 
 
-
 将棋タイム.kif解析_指し手 = function(kif){
     var 全指し手 = [{手数:0, コメント:''}];
 
@@ -849,9 +858,11 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.最初に移動ボタン_click = function (event){
     将棋タイム.描画(this.$s, 0);
 };
+
 
 
 将棋タイム.前に移動ボタン_click = function (event){
@@ -863,6 +874,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.次に移動ボタン_click = function(event){
     var 現在の手数 = this.$s.指し手.selectedIndex || 0;
     if(現在の手数 >= this.$s.局面.一覧.length - 1){
@@ -870,6 +882,7 @@ function 将棋タイム(args){
     }
     将棋タイム.描画(this.$s, 現在の手数 + 1);
 };
+
 
 
 将棋タイム.次に移動ボタン_wheel = function(event){
@@ -891,14 +904,17 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.最後に移動ボタン_click = function(event){
     将棋タイム.描画(this.$s, -1);
 };
 
 
+
 将棋タイム.指し手_change = function (event){
     将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
 };
+
 
 
 将棋タイム.反転ボタン_click = function(event){
@@ -910,6 +926,7 @@ function 将棋タイム(args){
     }
     将棋タイム.描画(this.$s, this.$s.指し手.selectedIndex || 0);
 };
+
 
 
 将棋タイム.bloc = function(root, self){
@@ -960,6 +977,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.オブジェクトコピー = function(from){
     var to = {};
     for(var key in from){
@@ -970,5 +988,5 @@ function 将棋タイム(args){
 
 
 
-document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ)  :  将棋タイム.スタートアップ();
 
+document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ)  :  将棋タイム.スタートアップ();
