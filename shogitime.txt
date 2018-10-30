@@ -114,7 +114,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 ◆開始時に任意の手数から始める
 
-scriptタグにstart属性を追加します。
+kifタグにstart属性を追加します。
 例えば5手目から開始したい場合は、次のようにします
 
 <script type="kif" start="5">
@@ -125,7 +125,7 @@ scriptタグにstart属性を追加します。
 
 ◆開始時に盤を反転して始める
 
-scriptタグにreverse属性を追加します
+kifタグにreverse属性を追加します
 
 <script type="kif" reverse>
 
@@ -140,7 +140,7 @@ scriptタグにreverse属性を追加します
 
 <textarea id="example"></textarea>
 
-2. scriptタグにcomment属性を追加し、その値に表示部を指し示す「CSSセレクタ」を記述します
+2. kifタグにcomment属性を追加し、その値に表示部を指し示す「CSSセレクタ」を記述します
 
 <script type="kif" comment="#example">
 
@@ -148,7 +148,7 @@ scriptタグにreverse属性を追加します
 
 ◆特定のマスをハイライトする
 
-scriptタグにblue/green/red属性を追加し、値にはハイライトしたいマス番号(2桁の数字)を指定してください。
+kifタグにblue/green/red属性を追加し、値にはハイライトしたいマス番号(2桁の数字)を指定してください。
 指定したマスを青色/緑色/赤色でハイライトします。
 複数のマスを指定したい場合は、コンマで区切ってください。
 

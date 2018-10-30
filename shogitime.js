@@ -43,17 +43,17 @@ function 将棋タイム(args){
     style.innerHTML = 将棋タイム.CSS;
     document.head.insertBefore(style, document.head.firstElementChild);
 
-    var dom = document.querySelectorAll("[type='kif']");
-    for(var i = 0; i < dom.length; i++){
+    var el = document.querySelectorAll("[type='kif']");
+    for(var i = 0; i < el.length; i++){
         将棋タイム({
-            el: dom[i],
-            kif: dom[i].textContent,
-            start: dom[i].getAttribute("start"),
-            reverse: dom[i].hasAttribute("reverse"),
-            comment: dom[i].getAttribute("comment"),
-            green: dom[i].getAttribute("green"),
-            red: dom[i].getAttribute("red"),
-            blue: dom[i].getAttribute("blue"),
+            el: el[i],
+            kif: el[i].textContent,
+            start: el[i].getAttribute("start"),
+            reverse: el[i].hasAttribute("reverse"),
+            comment: el[i].getAttribute("comment"),
+            green: el[i].getAttribute("green"),
+            red: el[i].getAttribute("red"),
+            blue: el[i].getAttribute("blue"),
         });
     }
 };
@@ -399,7 +399,9 @@ function 将棋タイム(args){
         var 駒 = str[i].substr(0, 1);
         var 数 = str[i].substr(1);
 
-        持駒[駒] = (数) ? 漢数字[数] : 1;
+        if(駒 in 持駒){
+            持駒[駒] = (数) ? 漢数字[数] : 1;
+        }
     }
 
     return 持駒;
