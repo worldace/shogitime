@@ -25,25 +25,22 @@ https://github.com/worldace/shogitime/archive/master.zip
 <script src="shogitime.js"></script>
 
 
-[3] 次のようなタグを用意し、中に「KIF形式のテキスト」を貼り付けます
+[3] type="kif"属性を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
 
 <script type="kif">
 ここにKIF形式のテキストを貼り付ける
 </script>
 
-または「KIFファイルのURL」を貼り付けてもOK
+またはを貼り付けてもOK
 
 <script type="kif">
 http://example.jp/example.kif
 </script>
 
 
-これだけで、このタグが自動的にHTMLに変換されます。
-
-
+※ scriptタグ以外でもOKです。例えばtemplateタグでも可
 ※ KIFファイルは原則として、サイトと同一サーバに置く必要があります。(クロスオリジン制約)
 ※ KIFファイルの文字コードがUTF-8の場合、ファイルの拡張子を「.kifu」にする必要があります
-※ [3]においてはscriptタグ以外でもOKです。例えばtemplateタグでも可
 
 
 
