@@ -20,7 +20,7 @@ function 将棋タイム(args){
     $b.将棋盤.ハイライト青 = args.blue;
     $b.指し手.コメントDOM  = args.comment;
 
-    if(args.reverse !== false){
+    if(args.reverse){
         $b.将棋盤.setAttribute('data-reverse', '1');
     }
 
@@ -43,7 +43,7 @@ function 将棋タイム(args){
     style.innerHTML = 将棋タイム.CSS;
     document.head.insertBefore(style, document.head.firstElementChild);
 
-    var dom = document.querySelectorAll("script[type='kif']");
+    var dom = document.querySelectorAll("[type='kif']");
     for(var i = 0; i < dom.length; i++){
         将棋タイム({
             el: dom[i],
@@ -84,7 +84,6 @@ function 将棋タイム(args){
     }
 
     args.start   = Number(args.start || 0);
-    args.reverse = args.reverse || false;
 
     if(args.comment){
         args.comment = document.querySelector(args.comment);
