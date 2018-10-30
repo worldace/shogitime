@@ -91,13 +91,13 @@ function 将棋タイム(args){
     }
 
     if(args.green){
-        args.green = args.green.split(',');
+        args.green = String(args.green).split(',');
     }
     if(args.red){
-        args.red = args.red.split(',');
+        args.red = String(args.red).split(',');
     }
     if(args.blue){
-        args.blue = args.blue.split(',');
+        args.blue = String(args.blue).split(',');
     }
 };
 
@@ -123,7 +123,7 @@ function 将棋タイム(args){
             最終手X = 10 - 最終手X;
             最終手Y = 10 - 最終手Y;
         }
-        $b.将棋盤.appendChild( 将棋タイム.描画.最終手DOM作成(最終手X, 最終手Y) );
+        $b.将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成(最終手X, 最終手Y) );
     }
     else{
         if(Array.isArray($b.将棋盤.ハイライト緑)){
@@ -204,7 +204,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.最終手DOM作成 = function (x, y){
+将棋タイム.描画.最終手ハイライトDOM作成 = function (x, y){
     var div = document.createElement('div');
     div.className = '将棋タイム-最終手';
     div.dataset.x = x;
