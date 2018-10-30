@@ -170,6 +170,12 @@ function 将棋タイム(args){
 将棋タイム.描画.初回 = function ($b, replace){
     $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.指し手.一覧) );
 
+    if($b.局面.勝敗){
+        var option = document.createElement('option');
+        option.textContent = $b.局面.勝敗.表記;
+        $b.指し手.appendChild(option);
+    }
+
     if($b.局面.総手数 === 0){
         $b.コントロールパネル.style.display = 'none';
     }
@@ -476,11 +482,11 @@ function 将棋タイム(args){
 
     if(理由 === '投了' || 理由 === '詰み' || 理由 === '切れ負け' || 理由 === '反則負け'){
         結果.勝者 = (手番 === '▲') ? '後手' : '先手';
-        結果.表記 = 理由 + 'にて' + 結果.勝者 + 'の勝ち';
+        結果.表記 = 理由 + 'にて' + 結果.勝者 + 'の勝利';
     }
     else if(理由 === '反則勝ち'){
         結果.勝者 = (手番 === '▲') ? '先手' : '後手';
-        結果.表記 = 理由 + 'にて' + 結果.勝者 + 'の勝ち';
+        結果.表記 = 理由 + 'にて' + 結果.勝者 + 'の勝利';
     }
     else if(理由 === '持将棋' || 理由 === '千日手'){
         結果.勝者 = '引き分け';
@@ -502,21 +508,25 @@ function 将棋タイム(args){
 
 
 将棋タイム.$前に移動ボタン_click = function (event){
-    if(this.$b.局面.手数 < 1){
-        return;
+    if(this.$b.指し手.selectedIndex > this.$b.局面.総手数){
+        this.$b.指し手.selectedIndex = this.$b.指し手.length - 2;
     }
-    this.$b.局面.手数--;
-    将棋タイム.描画(this.$b);
+    else if(this.$b.局面.手数 > 0){
+        this.$b.局面.手数--;
+        将棋タイム.描画(this.$b);
+    }
 };
 
 
 
 将棋タイム.$次に移動ボタン_click = function(event){
-    if(this.$b.局面.手数 >= this.$b.局面.総手数){
-        return;
+    if(this.$b.局面.手数 < this.$b.局面.総手数){
+        this.$b.局面.手数++;
+        将棋タイム.描画(this.$b);
     }
-    this.$b.局面.手数++;
-    将棋タイム.描画(this.$b);
+    else{
+        this.$b.指し手.selectedIndex = this.$b.指し手.length - 1;
+    }
 };
 
 
@@ -531,13 +541,19 @@ function 将棋タイム(args){
 将棋タイム.$最後に移動ボタン_click = function(event){
     this.$b.局面.手数 = this.$b.局面.総手数;
     将棋タイム.描画(this.$b);
+    this.$b.指し手.selectedIndex = this.$b.指し手.length - 1;
 };
 
 
 
 将棋タイム.$指し手_change = function (event){
-    this.$b.局面.手数 = this.$b.指し手.selectedIndex;
-    将棋タイム.描画(this.$b);
+    if(this.$b.指し手.selectedIndex > this.$b.局面.総手数){
+        this.$b.最後に移動ボタン.click();
+    }
+    else{
+        this.$b.局面.手数 = this.$b.指し手.selectedIndex;
+        将棋タイム.描画(this.$b);
+    }
 };
 
 
