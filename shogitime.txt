@@ -31,8 +31,6 @@ https://github.com/worldace/shogitime/archive/master.zip
 ここにKIF形式のテキストを貼り付ける
 </script>
 
-またはを貼り付けてもOK
-
 <script type="kif">
 http://example.jp/example.kif
 </script>
@@ -40,7 +38,7 @@ http://example.jp/example.kif
 
 ※ scriptタグ以外でもOKです。例えばtemplateタグでも可
 ※ KIFファイルは原則として、サイトと同一サーバに置く必要があります。(クロスオリジン制約)
-※ KIFファイルの文字コードがUTF-8の場合、ファイルの拡張子を「.kifu」にする必要があります
+※ KIFファイルの文字コードがUTF-8の場合は、ファイルの拡張子を「.kifu」にする必要があります
 
 
 
