@@ -15,7 +15,7 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 ■使い方
 ------------------------------------
 
-[1] 将棋タイムをダウンロードしたら解凍し、フォルダ一式をアップロードします
+[1] 将棋タイムをダウンロードしたら解凍し、shogitimeフォルダ一式をアップロードします
 https://github.com/worldace/shogitime/archive/master.zip
 
 
@@ -26,6 +26,7 @@ https://github.com/worldace/shogitime/archive/master.zip
 
 
 [3] type="kif"属性を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
+    scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます。
 
 <script type="kif">
 ここにKIF形式のテキストを貼り付ける
@@ -36,9 +37,8 @@ http://example.jp/example.kif
 </script>
 
 
-※ scriptタグ以外でもOKです。例えばtemplateタグでも可
 ※ KIFファイルは原則として、サイトと同一サーバに置く必要があります。(クロスオリジン制約)
-※ KIFファイルの文字コードがUTF-8の場合は、ファイルの拡張子を「.kifu」にする必要があります
+※ KIFファイルの文字コードがUTF-8の場合は、KIFファイルの拡張子を「.kifu」にする必要があります
 
 
 
@@ -51,7 +51,7 @@ http://example.jp/example.kif
 
 【Windows上で作成する】推奨
 ShogiGUI http://shogigui.siganus.com/
-「編集 → 棋譜コピー → KIF形式」 または 「ファイル → 名前を付けて保存」
+「編集 → 棋譜コピー → KIF形式」 または 「ファイル → 名前を付けて保存(KIF形式)」
 
 
 【KIF形式サンプル1】
@@ -171,7 +171,7 @@ kifタグにblue/green/red属性を追加し、値にはハイライトしたい
 
 
 【起動オプション一覧】
-起動オプションはオブジェクトです。'el'と'kif'が必須
+起動オプションはオブジェクトです。'el'と'kif'が必須で、他は任意です
 
 {
     el      : 将棋盤を表示する場所をDOM要素で。必須。このDOM要素(タグ)が将棋盤に置換されます
