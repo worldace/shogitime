@@ -719,6 +719,7 @@ function 将棋タイム(args){
     -webkit-user-select: none;
     user-select: none;
     width: 514px;
+    margin: 50px auto;
 }
 .将棋タイム *{
     box-sizing: border-box;
