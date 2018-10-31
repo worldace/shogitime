@@ -168,13 +168,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.初回 = function ($b, replace){
-    $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.指し手.一覧) );
-
-    if($b.局面.勝敗){
-        var option = document.createElement('option');
-        option.textContent = $b.局面.勝敗.表記;
-        $b.指し手.appendChild(option);
-    }
+    $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.指し手.一覧, $b.局面.勝敗) );
 
     if($b.局面.総手数 === 0){
         $b.コントロールパネル.style.display = 'none';
@@ -235,7 +229,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.指し手DOM作成 = function (全指し手){
+将棋タイム.描画.指し手DOM作成 = function (全指し手, 勝敗){
     var fragment = document.createDocumentFragment();
 
     for(var i = 1; i < 全指し手.length; i++){
@@ -243,6 +237,14 @@ function 将棋タイム(args){
         option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].表記;
         fragment.appendChild(option);
     }
+
+    if(勝敗){
+        var option = document.createElement('option');
+        option.textContent = 勝敗.表記;
+        fragment.appendChild(option);
+    }
+
+
     return fragment;
 };
 
