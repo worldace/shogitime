@@ -579,7 +579,9 @@ function 将棋タイム(args){
         }
     }
 
-    $b.root = root;
+    $b.root    = root;
+    $b.state   = {};
+    $b.root.$b = $b;
 
     var blocName = root.classList[0] || '';
     if(blocName === ''){
@@ -606,9 +608,6 @@ function 将棋タイム(args){
 
         $b[lastName] = elements[i];
     }
-
-    $b.state   = {};
-    $b.root.$b = $b;
 
     return $b;
 };
