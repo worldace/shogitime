@@ -6,7 +6,6 @@ function 将棋タイム(args){
 
     var $b = 将棋タイム.bloc(将棋タイム.HTML);
     将棋タイム.全イベント登録($b);
-
     var 解析結果   = 将棋タイム.kif解析(args.kif);
     $b.局面.一覧   = [{'先手の持駒': 解析結果.先手の持駒, '後手の持駒': 解析結果.後手の持駒, '駒': 解析結果.駒}];
     $b.局面.勝敗   = 解析結果.勝敗;
@@ -18,10 +17,6 @@ function 将棋タイム(args){
     $b.局面.手数   = 将棋タイム.手数正規化(args.start, $b.局面.総手数);
     
     $b.state.args = args;
-
-    if(args.reverse){
-        $b.将棋盤.setAttribute('data-reverse', '1');
-    }
 
     将棋タイム.全局面構築($b.指し手.一覧, $b.局面.一覧);
     将棋タイム.描画.初回($b);
@@ -170,6 +165,10 @@ function 将棋タイム(args){
 
     if($b.局面.総手数 === 0){
         $b.コントロールパネル.style.display = 'none';
+    }
+
+    if($b.state.args.reverse){
+        $b.将棋盤.setAttribute('data-reverse', '1');
     }
 
     将棋タイム.描画($b);
@@ -580,9 +579,7 @@ function 将棋タイム(args){
         }
     }
 
-    $b.root       = root;
-    $b.root.state = {};
-    $b.state      = $b.root.state;
+    $b.root = root;
 
     var blocName = root.classList[0] || '';
     if(blocName === ''){
@@ -609,7 +606,10 @@ function 将棋タイム(args){
 
         $b[lastName] = elements[i];
     }
-    
+
+    $b.state   = {};
+    $b.root.$b = $b;
+
     return $b;
 };
 
