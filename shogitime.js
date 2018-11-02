@@ -6,7 +6,7 @@ function 将棋タイム(args){
 
     var $b = 将棋タイム.bloc(将棋タイム.HTML);
 
-    $b.state        = 将棋タイム.kif解析(args.kif);
+    $b.state        = 将棋タイム.KIF解析(args.kif);
     $b.state.手数   = 将棋タイム.手数正規化(args.start, $b.state.総手数);
     $b.state.全局面 = 将棋タイム.全局面構築($b.state.全指し手, $b.state.初期局面);
     $b.state.args   = args;
@@ -53,7 +53,7 @@ function 将棋タイム(args){
     if(args.kif.match(/^https?:/)){
         var xhr = new XMLHttpRequest();
         xhr.open('GET', args.kif);
-        xhr.timeout = 20 * 1000;
+        xhr.timeout = 60 * 1000;
         if(!args.kif.match(/\.kifu$/)){
             xhr.overrideMimeType('text/plain; charset=Shift_JIS');
         }
@@ -244,7 +244,7 @@ function 将棋タイム(args){
     for(var i = 1; i < 指し手一覧.length; i++){
         全局面.push( 将棋タイム.全局面構築.各局面(指し手一覧[i], 全局面[i-1]) );
     }
-    
+
     return 全局面;
 };
 
@@ -310,9 +310,9 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析 = function(kif){
-    var 解析結果 = {};
+将棋タイム.KIF解析 = function(kif){
     var 一次解析 = {局面図:[]};
+    var 解析結果 = {};
 
     kif = kif.split(/\r?\n/);
 
@@ -334,15 +334,15 @@ function 将棋タイム(args){
     }
 
     解析結果.初期局面 = {
-        '駒'        : 将棋タイム.kif解析.局面図(一次解析.局面図),
-        '先手の持駒': 将棋タイム.kif解析.持駒(一次解析.先手の持駒),
-        '後手の持駒': 将棋タイム.kif解析.持駒(一次解析.後手の持駒),
+        '駒'        : 将棋タイム.KIF解析.局面図(一次解析.局面図),
+        '先手の持駒': 将棋タイム.KIF解析.持駒(一次解析.先手の持駒),
+        '後手の持駒': 将棋タイム.KIF解析.持駒(一次解析.後手の持駒),
     };
 
     解析結果.先手名   = 一次解析.先手 || '';
     解析結果.後手名   = 一次解析.後手 || '';
 
-    解析結果.全指し手 = 将棋タイム.kif解析.指し手(一次解析.全指し手);
+    解析結果.全指し手 = 将棋タイム.KIF解析.指し手(一次解析.全指し手);
     if('勝者' in 解析結果.全指し手[解析結果.全指し手.length-1]){
         解析結果.勝敗 = 解析結果.全指し手.pop();
     }
@@ -353,7 +353,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析.局面図 = function(kif局面図){
+将棋タイム.KIF解析.局面図 = function(kif局面図){
     if(kif局面図.length !== 9){
         return 将棋タイム.オブジェクトコピー(将棋タイム.初期局面);
     }
@@ -395,7 +395,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析.持駒 = function(kif持駒){
+将棋タイム.KIF解析.持駒 = function(kif持駒){
     var 持駒 = 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
 
     if(kif持駒 === undefined || kif持駒.match('なし')){
@@ -420,7 +420,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析.指し手 = function(kif指し手){
+将棋タイム.KIF解析.指し手 = function(kif指し手){
     var 全指し手 = [{手数:0, コメント:''}];
 
     if(!kif指し手){
@@ -458,7 +458,7 @@ function 将棋タイム(args){
 
         if(!解析){
             if(終局表記.indexOf(現在の手) >= 0){
-                全指し手.push(将棋タイム.kif解析.勝敗(現在の手, 手番));
+                全指し手.push(将棋タイム.KIF解析.勝敗(現在の手, 手番));
             }
             break;
         }
@@ -482,7 +482,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.kif解析.勝敗 = function (理由, 手番){
+将棋タイム.KIF解析.勝敗 = function (理由, 手番){
     var 結果 = {'勝者':'', '敗者':'', '理由':理由, '表記':''};
 
     if(理由 === '投了' || 理由 === '詰み' || 理由 === '切れ負け' || 理由 === '反則負け'){
