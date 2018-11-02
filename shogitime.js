@@ -5,7 +5,6 @@ function 将棋タイム(args){
     }
 
     var $b = 将棋タイム.bloc(将棋タイム.HTML);
-    将棋タイム.全イベント登録($b);
     var 解析結果   = 将棋タイム.kif解析(args.kif);
     
     $b.state.初期局面 = {'先手の持駒': 解析結果.先手の持駒, '後手の持駒': 解析結果.後手の持駒, '駒': 解析結果.駒};
@@ -13,13 +12,14 @@ function 将棋タイム(args){
     $b.state.全指し手  = 解析結果.指し手;
     $b.state.先手名 = 解析結果.先手;
     $b.state.後手名 = 解析結果.後手;
-
-    $b.state.総手数 = $b.state.全指し手.length - 1;
-    $b.state.手数   = 将棋タイム.手数正規化(args.start, $b.state.総手数);
+    $b.state.総手数 = 解析結果.指し手.length - 1;
     
-    $b.state.args = args;
 
+    $b.state.手数   = 将棋タイム.手数正規化(args.start, $b.state.総手数);
     $b.state.全局面 = 将棋タイム.全局面構築($b.state.全指し手, $b.state.初期局面);
+    $b.state.args   = args;
+
+    将棋タイム.全イベント登録($b);
     将棋タイム.描画.初回($b);
 }
 
