@@ -310,7 +310,6 @@ function 将棋タイム(args){
 
 
 
-
 将棋タイム.kif解析 = function(kif){
     var 解析結果 = {};
     var 一次解析 = {局面図:[]};
@@ -508,6 +507,7 @@ function 将棋タイム(args){
 };
 
 
+
 将棋タイム.$最初に移動ボタン_click = function (event){
     this.$b.state.手数 = 0;
     将棋タイム.描画(this.$b);
@@ -624,7 +624,7 @@ function 将棋タイム(args){
 
 将棋タイム.全イベント登録 = function ($b){
     for(var name in this){
-        if(name.indexOf('$') !== 0){
+        if(name.indexOf('$') !== 0 || typeof this[name] !== 'function'){
             continue;
         }
         var names     = name.substring(1).split('_');
