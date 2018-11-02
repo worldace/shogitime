@@ -7,18 +7,19 @@ function 将棋タイム(args){
     var $b = 将棋タイム.bloc(将棋タイム.HTML);
     将棋タイム.全イベント登録($b);
     var 解析結果   = 将棋タイム.kif解析(args.kif);
-    $b.局面.一覧   = [{'先手の持駒': 解析結果.先手の持駒, '後手の持駒': 解析結果.後手の持駒, '駒': 解析結果.駒}];
-    $b.局面.勝敗   = 解析結果.勝敗;
-    $b.指し手.一覧 = 解析結果.指し手;
-    $b.先手名.名前 = 解析結果.先手;
-    $b.後手名.名前 = 解析結果.後手;
+    
+    $b.state.初期局面 = {'先手の持駒': 解析結果.先手の持駒, '後手の持駒': 解析結果.後手の持駒, '駒': 解析結果.駒};
+    $b.state.勝敗   = 解析結果.勝敗;
+    $b.state.全指し手  = 解析結果.指し手;
+    $b.state.先手名 = 解析結果.先手;
+    $b.state.後手名 = 解析結果.後手;
 
-    $b.局面.総手数 = $b.指し手.一覧.length - 1;
-    $b.局面.手数   = 将棋タイム.手数正規化(args.start, $b.局面.総手数);
+    $b.state.総手数 = $b.state.全指し手.length - 1;
+    $b.state.手数   = 将棋タイム.手数正規化(args.start, $b.state.総手数);
     
     $b.state.args = args;
 
-    将棋タイム.全局面構築($b.指し手.一覧, $b.局面.一覧);
+    $b.state.全局面 = 将棋タイム.全局面構築($b.state.全指し手, $b.state.初期局面);
     将棋タイム.描画.初回($b);
 }
 
@@ -97,8 +98,8 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画 = function($b){
-    var 手数 = $b.局面.手数;
-    var 局面 = $b.局面.一覧[手数];
+    var 手数 = $b.state.手数;
+    var 局面 = $b.state.全局面[手数];
 
     //初期化
     $b.将棋盤.innerHTML = '';
@@ -110,7 +111,7 @@ function 将棋タイム(args){
 
     //マスハイライト
     if(手数 !== 0){
-        $b.将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成($b.指し手.一覧[手数].後X, $b.指し手.一覧[手数].後Y, 反転) );
+        $b.将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成($b.state.全指し手[手数].後X, $b.state.全指し手[手数].後Y, 反転) );
     }
     else{
         if(Array.isArray($b.state.args.green)){
@@ -147,23 +148,23 @@ function 将棋タイム(args){
     $b.指し手.selectedIndex = 手数;
     
     //名前
-    if($b.先手名.名前 && $b.後手名.名前){
-        $b[先手+'名'].textContent = '▲' + $b.先手名.名前;
-        $b[後手+'名'].textContent = '△' + $b.後手名.名前;
+    if($b.state.先手名 && $b.state.後手名){
+        $b[先手+'名'].textContent = '▲' + $b.state.先手名;
+        $b[後手+'名'].textContent = '△' + $b.state.後手名;
     }
     
     //コメント
     if($b.state.args.comment){
-        $b.state.args.comment.textContent = $b.指し手.一覧[手数].コメント;
+        $b.state.args.comment.textContent = $b.state.全指し手[手数].コメント;
     }
 };
 
 
 
 将棋タイム.描画.初回 = function ($b){
-    $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.指し手.一覧, $b.局面.勝敗) );
+    $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.state.全指し手, $b.state.勝敗) );
 
-    if($b.局面.総手数 === 0){
+    if($b.state.総手数 === 0){
         $b.コントロールパネル.style.display = 'none';
     }
 
@@ -246,10 +247,14 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.全局面構築 = function(指し手一覧, 局面一覧){
+将棋タイム.全局面構築 = function(指し手一覧, 初期局面){
+    var 全局面 = [初期局面];
+
     for(var i = 1; i < 指し手一覧.length; i++){
-        局面一覧.push( 将棋タイム.全局面構築.各局面(指し手一覧[i], 局面一覧[i-1]) );
+        全局面.push( 将棋タイム.全局面構築.各局面(指し手一覧[i], 全局面[i-1]) );
     }
+    
+    return 全局面;
 };
 
 
@@ -501,18 +506,18 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最初に移動ボタン_click = function (event){
-    this.$b.局面.手数 = 0;
+    this.$b.state.手数 = 0;
     将棋タイム.描画(this.$b);
 };
 
 
 
 将棋タイム.$前に移動ボタン_click = function (event){
-    if(this.$b.指し手.selectedIndex > this.$b.局面.総手数){
+    if(this.$b.指し手.selectedIndex > this.$b.state.総手数){
         this.$b.指し手.selectedIndex = this.$b.指し手.length - 2;
     }
-    else if(this.$b.局面.手数 > 0){
-        this.$b.局面.手数--;
+    else if(this.$b.state.手数 > 0){
+        this.$b.state.手数--;
         将棋タイム.描画(this.$b);
     }
 };
@@ -520,8 +525,8 @@ function 将棋タイム(args){
 
 
 将棋タイム.$次に移動ボタン_click = function(event){
-    if(this.$b.局面.手数 < this.$b.局面.総手数){
-        this.$b.局面.手数++;
+    if(this.$b.state.手数 < this.$b.state.総手数){
+        this.$b.state.手数++;
         将棋タイム.描画(this.$b);
     }
     else{
@@ -539,7 +544,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最後に移動ボタン_click = function(event){
-    this.$b.局面.手数 = this.$b.局面.総手数;
+    this.$b.state.手数 = this.$b.state.総手数;
     将棋タイム.描画(this.$b);
     this.$b.指し手.selectedIndex = this.$b.指し手.length - 1;
 };
@@ -547,11 +552,11 @@ function 将棋タイム(args){
 
 
 将棋タイム.$指し手_change = function (event){
-    if(this.$b.指し手.selectedIndex > this.$b.局面.総手数){
+    if(this.$b.指し手.selectedIndex > this.$b.state.総手数){
         this.$b.最後に移動ボタン.click();
     }
     else{
-        this.$b.局面.手数 = this.$b.指し手.selectedIndex;
+        this.$b.state.手数 = this.$b.指し手.selectedIndex;
         将棋タイム.描画(this.$b);
     }
 };
