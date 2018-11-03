@@ -17,18 +17,29 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.スタートアップ = function(event){
+将棋タイム.スタートアップ = function(){
+    将棋タイム.スタートアップ.CSS登録(将棋タイム.CSS);
+    document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ.実行)  :  将棋タイム.スタートアップ.実行();
+};
+
+
+
+将棋タイム.スタートアップ.CSS登録 = function (css){
     //shogitimeディレクトリのURLを求める
     var currentScript = document.querySelector("script[src*='shogitime.js']");
     将棋タイム.URL  = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
 
     //CSSの「URL()」の内容を、相対パスからURLに変換する
-    将棋タイム.CSS  = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
+    css  = css.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
 
     var style = document.createElement('style');
-    style.innerHTML = 将棋タイム.CSS;
+    style.innerHTML = css;
     document.head.insertBefore(style, document.head.firstElementChild);
+};
 
+
+
+将棋タイム.スタートアップ.実行 = function (event){
     var el = document.querySelectorAll("[type='kif']");
     for(var i = 0; i < el.length; i++){
         将棋タイム({
@@ -153,7 +164,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.初回 = function ($b){
-    $b.指し手.appendChild( 将棋タイム.描画.指し手DOM作成($b.state.全指し手, $b.state.勝敗) );
+    $b.指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($b.state.全指し手, $b.state.勝敗) );
 
     if($b.state.総手数 === 0){
         $b.コントロールパネル.style.display = 'none';
@@ -165,6 +176,26 @@ function 将棋タイム(args){
 
     将棋タイム.描画($b);
     $b.state.args.el.parentNode.replaceChild($b.root, $b.state.args.el);
+};
+
+
+
+将棋タイム.描画.初回.指し手DOM作成 = function (全指し手, 勝敗){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 1; i < 全指し手.length; i++){
+        var option = document.createElement('option');
+        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].表記;
+        fragment.appendChild(option);
+    }
+
+    if(勝敗){
+        var option = document.createElement('option');
+        option.textContent = 勝敗.表記;
+        fragment.appendChild(option);
+    }
+
+    return fragment;
 };
 
 
@@ -213,26 +244,6 @@ function 将棋タイム(args){
         div.dataset.y = マス[i].substring(1, 2);
         fragment.appendChild(div);
     }
-    return fragment;
-};
-
-
-
-将棋タイム.描画.指し手DOM作成 = function (全指し手, 勝敗){
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 1; i < 全指し手.length; i++){
-        var option = document.createElement('option');
-        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].表記;
-        fragment.appendChild(option);
-    }
-
-    if(勝敗){
-        var option = document.createElement('option');
-        option.textContent = 勝敗.表記;
-        fragment.appendChild(option);
-    }
-
     return fragment;
 };
 
@@ -458,7 +469,7 @@ function 将棋タイム(args){
 
         if(!解析){
             if(終局表記.indexOf(現在の手) >= 0){
-                全指し手.push(将棋タイム.KIF解析.勝敗(現在の手, 手番));
+                全指し手.push(将棋タイム.KIF解析.指し手.勝敗(現在の手, 手番));
             }
             break;
         }
@@ -482,7 +493,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.KIF解析.勝敗 = function (理由, 手番){
+将棋タイム.KIF解析.指し手.勝敗 = function (理由, 手番){
     var 結果 = {'勝者':'', '敗者':'', '理由':理由, '表記':''};
 
     if(理由 === '投了' || 理由 === '詰み' || 理由 === '切れ負け' || 理由 === '反則負け'){
@@ -1044,4 +1055,4 @@ function 将棋タイム(args){
 
 
 
-document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ)  :  将棋タイム.スタートアップ();
+将棋タイム.スタートアップ();
