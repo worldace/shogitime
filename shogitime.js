@@ -18,19 +18,23 @@ function 将棋タイム(args){
 
 
 将棋タイム.スタートアップ = function(){
-    将棋タイム.スタートアップ.CSS登録(将棋タイム.CSS);
+    将棋タイム.URL = 将棋タイム.スタートアップ.URL取得();
+    将棋タイム.スタートアップ.CSS登録(将棋タイム.CSS, 将棋タイム.URL);
     document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ.実行)  :  将棋タイム.スタートアップ.実行();
 };
 
 
 
-将棋タイム.スタートアップ.CSS登録 = function (css){
-    //shogitimeディレクトリのURLを求める
+将棋タイム.スタートアップ.URL取得 = function (){
     var currentScript = document.querySelector("script[src*='shogitime.js']");
-    将棋タイム.URL  = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
+    return currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
+};
 
+
+
+将棋タイム.スタートアップ.CSS登録 = function (css, url){
     //CSSの「URL()」の内容を、相対パスからURLに変換する
-    css  = css.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
+    css  = css.replace(/url\([\'\"]?/g, "$&" + url);
 
     var style = document.createElement('style');
     style.innerHTML = css;
