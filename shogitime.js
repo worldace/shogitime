@@ -18,27 +18,18 @@ function 将棋タイム(args){
 
 
 将棋タイム.スタートアップ = function(){
-    将棋タイム.URL = 将棋タイム.スタートアップ.URL取得();
-    将棋タイム.スタートアップ.CSS登録(将棋タイム.CSS, 将棋タイム.URL);
-    document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ.実行)  :  将棋タイム.スタートアップ.実行();
-};
-
-
-
-将棋タイム.スタートアップ.URL取得 = function (){
+    //shogitimeのURLを求める
     var currentScript = document.querySelector("script[src*='shogitime.js']");
-    return currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
-};
+    将棋タイム.URL = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
 
-
-
-将棋タイム.スタートアップ.CSS登録 = function (css, url){
     //CSSの「URL()」の内容を、相対パスからURLに変換する
-    css  = css.replace(/url\([\'\"]?/g, "$&" + url);
+    将棋タイム.CSS = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
 
     var style = document.createElement('style');
-    style.innerHTML = css;
+    style.innerHTML = 将棋タイム.CSS;
     document.head.insertBefore(style, document.head.firstElementChild);
+
+    document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ.実行)  :  将棋タイム.スタートアップ.実行();
 };
 
 
@@ -111,7 +102,7 @@ function 将棋タイム(args){
     $b.将棋盤.innerHTML = '';
 
     //反転
-    var 反転 = $b.将棋盤.hasAttribute('data-reverse');
+    var 反転 = $b.root.hasAttribute('data-reverse');
     var 先手 = (反転) ? '後手' : '先手';
     var 後手 = (反転) ? '先手' : '後手';
 
@@ -175,7 +166,7 @@ function 将棋タイム(args){
     }
 
     if($b.state.args.reverse){
-        $b.将棋盤.setAttribute('data-reverse', '1');
+        $b.root.setAttribute('data-reverse');
     }
 
     将棋タイム.描画($b);
@@ -582,7 +573,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$反転ボタン_click = function(event){
-    (this.$b.将棋盤.hasAttribute('data-reverse'))  ?  this.$b.将棋盤.removeAttribute('data-reverse')  :  this.$b.将棋盤.setAttribute('data-reverse', '1');
+    (this.$b.root.hasAttribute('data-reverse'))  ?  this.$b.root.removeAttribute('data-reverse')  :  this.$b.root.setAttribute('data-reverse');
     将棋タイム.描画(this.$b);
 };
 
@@ -822,7 +813,7 @@ function 将棋タイム(args){
     margin: 0 3px;
 }
 
-.将棋タイム-将棋盤[data-reverse]{
+.将棋タイム[data-reverse] .将棋タイム-将棋盤{
     background-image: url('マス_.png'), url('盤.png');
 }
 
