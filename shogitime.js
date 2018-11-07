@@ -11,7 +11,6 @@ function 将棋タイム(args){
     $b.state.全局面 = 将棋タイム.全局面構築($b.state.全指し手, $b.state.初期局面);
     $b.state.args   = args;
 
-    将棋タイム.全イベント登録($b);
     将棋タイム.描画.初回($b);
 }
 
@@ -166,10 +165,11 @@ function 将棋タイム(args){
     }
 
     if($b.state.args.reverse){
-        $b.root.setAttribute('data-reverse');
+        $b.root.setAttribute('data-reverse', '');
     }
 
     将棋タイム.描画($b);
+    将棋タイム.全イベント登録($b);
     $b.state.args.el.parentNode.replaceChild($b.root, $b.state.args.el);
 };
 
@@ -402,7 +402,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.KIF解析.持駒 = function(kif持駒){
-    var 持駒 = 将棋タイム.オブジェクトコピー(将棋タイム.初期持駒);
+    var 持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
 
     if(kif持駒 === undefined || kif持駒.match('なし')){
         return 持駒;
@@ -573,7 +573,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$反転ボタン_click = function(event){
-    (this.$b.root.hasAttribute('data-reverse'))  ?  this.$b.root.removeAttribute('data-reverse')  :  this.$b.root.setAttribute('data-reverse');
+    (this.$b.root.hasAttribute('data-reverse'))  ?  this.$b.root.removeAttribute('data-reverse')  :  this.$b.root.setAttribute('data-reverse', '');
     将棋タイム.描画(this.$b);
 };
 
@@ -650,11 +650,6 @@ function 将棋タイム(args){
     }
     return to;
 };
-
-
-
-
-将棋タイム.初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0};
 
 
 
