@@ -28,6 +28,7 @@ https://github.com/worldace/shogitime/archive/master.zip
 [3] type="kif"属性を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
     scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます。
 
+
 <script type="kif">
 ここにKIF形式のテキストを貼り付ける
 </script>
@@ -111,8 +112,11 @@ ShogiGUI http://shogigui.siganus.com/
 
 【将棋ウォーズの棋譜取得方法】
 
+Webのマイページを開きます。「https://shogiwars.heroz.jp/users/ID名」のようなURLです。
+
 対局履歴から棋譜を取得したい対局ページを開き、そのページのURLをコピーしてください
-https://kif-pona.heroz.jp/games/～ のようなURLです。
+「https://kif-pona.heroz.jp/games/～」のようなURLです。
+
 
 そのURLをShogiGUIに貼り付ければ棋譜を取得できます。 編集 → 棋譜貼り付け
 
