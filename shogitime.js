@@ -4,14 +4,13 @@ function 将棋タイム(args){
         return;
     }
 
-    var $b = 将棋タイム.bloc(将棋タイム.HTML);
+    var $ = 将棋タイム.bloc(将棋タイム.HTML, 将棋タイム.KIF解析(args.kif));
 
-    $b.state        = 将棋タイム.KIF解析(args.kif);
-    $b.state.手数   = 将棋タイム.手数正規化(args.start, $b.state.総手数);
-    $b.state.全局面 = 将棋タイム.全局面構築($b.state.全指し手, $b.state.初期局面);
-    $b.state.args   = args;
+    $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
+    $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
+    $.args   = args;
 
-    将棋タイム.描画.初回($b);
+    将棋タイム.描画.初回($);
 }
 
 
@@ -94,31 +93,31 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画 = function($b){
-    var 手数 = $b.state.手数;
-    var 局面 = $b.state.全局面[手数];
+将棋タイム.描画 = function($){
+    var 手数 = $.手数;
+    var 局面 = $.全局面[手数];
 
     //初期化
-    $b.将棋盤.innerHTML = '';
+    $.$将棋盤.innerHTML = '';
 
     //反転
-    var 反転 = $b.root.hasAttribute('data-reverse');
+    var 反転 = $.$root.hasAttribute('data-reverse');
     var 先手 = (反転) ? '後手' : '先手';
     var 後手 = (反転) ? '先手' : '後手';
 
     //マスハイライト
     if(手数 !== 0){
-        $b.将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成($b.state.全指し手[手数].後X, $b.state.全指し手[手数].後Y, 反転) );
+        $.$将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成($.全指し手[手数].後X, $.全指し手[手数].後Y, 反転) );
     }
     else{
-        if(Array.isArray($b.state.args.green)){
-            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.state.args.green, '緑') );
+        if(Array.isArray($.args.green)){
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.green, '緑') );
         }
-        if(Array.isArray($b.state.args.red)){
-            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.state.args.red, '赤') );
+        if(Array.isArray($.args.red)){
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.red, '赤') );
         }
-        if(Array.isArray($b.state.args.blue)){
-            $b.将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($b.state.args.blue, '青') );
+        if(Array.isArray($.args.blue)){
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.blue, '青') );
         }
     }
 
@@ -127,51 +126,51 @@ function 将棋タイム(args){
     for(var y in 局面.駒){
         for(var x in 局面.駒[y]){
             if(局面.駒[y][x]){
-                $b.将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面.駒[y][x], x, y, 反転) );
+                $.$将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面.駒[y][x], x, y, 反転) );
             }
         }
     }
 
     //先手持駒配置
     for(var 駒 in 局面.先手の持駒){
-        $b[先手+'駒台_'+駒].setAttribute("data-num", 局面.先手の持駒[駒]);
+        $['$'+先手+'駒台_'+駒].setAttribute("data-num", 局面.先手の持駒[駒]);
     }
     //後手持駒配置
     for(var 駒 in 局面.後手の持駒){
-        $b[後手+'駒台_'+駒].setAttribute("data-num", 局面.後手の持駒[駒]);
+        $['$'+後手+'駒台_'+駒].setAttribute("data-num", 局面.後手の持駒[駒]);
     }
 
     //指し手
-    $b.指し手.selectedIndex = 手数;
+    $.$指し手.selectedIndex = 手数;
     
     //名前
-    if($b.state.先手名 && $b.state.後手名){
-        $b[先手+'名'].textContent = '▲' + $b.state.先手名;
-        $b[後手+'名'].textContent = '△' + $b.state.後手名;
+    if($.先手名 && $.後手名){
+        $['$'+先手+'名'].textContent = '▲' + $.先手名;
+        $['$'+後手+'名'].textContent = '△' + $.後手名;
     }
     
     //コメント
-    if($b.state.args.comment){
-        $b.state.args.comment.textContent = $b.state.全指し手[手数].コメント;
+    if($.args.comment){
+        $.args.comment.textContent = $.全指し手[手数].コメント;
     }
 };
 
 
 
-将棋タイム.描画.初回 = function ($b){
-    $b.指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($b.state.全指し手, $b.state.勝敗) );
+将棋タイム.描画.初回 = function ($){
+    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手, $.勝敗) );
 
-    if($b.state.総手数 === 0){
-        $b.コントロールパネル.style.display = 'none';
+    if($.総手数 === 0){
+        $.$コントロールパネル.style.display = 'none';
     }
 
-    if($b.state.args.reverse){
-        $b.root.setAttribute('data-reverse', '');
+    if($.args.reverse){
+        $.$root.setAttribute('data-reverse', '');
     }
 
-    将棋タイム.描画($b);
-    将棋タイム.全イベント登録($b);
-    $b.state.args.el.parentNode.replaceChild($b.root, $b.state.args.el);
+    将棋タイム.描画($);
+    将棋タイム.全イベント登録($);
+    $.args.el.parentNode.replaceChild($.$root, $.args.el);
 };
 
 
@@ -508,31 +507,31 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最初に移動ボタン_click = function (event){
-    this.$b.state.手数 = 0;
-    将棋タイム.描画(this.$b);
+    this.$.手数 = 0;
+    将棋タイム.描画(this.$);
 };
 
 
 
 将棋タイム.$前に移動ボタン_click = function (event){
-    if(this.$b.指し手.selectedIndex > this.$b.state.総手数){
-        this.$b.指し手.selectedIndex = this.$b.指し手.length - 2;
+    if(this.$.$指し手.selectedIndex > this.$.総手数){
+        this.$.$指し手.selectedIndex = this.$.$指し手.length - 2;
     }
-    else if(this.$b.state.手数 > 0){
-        this.$b.state.手数--;
-        将棋タイム.描画(this.$b);
+    else if(this.$.手数 > 0){
+        this.$.手数--;
+        将棋タイム.描画(this.$);
     }
 };
 
 
 
 将棋タイム.$次に移動ボタン_click = function(event){
-    if(this.$b.state.手数 < this.$b.state.総手数){
-        this.$b.state.手数++;
-        将棋タイム.描画(this.$b);
+    if(this.$.手数 < this.$.総手数){
+        this.$.手数++;
+        将棋タイム.描画(this.$);
     }
     else{
-        this.$b.指し手.selectedIndex = this.$b.指し手.length - 1;
+        this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
     }
 };
 
@@ -540,41 +539,39 @@ function 将棋タイム(args){
 
 将棋タイム.$次に移動ボタン_wheel = function(event){
     event.preventDefault();
-    (event.deltaY > 0)  ?  this.$b.次に移動ボタン.click()  :  this.$b.前に移動ボタン.click();
+    (event.deltaY > 0)  ?  this.$.$次に移動ボタン.click()  :  this.$.$前に移動ボタン.click();
 };
 
 
 
 将棋タイム.$最後に移動ボタン_click = function(event){
-    this.$b.state.手数 = this.$b.state.総手数;
-    将棋タイム.描画(this.$b);
-    this.$b.指し手.selectedIndex = this.$b.指し手.length - 1;
+    this.$.手数 = this.$.総手数;
+    将棋タイム.描画(this.$);
+    this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
 };
 
 
 
 将棋タイム.$指し手_change = function (event){
-    if(this.$b.指し手.selectedIndex > this.$b.state.総手数){
-        this.$b.最後に移動ボタン.click();
+    if(this.$.$指し手.selectedIndex > this.$.総手数){
+        this.$.$最後に移動ボタン.click();
     }
     else{
-        this.$b.state.手数 = this.$b.指し手.selectedIndex;
-        将棋タイム.描画(this.$b);
+        this.$.手数 = this.$.$指し手.selectedIndex;
+        将棋タイム.描画(this.$);
     }
 };
 
 
 
 将棋タイム.$反転ボタン_click = function(event){
-    (this.$b.root.hasAttribute('data-reverse'))  ?  this.$b.root.removeAttribute('data-reverse')  :  this.$b.root.setAttribute('data-reverse', '');
-    将棋タイム.描画(this.$b);
+    (this.$.$root.hasAttribute('data-reverse'))  ?  this.$.$root.removeAttribute('data-reverse')  :  this.$.$root.setAttribute('data-reverse', '');
+    将棋タイム.描画(this.$);
 };
 
 
 
-将棋タイム.bloc = function(root){
-    var $b = {};
-    
+将棋タイム.bloc = function(root, $){
     if(typeof root === 'string'){
         if(root.match(/^</)){
             var tmpdiv = document.createElement('div');
@@ -586,9 +583,9 @@ function 将棋タイム(args){
         }
     }
 
-    $b.root    = root;
-    $b.state   = {};
-    $b.root.$b = $b;
+    $ = $ || {};
+    $.$root   = root;
+    $.$root.$ = $;
 
     var blocName = root.classList[0] || '';
     if(blocName === ''){
@@ -604,33 +601,33 @@ function 将棋タイム(args){
         var className = elements[i].classList[0] || '';
         var name      = className.split('-');
         var firstName = name.shift();
-        var lastName  = name.join('_');
+        var lastName  = '$' + name.join('_');
 
         if(firstName !== blocName){
             continue;
         }
-        if($b.hasOwnProperty(lastName)){
+        if($.hasOwnProperty(lastName)){
             throw '識別名が重複しています: ' + className;
         }
 
-        $b[lastName] = elements[i];
+        $[lastName] = elements[i];
     }
 
-    return $b;
+    return $;
 };
 
 
 
-将棋タイム.全イベント登録 = function ($b){
+将棋タイム.全イベント登録 = function ($){
     for(var name in this){
         if(name.indexOf('$') !== 0 || typeof this[name] !== 'function'){
             continue;
         }
         var names     = name.substring(1).split('_');
         var eventName = names.pop();
-        var className = names.join('_');
+        var className = '$' + names.join('_');
 
-        $b[className].addEventListener(eventName, {'handleEvent': this[name], '$b': $b});
+        $[className].addEventListener(eventName, {'handleEvent': this[name], '$': $});
     }
 };
 
