@@ -74,7 +74,8 @@ function 将棋タイム(args){
         throw '将棋タイムの起動オプション「el」にはDOM要素を指定してください ＞ 将棋タイム({el:DOM要素})';
     }
 
-    args.start = Number(args.start || 0);
+    args.start   = Number(args.start || 0);
+    args.reverse = Boolean(args.reverse);
 
     if(args.comment){
         args.comment = document.querySelector(args.comment);
@@ -264,7 +265,7 @@ function 将棋タイム(args){
     var 駒   = 指し手.駒;
 
     var 成変換 = {'歩':'と', '香':'杏', '桂':'圭', '銀':'全', '角':'馬', '飛':'龍'};
-    var 逆変換 = {'と':'歩', '杏':'香', '圭':'桂', '全':'銀', '馬':'角', '龍':'飛', '竜':'飛'};
+    var 逆変換 = {'と':'歩', '杏':'香', '圭':'桂', '全':'銀', '馬':'角', '龍':'飛'};
 
     if(指し手.前X !== 0){ //駒を移動する場合
         局面.駒[指し手.前Y][指し手.前X] = null;
@@ -409,8 +410,8 @@ function 将棋タイム(args){
     var str    = kif持駒.split(/\s/);
 
     for(var i = 0; i < str.length; i++){
-        var 駒 = str[i].substr(0, 1);
-        var 数 = str[i].substr(1);
+        var 駒 = str[i][0];
+        var 数 = str[i][1];
 
         if(駒 in 持駒){
             持駒[駒] = (数) ? 漢数字[数] : 1;
@@ -453,10 +454,7 @@ function 将棋タイム(args){
         手番 = (手数 % 2 === 1) ? '▲' : '△';
 
         var 解析 = 現在の手.match(/([１-９同])([一二三四五六七八九　])([^\(]+)(\((\d)(\d)\))?/);
-        //解析例
-        // ["４六銀(45)", "４", "六", "銀", "(45)", "4", "5"]
-        // ["同　角成(86)", "同", "　", "角成", "(86)", "8", "6"]
-        // ["７七銀打", "７", "七", "銀打", undefined, undefined, undefined]
+        //解析例: ["４六銀(45)", "４", "六", "銀", "(45)", "4", "5"] ["同　角成(86)", "同", "　", "角成", "(86)", "8", "6"] ["７七銀打", "７", "七", "銀打", undefined, undefined, undefined]
 
         if(!解析){
             if(終局表記.indexOf(現在の手) >= 0){
@@ -465,7 +463,7 @@ function 将棋タイム(args){
             break;
         }
 
-        var 指し手 = {
+        全指し手.push({
             '手数': 手数,
             '駒'  : 解析[3].replace(/[打成]$/, '').replace('成銀', '全').replace('成桂', '圭').replace('成香', '杏').replace('王', '玉').replace('竜', '龍'),
             '前X' : Number(解析[5] || 0),
@@ -475,8 +473,7 @@ function 将棋タイム(args){
             '成り': /成$/.test(解析[3]),
             '表記': 手番 + 解析[0],
             'コメント': '',
-        };
-        全指し手.push(指し手);
+        });
     }
     
     return 全指し手;
