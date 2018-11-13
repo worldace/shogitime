@@ -4,7 +4,7 @@ function 将棋タイム(args){
         return;
     }
 
-    var $ = 将棋タイム.bloc(将棋タイム.HTML, 将棋タイム.KIF解析(args.kif));
+    var $ = 将棋タイム.SilverState(将棋タイム, 将棋タイム.HTML, 将棋タイム.KIF解析(args.kif));
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
     $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
@@ -169,7 +169,6 @@ function 将棋タイム(args){
     }
 
     将棋タイム.描画($);
-    将棋タイム.全イベント登録($);
     $.args.el.parentNode.replaceChild($.$root, $.args.el);
 };
 
@@ -571,39 +570,26 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.bloc = function(root, $){
-    if(typeof root === 'string'){
-        if(root.match(/^</)){
-            var tmpdiv = document.createElement('div');
-            tmpdiv.innerHTML = root;
-            root = tmpdiv.firstElementChild;
-        }
-        else{
-            root = document.querySelector(root);
-        }
-    }
+将棋タイム.SilverState = function(app, html, $){
+    var div  = document.createElement('div');
+    div.innerHTML = html.trim();
+    var root = div.firstElementChild;
 
     $ = $ || {};
     $.$root   = root;
     $.$root.$ = $;
 
-    var blocName = root.classList[0] || '';
-    if(blocName === ''){
-        throw 'ブロック名が存在しません';
-    }
-    if(blocName.indexOf('-') !== -1){
-        throw 'ブロック名にハイフンは使用できません: ' + blocName;
-    }
-
+    var appName  = root.classList[0] || '';
     var elements = root.querySelectorAll("*");
 
+    //DOM選択
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
         var name      = className.split('-');
         var firstName = name.shift();
         var lastName  = '$' + name.join('_');
 
-        if(firstName !== blocName){
+        if(firstName !== appName){
             continue;
         }
         if($.hasOwnProperty(lastName)){
@@ -613,22 +599,19 @@ function 将棋タイム(args){
         $[lastName] = elements[i];
     }
 
-    return $;
-};
-
-
-
-将棋タイム.全イベント登録 = function ($){
-    for(var name in this){
-        if(name.indexOf('$') !== 0 || typeof this[name] !== 'function'){
+    //イベント登録
+    for(var name in app){
+        if(name.indexOf('$') !== 0 || typeof app[name] !== 'function'){
             continue;
         }
         var names     = name.substring(1).split('_');
         var eventName = names.pop();
         var className = '$' + names.join('_');
 
-        $[className].addEventListener(eventName, {'handleEvent': this[name], '$': $});
+        $[className].addEventListener(eventName, {'handleEvent': app[name], '$': $});
     }
+
+    return $;
 };
 
 
@@ -727,12 +710,12 @@ function 将棋タイム(args){
     width: 100%;
     text-align: right;
     font-size: 14px;
-    font-family: meiryo, sans-serif;
+    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム-後手名{
     width: 100%;
     font-size: 14px;
-    font-family: meiryo, sans-serif;
+    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム-先手名:empty,
 .将棋タイム-先手名:empty{
