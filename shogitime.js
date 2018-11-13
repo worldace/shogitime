@@ -572,7 +572,7 @@ function 将棋タイム(args){
 
 将棋タイム.SilverState = function(app, html, $){
     var div  = document.createElement('div');
-    div.innerHTML = html.trim();
+    div.innerHTML = html;
     var root = div.firstElementChild;
 
     $ = $ || {};
@@ -585,18 +585,18 @@ function 将棋タイム(args){
     //DOM選択
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
-        var name      = className.split('-');
-        var firstName = name.shift();
-        var lastName  = '$' + name.join('_');
+        var names     = className.split('-');
+        var firstName = names.shift();
+        var idName    = '$' + names.join('_');
 
         if(firstName !== appName){
             continue;
         }
-        if($.hasOwnProperty(lastName)){
+        if($.hasOwnProperty(idName)){
             throw '識別名が重複しています: ' + className;
         }
 
-        $[lastName] = elements[i];
+        $[idName] = elements[i];
     }
 
     //イベント登録
@@ -606,9 +606,9 @@ function 将棋タイム(args){
         }
         var names     = name.substring(1).split('_');
         var eventName = names.pop();
-        var className = '$' + names.join('_');
+        var idName    = '$' + names.join('_');
 
-        $[className].addEventListener(eventName, {'handleEvent': app[name], '$': $});
+        $[idName].addEventListener(eventName, {'handleEvent': app[name], '$': $});
     }
 
     return $;
