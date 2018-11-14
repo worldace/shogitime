@@ -550,7 +550,7 @@ function 将棋タイム(args){
 
 将棋タイム.$次に移動ボタン_wheel = function(event){
     event.preventDefault();
-    (event.deltaY > 0)  ?  this.$.$次に移動ボタン.click()  :  this.$.$前に移動ボタン.click();
+    (event.deltaY > 0)  ?  将棋タイム.$次に移動ボタン_click.call(this)  :  将棋タイム.$前に移動ボタン_click.call(this);
 };
 
 
@@ -565,7 +565,7 @@ function 将棋タイム(args){
 
 将棋タイム.$指し手_change = function (event){
     if(this.$.$指し手.selectedIndex > this.$.総手数){
-        this.$.$最後に移動ボタン.click();
+        将棋タイム.$最後に移動ボタン_click.call(this);
     }
     else{
         this.$.手数 = this.$.$指し手.selectedIndex;
