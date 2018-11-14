@@ -16,24 +16,11 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.スタートアップ = function(){
+将棋タイム.スタートアップ = function (event){
     //shogitimeのURLを求める
     var currentScript = document.querySelector("script[src*='shogitime.js']");
     将棋タイム.URL = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
 
-    //CSSの「URL()」の内容を、相対パスからURLに変換する
-    将棋タイム.CSS = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
-
-    var style = document.createElement('style');
-    style.innerHTML = 将棋タイム.CSS;
-    document.head.insertBefore(style, document.head.firstElementChild);
-
-    document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ.実行)  :  将棋タイム.スタートアップ.実行();
-};
-
-
-
-将棋タイム.スタートアップ.実行 = function (event){
     var el = document.querySelectorAll("[type='kif']");
     for(var i = 0; i < el.length; i++){
         将棋タイム({
@@ -223,6 +210,11 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.初回 = function ($){
+    if(将棋タイム.CSS){
+        将棋タイム.描画.初回.CSS(将棋タイム.CSS);
+        将棋タイム.CSS = null;
+    }
+    
     $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手, $.勝敗) );
 
     if($.総手数 === 0){
@@ -231,6 +223,18 @@ function 将棋タイム(args){
 
     将棋タイム.描画($);
     $.args.el.parentNode.replaceChild($.$root, $.args.el);
+};
+
+
+
+将棋タイム.描画.初回.CSS = function (css){
+    //CSSの「URL()」の内容を、相対パスからURLに変換する
+    css = css.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
+
+    var style = document.createElement('style');
+    style.innerHTML = css;
+    style.className = '将棋タイム-CSS';
+    document.head.insertBefore(style, document.head.firstElementChild);
 };
 
 
@@ -1030,4 +1034,5 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.スタートアップ();
+document.readyState === 'loading'  ?  document.addEventListener('DOMContentLoaded', 将棋タイム.スタートアップ)  :  将棋タイム.スタートアップ();
+
