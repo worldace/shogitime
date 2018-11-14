@@ -8,6 +8,7 @@ function 将棋タイム(args){
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
     $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
+    $.data   = {'reverse': args.reverse};
     $.args   = args;
 
     将棋タイム.描画.初回($);
@@ -96,14 +97,12 @@ function 将棋タイム(args){
 将棋タイム.描画 = function($){
     var 手数 = $.手数;
     var 局面 = $.全局面[手数];
+    var 反転 = $.data.reverse;
+    var 先手 = (反転) ? '後手' : '先手';
+    var 後手 = (反転) ? '先手' : '後手';
 
     //初期化
     $.$将棋盤.innerHTML = '';
-
-    //反転
-    var 反転 = $.$root.hasAttribute('data-reverse');
-    var 先手 = (反転) ? '後手' : '先手';
-    var 後手 = (反転) ? '先手' : '後手';
 
     //マスハイライト
     if(手数 !== 0){
@@ -148,48 +147,14 @@ function 将棋タイム(args){
         $['$'+先手+'名'].textContent = '▲' + $.先手名;
         $['$'+後手+'名'].textContent = '△' + $.後手名;
     }
-    
+
+    //data属性
+    将棋タイム.描画.data属性($.data, $.$root);
+
     //コメント
     if($.args.comment){
         $.args.comment.textContent = $.全指し手[手数].コメント;
     }
-};
-
-
-
-将棋タイム.描画.初回 = function ($){
-    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手, $.勝敗) );
-
-    if($.総手数 === 0){
-        $.$コントロールパネル.style.display = 'none';
-    }
-
-    if($.args.reverse){
-        $.$root.setAttribute('data-reverse', '');
-    }
-
-    将棋タイム.描画($);
-    $.args.el.parentNode.replaceChild($.$root, $.args.el);
-};
-
-
-
-将棋タイム.描画.初回.指し手DOM作成 = function (全指し手, 勝敗){
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 1; i < 全指し手.length; i++){
-        var option = document.createElement('option');
-        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].表記;
-        fragment.appendChild(option);
-    }
-
-    if(勝敗){
-        var option = document.createElement('option');
-        option.textContent = 勝敗.表記;
-        fragment.appendChild(option);
-    }
-
-    return fragment;
 };
 
 
@@ -238,6 +203,53 @@ function 将棋タイム(args){
         div.dataset.y = マス[i].substring(1, 2);
         fragment.appendChild(div);
     }
+    return fragment;
+};
+
+
+
+将棋タイム.描画.data属性 = function(attr, el){
+    for(var key in attr){
+        var name = "data-" + key;
+        if(typeof attr[key] === "boolean"){
+            (attr[key]) ? el.setAttribute(name, "") : el.removeAttribute(name);
+        }
+        else{
+            el.setAttribute(name, attr[key]);
+        }
+    }
+};
+
+
+
+将棋タイム.描画.初回 = function ($){
+    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手, $.勝敗) );
+
+    if($.総手数 === 0){
+        $.$コントロールパネル.style.display = 'none';
+    }
+
+    将棋タイム.描画($);
+    $.args.el.parentNode.replaceChild($.$root, $.args.el);
+};
+
+
+
+将棋タイム.描画.初回.指し手DOM作成 = function (全指し手, 勝敗){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 1; i < 全指し手.length; i++){
+        var option = document.createElement('option');
+        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].表記;
+        fragment.appendChild(option);
+    }
+
+    if(勝敗){
+        var option = document.createElement('option');
+        option.textContent = 勝敗.表記;
+        fragment.appendChild(option);
+    }
+
     return fragment;
 };
 
@@ -564,7 +576,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$反転ボタン_click = function(event){
-    (this.$.$root.hasAttribute('data-reverse'))  ?  this.$.$root.removeAttribute('data-reverse')  :  this.$.$root.setAttribute('data-reverse', '');
+    this.$.data.reverse = !this.$.data.reverse;
     将棋タイム.描画(this.$);
 };
 
