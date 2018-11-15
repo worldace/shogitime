@@ -225,7 +225,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.初回 = function ($){
-    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手, $.勝敗) );
+    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手) );
 
     if($.総手数 === 0){
         $.$コントロールパネル.style.display = 'none';
@@ -237,7 +237,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.初回.指し手DOM作成 = function (全指し手, 勝敗){
+将棋タイム.描画.初回.指し手DOM作成 = function (全指し手){
     var fragment = document.createDocumentFragment();
 
     for(var i = 1; i < 全指し手.length; i++){
@@ -246,9 +246,9 @@ function 将棋タイム(args){
         fragment.appendChild(option);
     }
 
-    if(勝敗){
+    if(全指し手.勝敗){
         var option = document.createElement('option');
-        option.textContent = 勝敗.表記;
+        option.textContent = 全指し手.勝敗.表記;
         fragment.appendChild(option);
     }
 
@@ -358,9 +358,6 @@ function 将棋タイム(args){
     解析結果.後手名   = 一次解析.後手 || '';
 
     解析結果.全指し手 = 将棋タイム.KIF解析.指し手(一次解析.全指し手);
-    if('勝者' in 解析結果.全指し手[解析結果.全指し手.length-1]){
-        解析結果.勝敗 = 解析結果.全指し手.pop();
-    }
     解析結果.総手数   = 解析結果.全指し手.length - 1;
 
     return 解析結果;
@@ -470,7 +467,7 @@ function 将棋タイム(args){
 
         if(!解析){
             if(終局表記.indexOf(現在の手) >= 0){
-                全指し手.push(将棋タイム.KIF解析.指し手.勝敗(現在の手, 手番));
+                全指し手.勝敗 = 将棋タイム.KIF解析.指し手.勝敗(現在の手, 手番);
             }
             break;
         }
