@@ -326,8 +326,8 @@ function 将棋タイム(args){
 
 
 将棋タイム.KIF解析 = function(kif){
-    var 一次解析 = {局面図:[]};
     var 解析結果 = {};
+    var 一次解析 = {局面図:[]};
 
     kif = kif.split(/\r?\n/);
 
@@ -354,11 +354,11 @@ function 将棋タイム(args){
         '後手の持駒': 将棋タイム.KIF解析.持駒(一次解析.後手の持駒),
     };
 
-    解析結果.先手名   = 一次解析.先手 || '';
-    解析結果.後手名   = 一次解析.後手 || '';
-
     解析結果.全指し手 = 将棋タイム.KIF解析.指し手(一次解析.全指し手);
     解析結果.総手数   = 解析結果.全指し手.length - 1;
+
+    解析結果.先手名   = 一次解析.先手 || '';
+    解析結果.後手名   = 一次解析.後手 || '';
 
     return 解析結果;
 };
@@ -582,6 +582,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.SilverState = function(app, html, $){
+    //HTMLからDOM作成
     var div  = document.createElement('div');
     div.innerHTML = html;
     var root = div.firstElementChild;
