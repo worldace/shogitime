@@ -367,10 +367,10 @@ function 将棋タイム(args){
 
 将棋タイム.KIF解析.局面図 = function(kif局面図){
     if(kif局面図.length !== 9){
-        return 将棋タイム.オブジェクトコピー(将棋タイム.初期局面);
+        return 将棋タイム.KIF解析.局面図.初期局面();
     }
 
-    var 局面 = 将棋タイム.オブジェクトコピー(将棋タイム.駒無し局面);
+    var 局面 = 将棋タイム.KIF解析.局面図.駒無し局面();
     var 先手 = true;
     var x    = 10;
     var 変換 = {'王':'玉', '竜':'龍'};
@@ -404,6 +404,38 @@ function 将棋タイム(args){
     }
 
     return 局面;
+};
+
+
+
+将棋タイム.KIF解析.局面図.初期局面 = function(){
+    return {
+        '1': {'1': '香_', '2': '桂_', '3': '銀_', '4': '金_', '5': '玉_', '6': '金_', '7': '銀_', '8': '桂_', '9': '香_'},
+        '2': {'1': null, '2': '角_', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '飛_', '9': null},
+        '3': {'1': '歩_', '2': '歩_', '3': '歩_', '4': '歩_', '5': '歩_', '6': '歩_', '7': '歩_', '8': '歩_', '9': '歩_'},
+        '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '7': {'1': '歩', '2': '歩', '3': '歩', '4': '歩', '5': '歩', '6': '歩', '7': '歩', '8': '歩', '9': '歩'},
+        '8': {'1': null, '2': '飛', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '角', '9': null},
+        '9': {'1': '香', '2': '桂', '3': '銀', '4': '金', '5': '玉', '6': '金', '7': '銀', '8': '桂', '9': '香'},
+    };
+};
+
+
+
+将棋タイム.KIF解析.局面図.駒無し局面 = function() {
+    return {
+        '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+        '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
+    };
 };
 
 
@@ -635,34 +667,6 @@ function 将棋タイム(args){
         to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
     }
     return to;
-};
-
-
-
-将棋タイム.初期局面 = {
-    '1': {'1': '香_', '2': '桂_', '3': '銀_', '4': '金_', '5': '玉_', '6': '金_', '7': '銀_', '8': '桂_', '9': '香_'},
-    '2': {'1': null, '2': '角_', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '飛_', '9': null},
-    '3': {'1': '歩_', '2': '歩_', '3': '歩_', '4': '歩_', '5': '歩_', '6': '歩_', '7': '歩_', '8': '歩_', '9': '歩_'},
-    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '7': {'1': '歩', '2': '歩', '3': '歩', '4': '歩', '5': '歩', '6': '歩', '7': '歩', '8': '歩', '9': '歩'},
-    '8': {'1': null, '2': '飛', '3': null, '4': null, '5': null, '6': null, '7': null, '8': '角', '9': null},
-    '9': {'1': '香', '2': '桂', '3': '銀', '4': '金', '5': '玉', '6': '金', '7': '銀', '8': '桂', '9': '香'},
-};
-
-
-
-将棋タイム.駒無し局面 = {
-    '1': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '2': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '3': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '4': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '5': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '6': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '7': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '8': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
-    '9': {'1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null, '9': null},
 };
 
 
