@@ -11,7 +11,7 @@ function 将棋タイム(args){
     $.data   = {'reverse': args.reverse};
     $.args   = args;
 
-    将棋タイム.初回処理();
+    将棋タイム.セットアップ();
     将棋タイム.描画.初回($);
 }
 
@@ -31,6 +31,28 @@ function 将棋タイム(args){
             blue: el[i].getAttribute("blue"),
         });
     }
+};
+
+
+
+将棋タイム.セットアップ = function (){
+    //shogitimeのURLを求める
+    var currentScript = document.querySelector("script[src*='shogitime.js']");
+    将棋タイム.URL = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
+
+    //CSSの「URL()」の内容を、相対パスからURLに変換する
+    var css = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
+
+    var style = document.createElement('style');
+    style.innerHTML = css;
+    style.className = '将棋タイム-CSS';
+    document.head.insertBefore(style, document.head.firstElementChild);
+
+    //駒音
+    //将棋タイム.駒音.autoplay = false;
+    //将棋タイム.駒音.src      = 将棋タイム.URL + "se.mp3";
+
+    将棋タイム.セットアップ = function (){};
 };
 
 
@@ -74,24 +96,6 @@ function 将棋タイム(args){
     if(args.blue){
         args.blue = String(args.blue).split(',');
     }
-};
-
-
-
-将棋タイム.初回処理 = function (){
-    //shogitimeのURLを求める
-    var currentScript = document.querySelector("script[src*='shogitime.js']");
-    将棋タイム.URL = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
-
-    //CSSの「URL()」の内容を、相対パスからURLに変換する
-    var css = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
-
-    var style = document.createElement('style');
-    style.innerHTML = css;
-    style.className = '将棋タイム-CSS';
-    document.head.insertBefore(style, document.head.firstElementChild);
-
-    将棋タイム.初回処理 = function (){};
 };
 
 
@@ -226,6 +230,8 @@ function 将棋タイム(args){
 
 将棋タイム.描画.初回 = function ($){
     $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手) );
+
+    $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
     if($.総手数 === 0){
         $.$コントロールパネル.style.display = 'none';
@@ -549,6 +555,17 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.駒音 = new Audio();
+
+
+
+将棋タイム.駒音.再生 = function (){
+    将棋タイム.駒音.load();
+    将棋タイム.駒音.play();
+};
+
+
+
 将棋タイム.$最初に移動ボタン_click = function (event){
     this.$.手数 = 0;
     将棋タイム.描画(this.$);
@@ -607,9 +624,41 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.$ダイアログボタン_click = function(event){
+    this.$.$root.hasAttribute('data-dialog') ? this.$.$root.removeAttribute('data-dialog') : this.$.$root.setAttribute('data-dialog', '');
+};
+
+
+
 将棋タイム.$反転ボタン_click = function(event){
     this.$.data.reverse = !this.$.data.reverse;
     将棋タイム.描画(this.$);
+};
+
+
+
+将棋タイム.$ダイアログ_閉じるボタン_click = function(event){
+    this.$.$root.removeAttribute('data-dialog');
+};
+
+
+
+将棋タイム.$ダイアログ_棋譜コピーボタン_click = function(event){
+    var el = this.$.$ダイアログ_棋譜テキスト;
+
+    //参考 https://mamewaza.com/support/blog/javascript-copy.html
+    el.style.display = 'inline-block';
+    el.select();
+
+    var range  = document.createRange();
+    range.selectNodeContents(el);
+    var select = window.getSelection();
+    select.removeAllRanges();
+    select.addRange(range);
+    el.setSelectionRange(0, 999999);
+
+    document.execCommand("copy");
+    el.style.display = 'none';
 };
 
 
@@ -703,7 +752,19 @@ function 将棋タイム(args){
     <div class="将棋タイム-次に移動ボタン"></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
     <select class="将棋タイム-指し手"><option selected>開始局面</option></select>
+    <div class="将棋タイム-ダイアログボタン"></div>
     <div class="将棋タイム-反転ボタン"></div>
+  </div>
+  <div class="将棋タイム-ダイアログ">
+    <div class="将棋タイム-ダイアログ-ヘッダ">
+      <div class="将棋タイム-ダイアログ-タイトル">ダイアログ</div>
+      <div class="将棋タイム-ダイアログ-閉じるボタン"></div>
+    </div>
+    <div class="将棋タイム-ダイアログ-コンテンツ">
+      <div class="将棋タイム-ダイアログ-棋譜コピーボタン">棋譜をコピーする</div>
+      <textarea class="将棋タイム-ダイアログ-棋譜テキスト" readonly></textarea>
+      <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.1</a></div>
+    </div>
   </div>
 </div>
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
@@ -719,6 +780,8 @@ function 将棋タイム(args){
     user-select: none;
     width: 514px;
     margin: 50px auto;
+    position: relative;
+    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム *{
     box-sizing: border-box;
@@ -727,12 +790,10 @@ function 将棋タイム(args){
     width: 100%;
     text-align: right;
     font-size: 14px;
-    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム-後手名{
     width: 100%;
     font-size: 14px;
-    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム-先手名:empty,
 .将棋タイム-先手名:empty{
@@ -1027,8 +1088,80 @@ function 将棋タイム(args){
 .将棋タイム-指し手{
     margin: 0 8px;
 }
+.将棋タイム-ダイアログボタン{
+    background-image: url('gear.png');
+}
 .将棋タイム-反転ボタン{
     background-image: url('refresh.png');
+}
+
+.将棋タイム-ダイアログ{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 1);
+    z-index: 10;
+    border: solid 1px #15B358;
+    border-radius: 6px;
+}
+.将棋タイム-ダイアログ-ヘッダ{
+    border: solid 1px #15B358;
+    border-radius: 6px 6px 0 0;
+    background-color: #2ecc71;
+    padding: 5px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.将棋タイム-ダイアログ-タイトル{
+    color: #fff;
+    font-size: 16px;
+}
+.将棋タイム-ダイアログ-閉じるボタン{
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-image: url('close.png');
+    cursor: pointer;
+}
+
+.将棋タイム-ダイアログ-コンテンツ{
+    text-align: center;
+}
+.将棋タイム-ダイアログ-棋譜コピーボタン{ 
+    border-radius: 5px;
+    padding: 15px 25px;
+    font-size: 18px;
+    text-decoration: none;
+    margin: 20px;
+    color: #fff;
+    display: inline-block;
+    background-color: #55acee;
+    box-shadow: 0px 5px 0px 0px #3C93D5;
+    cursor: pointer;
+}
+.将棋タイム-ダイアログ-棋譜コピーボタン:active {
+    transform: translate(0px, 5px);
+    box-shadow: 0px 1px 0px 0px;
+}
+.将棋タイム-ダイアログ-棋譜テキスト{
+    position: fixed;
+    right: 100vw;
+    font-size: 16px;
+    display: none;
+    width: 1px;
+    height: 1px;
+}
+.将棋タイム-ダイアログ-フッタ{
+    text-align: right;
+    font-size: 12px;
+    padding: 2px 4px;
+}
+
+.将棋タイム[data-dialog] .将棋タイム-ダイアログ{
+    display: block;
 }
 
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
