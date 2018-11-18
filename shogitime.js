@@ -29,6 +29,7 @@ function 将棋タイム(args){
             green: el[i].getAttribute("green"),
             red: el[i].getAttribute("red"),
             blue: el[i].getAttribute("blue"),
+            nocp: el[i].hasAttribute("nocp"),
         });
     }
 };
@@ -82,6 +83,7 @@ function 将棋タイム(args){
 
     args.start   = Number(args.start || 0);
     args.reverse = Boolean(args.reverse);
+    args.nocp    = Boolean(args.nocp);
 
     if(args.comment){
         args.comment = document.querySelector(args.comment);
@@ -233,7 +235,7 @@ function 将棋タイム(args){
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
-    if($.総手数 === 0){
+    if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
 
@@ -757,7 +759,7 @@ function 将棋タイム(args){
   </div>
   <div class="将棋タイム-ダイアログ">
     <div class="将棋タイム-ダイアログ-ヘッダ">
-      <div class="将棋タイム-ダイアログ-タイトル">ダイアログ</div>
+      <div class="将棋タイム-ダイアログ-タイトル">将棋タイム</div>
       <div class="将棋タイム-ダイアログ-閉じるボタン"></div>
     </div>
     <div class="将棋タイム-ダイアログ-コンテンツ">
