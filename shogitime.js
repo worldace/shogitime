@@ -599,13 +599,6 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$次に移動ボタン_wheel = function(event){
-    event.preventDefault();
-    (event.deltaY > 0)  ?  将棋タイム.$次に移動ボタン_click.call(this)  :  将棋タイム.$前に移動ボタン_click.call(this);
-};
-
-
-
 将棋タイム.$最後に移動ボタン_click = function(event){
     this.$.手数 = this.$.総手数;
     将棋タイム.描画(this.$);
