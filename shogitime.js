@@ -49,9 +49,7 @@ function 将棋タイム(args){
     style.className = '将棋タイム-CSS';
     document.head.insertBefore(style, document.head.firstElementChild);
 
-    //駒音
-    将棋タイム.駒音.autoplay = false;
-    将棋タイム.駒音.src      = 将棋タイム.URL + "駒音.mp3";
+    将棋タイム.駒音.src = 将棋タイム.URL + "駒音.mp3";
 
     将棋タイム.セットアップ = function (){};
 };
@@ -151,8 +149,12 @@ function 将棋タイム(args){
     $.$指し手.selectedIndex = 手数;
     
     //名前
-    $['$'+先手+'名'].textContent = $.先手名;
-    $['$'+後手+'名'].textContent = $.後手名;
+    if($.先手名){
+        $['$'+先手+'名'].textContent = "▲" + $.先手名;
+    }
+    if($.後手名){
+        $['$'+後手+'名'].textContent = "△" + $.後手名;
+    }
 
     //data属性
     将棋タイム.描画.data属性($.data, $.$root);
@@ -905,12 +907,6 @@ function 将棋タイム(args){
 .将棋タイム-先手名:empty,
 .将棋タイム-後手名:empty{
     display: none;
-}
-.将棋タイム-先手名::before{
-    content: '▲';
-}
-.将棋タイム-後手名::before{
-    content: '△';
 }
 
 
