@@ -791,7 +791,7 @@ function 将棋タイム(args){
     font-size: 14px;
 }
 .将棋タイム-先手名:empty,
-.将棋タイム-先手名:empty{
+.将棋タイム-後手名:empty{
     display: none;
 }
 
