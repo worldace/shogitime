@@ -50,8 +50,8 @@ function 将棋タイム(args){
     document.head.insertBefore(style, document.head.firstElementChild);
 
     //駒音
-    //将棋タイム.駒音.autoplay = false;
-    //将棋タイム.駒音.src      = 将棋タイム.URL + "se.mp3";
+    将棋タイム.駒音.autoplay = false;
+    将棋タイム.駒音.src      = 将棋タイム.URL + "駒音.mp3";
 
     将棋タイム.セットアップ = function (){};
 };
@@ -673,7 +673,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.駒音.再生 = function (){
-    将棋タイム.駒音.load();
+    将棋タイム.駒音.currentTime = 0;
     将棋タイム.駒音.play();
 };
 
@@ -702,6 +702,7 @@ function 将棋タイム(args){
     if(this.$.手数 < this.$.総手数){
         this.$.手数++;
         将棋タイム.描画(this.$);
+        将棋タイム.駒音.再生();
     }
     else{
         this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
