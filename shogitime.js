@@ -232,7 +232,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.初回描画 = function ($){
-    $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手) );
+    $.$指し手.appendChild( 将棋タイム.初回描画.指し手DOM作成($.全指し手) );
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
