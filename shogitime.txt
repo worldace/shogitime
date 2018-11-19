@@ -213,4 +213,5 @@ kifタグにnocp属性を追加します
 
 ・将棋タイムは誰でも自由に利用できます。(パブリックドメイン)
 ・画像は「将棋アプリ用クリエイティブコモンズ画像」様のものを利用しています。http://mucho.girly.jp/bona/
+・駒音は「kenney」様のものを利用しています。 http://www.kenney.nl/
 ・KIF形式の仕様 http://kakinoki.o.oo7.jp/kif_format.html

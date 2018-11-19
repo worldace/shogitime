@@ -4,6 +4,8 @@ function 将棋タイム(args){
         return;
     }
 
+    将棋タイム.セットアップ();
+
     var $ = 将棋タイム.SilverState(将棋タイム, 将棋タイム.HTML, 将棋タイム.KIF解析(args.kif));
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
@@ -11,8 +13,7 @@ function 将棋タイム(args){
     $.data   = {'reverse': args.reverse};
     $.args   = args;
 
-    将棋タイム.セットアップ();
-    将棋タイム.描画.初回($);
+    将棋タイム.初回描画($);
 }
 
 
@@ -230,7 +231,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.初回 = function ($){
+将棋タイム.初回描画 = function ($){
     $.$指し手.appendChild( 将棋タイム.描画.初回.指し手DOM作成($.全指し手) );
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
@@ -245,7 +246,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.初回.指し手DOM作成 = function (全指し手){
+将棋タイム.初回描画.指し手DOM作成 = function (全指し手){
     var fragment = document.createDocumentFragment();
 
     for(var i = 1; i < 全指し手.length; i++){
@@ -261,6 +262,21 @@ function 将棋タイム(args){
     }
 
     return fragment;
+};
+
+
+
+将棋タイム.手数正規化 = function(手数, 総手数){
+    if(総手数 === 0){
+        return 0;
+    }
+    if(手数 < 0){
+        手数 = 総手数 + 手数 + 1;
+    }
+    if(手数 > 総手数){
+        return 総手数;
+    }
+    return 手数;
 };
 
 
@@ -314,22 +330,6 @@ function 将棋タイム(args){
 
     return 局面;
 };
-
-
-
-将棋タイム.手数正規化 = function(手数, 総手数){
-    if(総手数 === 0){
-        return 0;
-    }
-    if(手数 < 0){
-        手数 = 総手数 + 手数 + 1;
-    }
-    if(手数 > 総手数){
-        return 総手数;
-    }
-    return 手数;
-};
-
 
 
 
