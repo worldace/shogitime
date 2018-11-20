@@ -76,17 +76,17 @@ function 将棋タイム(args){
         return false;
    }
 
-    if(!(args.el instanceof Element)){
-        throw '将棋タイムの起動オプション「el」にはDOM要素を指定してください ＞ 将棋タイム({el:DOM要素})';
+    if(typeof args.el === 'string'){
+        args.el = document.querySelector(args.el);
+    }
+    if(typeof args.comment === 'string'){
+        args.comment = document.querySelector(args.comment);
     }
 
     args.start   = Number(args.start || 0);
     args.reverse = Boolean(args.reverse);
     args.nocp    = Boolean(args.nocp);
 
-    if(args.comment){
-        args.comment = document.querySelector(args.comment);
-    }
 
     if(args.green){
         args.green = String(args.green).split(',');
