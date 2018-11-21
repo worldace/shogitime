@@ -764,16 +764,15 @@ function 将棋タイム(args){
 
 
 将棋タイム.SilverState = function(app, html, css, $){
-    //HTMLからDOM作成
-    var div  = document.createElement('div');
-    div.innerHTML = html;
-    var root = div.firstElementChild;
-
     $ = $ || {};
-    $.$root   = root;
-    $.$root.$ = $;
 
-    var appName  = root.classList[0] || '';
+    //HTMLからDOM作成
+    var div       = document.createElement('div');
+    div.innerHTML = html;
+    $.$root       = div.firstElementChild;
+    $.$root.$     = $;
+
+    var appName   = $.$root.classList[0] || '';
 
     //CSS登録
     if(css){
@@ -788,7 +787,7 @@ function 将棋タイム(args){
     }
 
     //DOM選択
-    var elements = root.querySelectorAll("*");
+    var elements = $.$root.querySelectorAll("*");
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
         var names     = className.split('-');
