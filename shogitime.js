@@ -741,7 +741,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$ダイアログ_棋譜コピーボタン_click = function(event){
+将棋タイム.$ダイアログ_棋譜コピーボタン_mousedown = function(event){
     var el = this.$.$ダイアログ_棋譜テキスト;
 
     //参考 https://mamewaza.com/support/blog/javascript-copy.html
@@ -890,7 +890,7 @@ function 将棋タイム(args){
     width: 514px;
     margin: 50px auto;
     position: relative;
-    font-family: meiryo, sans-serif;
+    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
 .将棋タイム *{
     box-sizing: border-box;
