@@ -890,7 +890,7 @@ function 将棋タイム(args){
     width: 514px;
     margin: 50px auto;
     position: relative;
-    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
+    font-family: meiryo, sans-serif;
 }
 .将棋タイム *{
     box-sizing: border-box;
