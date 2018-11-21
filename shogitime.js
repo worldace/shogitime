@@ -149,7 +149,7 @@ function 将棋タイム(args){
     }
 
     //data属性
-    将棋タイム.描画.data属性($.data, $.$root);
+    将棋タイム.描画.data属性($.$将棋タイム, $.data);
 
     //コメント
     if($.args.comment){
@@ -208,7 +208,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.data属性 = function(attr, el){
+将棋タイム.描画.data属性 = function(el, attr){
     for(var key in attr){
         var name = "data-" + key;
         if(typeof attr[key] === "boolean"){
@@ -232,7 +232,7 @@ function 将棋タイム(args){
     }
 
     将棋タイム.描画($);
-    $.args.el.parentNode.replaceChild($.$root, $.args.el);
+    $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
 };
 
 
@@ -725,7 +725,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$ダイアログボタン_click = function(event){
-    this.$.$root.hasAttribute('data-dialog') ? this.$.$root.removeAttribute('data-dialog') : this.$.$root.setAttribute('data-dialog', '');
+    this.$.$将棋タイム.hasAttribute('data-dialog') ? this.$.$将棋タイム.removeAttribute('data-dialog') : this.$.$将棋タイム.setAttribute('data-dialog', '');
 };
 
 
@@ -738,7 +738,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$ダイアログ_閉じるボタン_click = function(event){
-    this.$.$root.removeAttribute('data-dialog');
+    this.$.$将棋タイム.removeAttribute('data-dialog');
 };
 
 
@@ -767,27 +767,27 @@ function 将棋タイム(args){
     $ = $ || {};
 
     //HTMLからDOM作成
-    var div       = document.createElement('div');
-    div.innerHTML = html;
-    $.$root       = div.firstElementChild;
-    $.$root.$     = $;
+    var div        = document.createElement('div');
+    div.innerHTML  = html;
+    var root       = div.firstElementChild;
+    var appName    = root.classList[0];
+    $['$'+appName] = root;
 
-    var appName   = $.$root.classList[0] || '';
 
     //CSS登録
     if(css){
         var cssClass = appName + "-css";
-        $.$css = document.querySelector(cssClass);
-        if(!$.$css){
-            $.$css           = document.createElement('style');
-            $.$css.innerHTML = css;
-            $.$css.className = cssClass;
-            document.head.insertBefore($.$css, document.head.firstElementChild);
+        $.$style = document.querySelector(cssClass);
+        if(!$.$style){
+            $.$style           = document.createElement('style');
+            $.$style.innerHTML = css;
+            $.$style.className = cssClass;
+            document.head.insertBefore($.$style, document.head.firstElementChild);
         }
     }
 
     //DOM選択
-    var elements = $.$root.querySelectorAll("*");
+    var elements = $['$'+appName].querySelectorAll("*");
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
         var names     = className.split('-');
@@ -816,6 +816,7 @@ function 将棋タイム(args){
         $[idName].addEventListener(eventName, {'handleEvent': app[name], '$': $});
     }
 
+    $['$'+appName].$ = $;
     return $;
 };
 
