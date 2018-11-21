@@ -6,7 +6,7 @@ function 将棋タイム(args){
 
     将棋タイム.セットアップ();
 
-    var $ = 将棋タイム.SilverState(将棋タイム, 将棋タイム.HTML, 将棋タイム.KIF解析(args.kif));
+    var $ = 将棋タイム.SilverState(将棋タイム, 将棋タイム.HTML, 将棋タイム.CSS, 将棋タイム.KIF解析(args.kif));
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
     $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
@@ -38,18 +38,9 @@ function 将棋タイム(args){
 
 
 将棋タイム.セットアップ = function (){
-    //shogitimeのURLを求める
-    var currentScript = document.querySelector("script[src*='shogitime.js']");
-    将棋タイム.URL = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
-
-    //CSSの「URL()」の内容を、相対パスからURLに変換する
-    var css = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL);
-
-    var style = document.createElement('style');
-    style.innerHTML = css;
-    style.className = '将棋タイム-CSS';
-    document.head.insertBefore(style, document.head.firstElementChild);
-
+    var currentScript   = document.querySelector("script[src*='shogitime.js']");
+    将棋タイム.URL      = currentScript.src.replace(/\/[^\/]*$/, '') + '/'; //PHPの dirname() 相当
+    将棋タイム.CSS      = 将棋タイム.CSS.replace(/url\([\'\"]?/g, "$&" + 将棋タイム.URL); //CSSの「URL()」の内容を、相対パスからURLに変換する
     将棋タイム.駒音.src = 将棋タイム.URL + "駒音.mp3";
 
     将棋タイム.セットアップ = function (){};
@@ -772,7 +763,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.SilverState = function(app, html, $){
+将棋タイム.SilverState = function(app, html, css, $){
     //HTMLからDOM作成
     var div  = document.createElement('div');
     div.innerHTML = html;
@@ -783,9 +774,21 @@ function 将棋タイム(args){
     $.$root.$ = $;
 
     var appName  = root.classList[0] || '';
-    var elements = root.querySelectorAll("*");
+
+    //CSS登録
+    if(css){
+        var cssClass = appName + "-css";
+        $.$css = document.querySelector(cssClass);
+        if(!$.$css){
+            $.$css           = document.createElement('style');
+            $.$css.innerHTML = css;
+            $.$css.className = cssClass;
+            document.head.insertBefore($.$css, document.head.firstElementChild);
+        }
+    }
 
     //DOM選択
+    var elements = root.querySelectorAll("*");
     for(var i = 0; i < elements.length; i++){
         var className = elements[i].classList[0] || '';
         var names     = className.split('-');
