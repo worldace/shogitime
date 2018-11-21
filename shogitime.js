@@ -773,16 +773,15 @@ function 将棋タイム(args){
     var appName    = root.classList[0];
     $['$'+appName] = root;
 
-
     //CSS登録
     if(css){
         var cssClass = appName + "-css";
-        $.$style = document.querySelector(cssClass);
-        if(!$.$style){
-            $.$style           = document.createElement('style');
-            $.$style.innerHTML = css;
-            $.$style.className = cssClass;
-            document.head.insertBefore($.$style, document.head.firstElementChild);
+        $.$css = document.querySelector(cssClass);
+        if(!$.$css){
+            $.$css           = document.createElement('style');
+            $.$css.innerHTML = css;
+            $.$css.className = cssClass;
+            document.head.insertBefore($.$css, document.head.firstElementChild);
         }
     }
 
