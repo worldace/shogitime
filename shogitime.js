@@ -14,6 +14,8 @@ function 将棋タイム(args){
     $.args   = args;
 
     将棋タイム.初回描画($);
+
+    return $.$将棋タイム;
 }
 
 
@@ -232,7 +234,10 @@ function 将棋タイム(args){
     }
 
     将棋タイム.描画($);
-    $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
+
+    if($.args.el){
+        $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
+    }
 };
 
 
@@ -670,14 +675,14 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$最初に移動ボタン_click = function (event){
+将棋タイム.$最初に移動ボタン_mousedown = function (event){
     this.$.手数 = 0;
     将棋タイム.描画(this.$);
 };
 
 
 
-将棋タイム.$前に移動ボタン_click = function (event){
+将棋タイム.$前に移動ボタン_mousedown = function (event){
     if(this.$.$指し手.selectedIndex > this.$.総手数){
         this.$.$指し手.selectedIndex = this.$.$指し手.length - 2;
     }
@@ -689,7 +694,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$次に移動ボタン_click = function(event){
+将棋タイム.$次に移動ボタン_mousedown = function(event){
     if(this.$.手数 < this.$.総手数){
         this.$.手数++;
         将棋タイム.描画(this.$);
@@ -702,7 +707,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$最後に移動ボタン_click = function(event){
+将棋タイム.$最後に移動ボタン_mousedown = function(event){
     this.$.手数 = this.$.総手数;
     将棋タイム.描画(this.$);
     this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
@@ -722,13 +727,13 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$ダイアログボタン_click = function(event){
+将棋タイム.$ダイアログボタン_mousedown = function(event){
     this.$.$将棋タイム.hasAttribute('data-dialog') ? this.$.$将棋タイム.removeAttribute('data-dialog') : this.$.$将棋タイム.setAttribute('data-dialog', '');
 };
 
 
 
-将棋タイム.$反転ボタン_click = function(event){
+将棋タイム.$反転ボタン_mousedown = function(event){
     this.$.data.reverse = !this.$.data.reverse;
     将棋タイム.描画(this.$);
 };
