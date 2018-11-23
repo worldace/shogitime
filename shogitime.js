@@ -676,78 +676,78 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最初に移動ボタン_mousedown = function (event){
-    this.$.手数 = 0;
-    将棋タイム.描画(this.$);
+    this.手数 = 0;
+    将棋タイム.描画(this);
 };
 
 
 
 将棋タイム.$前に移動ボタン_mousedown = function (event){
-    if(this.$.$指し手.selectedIndex > this.$.総手数){
-        this.$.$指し手.selectedIndex = this.$.$指し手.length - 2;
+    if(this.$指し手.selectedIndex > this.総手数){
+        this.$指し手.selectedIndex = this.$指し手.length - 2;
     }
-    else if(this.$.手数 > 0){
-        this.$.手数--;
-        将棋タイム.描画(this.$);
+    else if(this.手数 > 0){
+        this.手数--;
+        将棋タイム.描画(this);
     }
 };
 
 
 
 将棋タイム.$次に移動ボタン_mousedown = function(event){
-    if(this.$.手数 < this.$.総手数){
-        this.$.手数++;
-        将棋タイム.描画(this.$);
+    if(this.手数 < this.総手数){
+        this.手数++;
+        将棋タイム.描画(this);
         将棋タイム.駒音.再生();
     }
     else{
-        this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
+        this.$指し手.selectedIndex = this.$指し手.length - 1;
     }
 };
 
 
 
 将棋タイム.$最後に移動ボタン_mousedown = function(event){
-    this.$.手数 = this.$.総手数;
-    将棋タイム.描画(this.$);
-    this.$.$指し手.selectedIndex = this.$.$指し手.length - 1;
+    this.手数 = this.総手数;
+    将棋タイム.描画(this);
+    this.$指し手.selectedIndex = this.$指し手.length - 1;
 };
 
 
 
 将棋タイム.$指し手_change = function (event){
-    if(this.$.$指し手.selectedIndex > this.$.総手数){
-        将棋タイム.$最後に移動ボタン_click.call(this);
+    if(this.$指し手.selectedIndex > this.総手数){
+        将棋タイム.$最後に移動ボタン_mousedown.call(this);
     }
     else{
-        this.$.手数 = this.$.$指し手.selectedIndex;
-        将棋タイム.描画(this.$);
+        this.手数 = this.$指し手.selectedIndex;
+        将棋タイム.描画(this);
     }
 };
 
 
 
 将棋タイム.$ダイアログボタン_mousedown = function(event){
-    this.$.$将棋タイム.hasAttribute('data-dialog') ? this.$.$将棋タイム.removeAttribute('data-dialog') : this.$.$将棋タイム.setAttribute('data-dialog', '');
+    this.$将棋タイム.hasAttribute('data-dialog') ? this.$将棋タイム.removeAttribute('data-dialog') : this.$将棋タイム.setAttribute('data-dialog', '');
 };
 
 
 
 将棋タイム.$反転ボタン_mousedown = function(event){
-    this.$.data.reverse = !this.$.data.reverse;
-    将棋タイム.描画(this.$);
+    this.data.reverse = !this.data.reverse;
+    将棋タイム.描画(this);
 };
 
 
 
 将棋タイム.$ダイアログ_閉じるボタン_click = function(event){
-    this.$.$将棋タイム.removeAttribute('data-dialog');
+    this.$将棋タイム.removeAttribute('data-dialog');
 };
 
 
 
 将棋タイム.$ダイアログ_棋譜コピーボタン_mousedown = function(event){
-    var el = this.$.$ダイアログ_棋譜テキスト;
+    var el = this.$ダイアログ_棋譜テキスト;
 
     //参考 https://mamewaza.com/support/blog/javascript-copy.html
     el.style.display = 'inline-block';
@@ -815,7 +815,7 @@ function 将棋タイム(args){
         var eventName = names.pop();
         var idName    = '$' + names.join('_');
 
-        $[idName].addEventListener(eventName, {'handleEvent': app[name], '$': $});
+        $[idName].addEventListener(eventName, app[name].bind($));
     }
 
     $['$'+appName].$ = $;
