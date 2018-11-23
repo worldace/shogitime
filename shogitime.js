@@ -675,14 +675,14 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$最初に移動ボタン_mousedown = function (event){
+将棋タイム.$最初に移動ボタン_onmousedown = function (event){
     this.手数 = 0;
     将棋タイム.描画(this);
 };
 
 
 
-将棋タイム.$前に移動ボタン_mousedown = function (event){
+将棋タイム.$前に移動ボタン_onmousedown = function (event){
     if(this.$指し手.selectedIndex > this.総手数){
         this.$指し手.selectedIndex = this.$指し手.length - 2;
     }
@@ -694,7 +694,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$次に移動ボタン_mousedown = function(event){
+将棋タイム.$次に移動ボタン_onmousedown = function(event){
     if(this.手数 < this.総手数){
         this.手数++;
         将棋タイム.描画(this);
@@ -707,7 +707,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$最後に移動ボタン_mousedown = function(event){
+将棋タイム.$最後に移動ボタン_onmousedown = function(event){
     this.手数 = this.総手数;
     将棋タイム.描画(this);
     this.$指し手.selectedIndex = this.$指し手.length - 1;
@@ -715,9 +715,9 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$指し手_change = function (event){
+将棋タイム.$指し手_onchange = function (event){
     if(this.$指し手.selectedIndex > this.総手数){
-        将棋タイム.$最後に移動ボタン_mousedown.call(this);
+        将棋タイム.$最後に移動ボタン_onmousedown.call(this);
     }
     else{
         this.手数 = this.$指し手.selectedIndex;
@@ -727,26 +727,26 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$ダイアログボタン_mousedown = function(event){
+将棋タイム.$ダイアログボタン_onmousedown = function(event){
     this.$将棋タイム.hasAttribute('data-dialog') ? this.$将棋タイム.removeAttribute('data-dialog') : this.$将棋タイム.setAttribute('data-dialog', '');
 };
 
 
 
-将棋タイム.$反転ボタン_mousedown = function(event){
+将棋タイム.$反転ボタン_onmousedown = function(event){
     this.data.reverse = !this.data.reverse;
     将棋タイム.描画(this);
 };
 
 
 
-将棋タイム.$ダイアログ_閉じるボタン_click = function(event){
+将棋タイム.$ダイアログ_閉じるボタン_onclick = function(event){
     this.$将棋タイム.removeAttribute('data-dialog');
 };
 
 
 
-将棋タイム.$ダイアログ_棋譜コピーボタン_mousedown = function(event){
+将棋タイム.$ダイアログ_棋譜コピーボタン_onmousedown = function(event){
     var el = this.$ダイアログ_棋譜テキスト;
 
     //参考 https://mamewaza.com/support/blog/javascript-copy.html
@@ -808,14 +808,14 @@ function 将棋タイム(args){
 
     //イベント登録
     for(var name in app){
-        if(name.indexOf('$') !== 0 || typeof app[name] !== 'function'){
+        if(name.indexOf('$') !== 0){
             continue;
         }
         var names     = name.substring(1).split('_');
         var eventName = names.pop();
         var idName    = '$' + names.join('_');
 
-        $[idName].addEventListener(eventName, app[name].bind($));
+        $[idName][eventName] = (typeof app[name] === 'function')  ?  app[name].bind($)  :  app[name];
     }
 
     $['$'+appName].$ = $;
