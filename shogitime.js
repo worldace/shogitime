@@ -1188,25 +1188,25 @@ function 将棋タイム(args){
     background-repeat: no-repeat;
 }
 .将棋タイム-最初に移動ボタン{
-    background-image: url('step-forward_.png');
+    background-image: url('1.svg');
 }
 .将棋タイム-前に移動ボタン{
-    background-image: url('play_.png');
+    background-image: url('2.svg');
 }
 .将棋タイム-次に移動ボタン{
-    background-image: url('play.png');
+    background-image: url('3.svg');
 }
 .将棋タイム-最後に移動ボタン{
-    background-image: url('step-forward.png');
+    background-image: url('4.svg');
 }
 .将棋タイム-指し手{
     margin: 0 8px;
 }
 .将棋タイム-ダイアログボタン{
-    background-image: url('gear.png');
+    background-image: url('5.svg');
 }
 .将棋タイム-反転ボタン{
-    background-image: url('refresh.png');
+    background-image: url('6.svg');
 }
 
 .将棋タイム-ダイアログ{
