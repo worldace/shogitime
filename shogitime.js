@@ -675,6 +675,12 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.$将棋盤_onmousedown = function (event){
+    将棋タイム.$次に移動ボタン_onmousedown.call(this);
+};
+
+
+
 将棋タイム.$最初に移動ボタン_onmousedown = function (event){
     this.手数 = 0;
     将棋タイム.描画(this);
@@ -762,6 +768,12 @@ function 将棋タイム(args){
 
     document.execCommand("copy");
     el.style.display = 'none';
+};
+
+
+
+将棋タイム.$将棋タイム_ondblclick = function(event){
+    event.preventDefault();
 };
 
 
