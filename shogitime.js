@@ -772,12 +772,6 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$将棋タイム_ondblclick = function(event){
-    event.preventDefault();
-};
-
-
-
 将棋タイム.SilverState = function(app, html, css, $){
     $ = $ || {};
 
@@ -983,6 +977,7 @@ function 将棋タイム(args){
     background-image: url('マス.png'), url('盤.png');
     position: relative;
     margin: 0 3px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .将棋タイム[data-reverse] .将棋タイム-将棋盤{
