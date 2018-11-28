@@ -55,17 +55,7 @@ function 将棋タイム(args){
     args.kif = args.kif.trim();
 
     if(args.kif.match(/^https?:/)){
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', args.kif);
-        xhr.timeout = 60 * 1000;
-        if(!args.kif.match(/\.kifu$/)){
-            xhr.overrideMimeType('text/plain; charset=Shift_JIS');
-        }
-        xhr.onload = function(e) {
-            args.kif = xhr.responseText;
-            将棋タイム(args);
-        };
-        xhr.send();
+        将棋タイム.引数確認.ファイル取得(args);
         return false;
    }
 
@@ -90,6 +80,25 @@ function 将棋タイム(args){
     if(args.blue){
         args.blue = String(args.blue).split(',');
     }
+};
+
+
+
+将棋タイム.引数確認.ファイル取得 = function (args){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', args.kif);
+    xhr.timeout = 60 * 1000;
+    if(args.kif.match(/\.kifu$/)){
+        xhr.overrideMimeType('text/plain; charset=UTF-8');
+    }
+    else{
+        xhr.overrideMimeType('text/plain; charset=Shift_JIS');
+    }
+    xhr.onload = function(e) {
+        args.kif = xhr.responseText;
+        将棋タイム(args);
+    };
+    xhr.send();
 };
 
 
