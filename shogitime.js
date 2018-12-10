@@ -85,17 +85,19 @@ function 将棋タイム(args){
 
 
 将棋タイム.引数確認.ファイル取得 = function (args){
-    var charset   = (args.kif.match(/\.kifu$/)) ? 'UTF-8' : 'Shift_JIS';
+    var 文字コード = (args.kif.match(/\.kifu$/)) ? 'UTF-8' : 'Shift_JIS';
 
-    var xhr       = new XMLHttpRequest();
-    xhr.timeout   = 60 * 1000;
-    xhr.onloadend = function(event){
-        args.kif = xhr.responseText;
-        将棋タイム(args);
-    };
-    xhr.overrideMimeType('text/plain; charset=' + charset);
+    var xhr        = new XMLHttpRequest();
+    xhr.timeout    = 60 * 1000;
+    xhr.onloadend  = loadend;
+    xhr.overrideMimeType('text/plain; charset=' + 文字コード);
     xhr.open('GET', args.kif);
     xhr.send();
+
+    function loadend(event){
+        args.kif = xhr.responseText;
+        将棋タイム(args);
+    }
 };
 
 
