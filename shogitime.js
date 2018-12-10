@@ -85,19 +85,16 @@ function 将棋タイム(args){
 
 
 将棋タイム.引数確認.ファイル取得 = function (args){
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', args.kif);
-    xhr.timeout = 60 * 1000;
-    if(args.kif.match(/\.kifu$/)){
-        xhr.overrideMimeType('text/plain; charset=UTF-8');
-    }
-    else{
-        xhr.overrideMimeType('text/plain; charset=Shift_JIS');
-    }
-    xhr.onload = function(e) {
+    var charset   = (args.kif.match(/\.kifu$/)) ? 'UTF-8' : 'Shift_JIS';
+
+    var xhr       = new XMLHttpRequest();
+    xhr.timeout   = 60 * 1000;
+    xhr.onloadend = function(event){
         args.kif = xhr.responseText;
         将棋タイム(args);
     };
+    xhr.overrideMimeType('text/plain; charset=' + charset);
+    xhr.open('GET', args.kif);
     xhr.send();
 };
 
@@ -821,16 +818,21 @@ function 将棋タイム(args){
         $[idName] = elements[i];
     }
 
-    //イベント登録
+    //プロパティ登録
     for(var name in app){
         if(name.indexOf('$') !== 0){
             continue;
         }
-        var names     = name.substring(1).split('_');
-        var eventName = names.pop();
-        var idName    = '$' + names.join('_');
-
-        $[idName][eventName] = (typeof app[name] === 'function')  ?  app[name].bind($)  :  app[name];
+        var names = name.substring(1).split('_');
+        if(names.length < 2){
+            continue;
+        }
+        var propName = names.pop();
+        var idName   = '$' + names.join('_');
+        if(!(idName in $)){
+            $[idName] = {};
+        }
+        $[idName][propName] = (typeof app[name] === 'function')  ?  app[name].bind($)  :  app[name];
     }
 
     $['$'+appName].$ = $;
