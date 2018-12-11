@@ -1208,25 +1208,25 @@ function 将棋タイム(args){
     background-repeat: no-repeat;
 }
 .将棋タイム-最初に移動ボタン{
-    background-image: url('1.svg');
+    background-image: url('最初に移動ボタン.svg');
 }
 .将棋タイム-前に移動ボタン{
-    background-image: url('2.svg');
+    background-image: url('前に移動ボタン.svg');
 }
 .将棋タイム-次に移動ボタン{
-    background-image: url('3.svg');
+    background-image: url('次に移動ボタン.svg');
 }
 .将棋タイム-最後に移動ボタン{
-    background-image: url('4.svg');
+    background-image: url('最後に移動ボタン.svg');
 }
 .将棋タイム-指し手{
     margin: 0 8px;
 }
 .将棋タイム-ダイアログボタン{
-    background-image: url('5.svg');
+    background-image: url('ダイアログボタン.svg');
 }
 .将棋タイム-反転ボタン{
-    background-image: url('6.svg');
+    background-image: url('反転ボタン.svg');
 }
 
 .将棋タイム-ダイアログ{
@@ -1257,7 +1257,8 @@ function 将棋タイム(args){
     width: 20px;
     height: 20px;
     background-repeat: no-repeat;
-    background-image: url('close.png');
+    background-image: url('ダイアログ-閉じるボタン.svg');
+    background-size: 20px;
     cursor: pointer;
 }
 
