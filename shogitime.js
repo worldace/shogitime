@@ -684,7 +684,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$将棋盤_onmousedown = function (event){
-    将棋タイム.$次に移動ボタン_onmousedown.call(this);
+    this.$次に移動ボタン.onmousedown();
 };
 
 
@@ -731,7 +731,7 @@ function 将棋タイム(args){
 
 将棋タイム.$指し手_onchange = function (event){
     if(this.$指し手.selectedIndex > this.総手数){
-        将棋タイム.$最後に移動ボタン_onmousedown.call(this);
+        this.$最後に移動ボタン.onmousedown();
     }
     else{
         this.手数 = this.$指し手.selectedIndex;
