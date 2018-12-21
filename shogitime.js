@@ -87,11 +87,12 @@ function 将棋タイム(args){
 将棋タイム.引数確認.ファイル取得 = function (args){
     var 文字コード = (args.kif.match(/\.kifu$/)) ? 'UTF-8' : 'Shift_JIS';
 
-    var xhr        = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', args.kif);
+
     xhr.timeout    = 60 * 1000;
     xhr.onloadend  = loadend;
     xhr.overrideMimeType('text/plain; charset=' + 文字コード);
-    xhr.open('GET', args.kif);
     xhr.send();
 
     function loadend(event){
