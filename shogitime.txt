@@ -111,13 +111,8 @@ ShogiGUI http://shogigui.siganus.com/
 
 【将棋ウォーズの棋譜取得方法】
 
-Webのマイページを開きます。「https://shogiwars.heroz.jp/users/ID名」のようなURLです。
-
-対局履歴から棋譜を取得したい対局ページを開き、そのページのURLをコピーしてください
-「https://kif-pona.heroz.jp/games/～」のようなURLです。
-
-
-そのURLをShogiGUIに貼り付ければ棋譜を取得できます。 編集 → 棋譜貼り付け
+自作のダウンローダをご利用ください。Windows用
+https://spelunker2.wordpress.com/2019/01/09/shogiwars/
 
 
 
