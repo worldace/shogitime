@@ -14,6 +14,7 @@ function 将棋タイム(args){
     $.args   = args;
 
     将棋タイム.初回描画($);
+    将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
 
     return $.$将棋タイム;
 }
@@ -852,6 +853,19 @@ function 将棋タイム(args){
     return to;
 };
 
+
+
+将棋タイム.イベント発行 = function (name, el, detail){
+    detail = detail || {};
+    try {
+        var event = new CustomEvent(name, {bubbles:true, detail: detail});
+    }
+    catch(e){
+        event = document.createEvent('CustomEvent');
+        event.initCustomEvent(name, true, false, detail);
+    }
+    el.dispatchEvent(event);
+};
 
 
 
