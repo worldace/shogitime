@@ -1,6 +1,6 @@
 
 document.addEventListener('将棋タイム開始', function(event){
-    var 設定 = {限界値: 5000}; //グラフのY幅。必要なら変更してください
+    var 設定 = {限界値: 3000}; //グラフのY幅。必要なら変更してください
 
     var $    = event.target.$;
     var kif  = $.args.kif.split(/\r?\n/);
@@ -34,6 +34,7 @@ document.addEventListener('将棋タイム開始', function(event){
     }
 
     $.チャート = c3.generate({
+        bindto: '.将棋タイム-グラフ',
         data: {
             columns: [
                 ['評価値'].concat($.評価値),
