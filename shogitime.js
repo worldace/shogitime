@@ -42,7 +42,7 @@ function 将棋タイム(args){
             blue: el[i].getAttribute("blue"),
             nocp: el[i].hasAttribute("nocp"),
             myname: el[i].getAttribute("myname"),
-            chart: el[i].getAttribute("chart"),
+            graph: el[i].getAttribute("graph"),
         });
     }
 };
@@ -75,8 +75,8 @@ function 将棋タイム(args){
     if(typeof args.comment === 'string'){
         args.comment = document.querySelector(args.comment);
     }
-    if(typeof args.chart === 'string'){
-        args.chart = document.querySelector(args.chart);
+    if(typeof args.graph === 'string'){
+        args.graph = document.querySelector(args.graph);
     }
 
     args.start   = Number(args.start || 0);
@@ -180,9 +180,9 @@ function 将棋タイム(args){
     if($.args.comment){
         $.args.comment.textContent = $.全指し手[手数].コメント;
     }
-    //チャート
-    if($.チャート){
-        $.チャート.xgrids([{value: $.手数}]);
+    //グラフ
+    if($.グラフ){
+        $.グラフ.xgrids([{value: $.手数}]);
     }
 
     将棋タイム.イベント発行('将棋タイム描画', $.$将棋タイム);
@@ -261,8 +261,8 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
-    if($.args.chart && $.評価値.length && window.c3){
-        $.チャート = 将棋タイム.初回描画.チャート($);
+    if($.args.graph && $.評価値.length && window.c3){
+        $.グラフ = 将棋タイム.初回描画.グラフ($);
     }
 
     将棋タイム.描画($);
@@ -295,9 +295,9 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.初回描画.チャート = function ($){
+将棋タイム.初回描画.グラフ = function ($){
     return window.c3.generate({
-        bindto: $.args.chart,
+        bindto: $.args.graph,
         data: {
             columns: [
                 ['評価値'].concat($.評価値),
