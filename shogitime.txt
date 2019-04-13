@@ -217,7 +217,7 @@ ShogiGUIでKIFファイルを解析すると、評価値チャートを表示す
    解析が終わったらファイルを保存してください
 
 
-2. head内に次の3つのタグを追加で貼り付けます
+2. HTMLの<head>内に次の3つのタグを追加で貼り付けます
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
@@ -226,7 +226,7 @@ ShogiGUIでKIFファイルを解析すると、評価値チャートを表示す
 
 
 
-3. kifタグにchart属性を追加し、その値に表示部を指し示す「CSSセレクタ」を記述します
+3. kifタグにchart属性を追加し、その値にチャート表示部を指し示す「CSSセレクタ」を記述します
 
 
 <script type="kif" chart="#chart1">
@@ -239,8 +239,7 @@ ShogiGUIでKIFファイルを解析すると、評価値チャートを表示す
 
 <div id="chart1" style="width:1200px; height:200px; margin:0 auto;"></div>
 
-
-幅1200px、高さ200pxのチャートがセンタリングされて表示されます。
+※このサンプルでは幅1200px、高さ200pxのチャートがセンタリングされて表示されます。
 
 
 
