@@ -261,7 +261,7 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
-    if($.args.chart && $.評価値.length){
+    if($.args.chart && $.評価値.length && window.c3){
         $.チャート = 将棋タイム.初回描画.チャート($);
     }
 
@@ -296,7 +296,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.初回描画.チャート = function ($){
-    return c3.generate({
+    return window.c3.generate({
         bindto: $.args.chart,
         data: {
             columns: [
@@ -431,8 +431,9 @@ function 将棋タイム(args){
         else if(kif[i].indexOf('|') === 0){
             一次解析.局面図.push(kif[i]);
         }
-        else if(kif[i].indexOf('|') === 0){
-            一次解析.局面図.push(kif[i]);
+        else if(kif[i].indexOf('：') > -1){
+            var info = kif[i].split('：'); //手抜き
+            一次解析[info[0]] = info[1];
         }
         else if(kif[i].indexOf('**Engines') === 0){
             一次解析.解析済み = true;
