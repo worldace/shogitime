@@ -261,7 +261,7 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
-    if($.args.chart){
+    if($.args.chart && $.評価値.length){
         $.チャート = 将棋タイム.初回描画.チャート($);
     }
 
