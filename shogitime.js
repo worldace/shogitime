@@ -167,6 +167,8 @@ function 将棋タイム(args){
     if($.args.comment){
         $.args.comment.textContent = $.全指し手[手数].コメント;
     }
+
+    将棋タイム.イベント発行('将棋タイム描画', $.$将棋タイム);
 };
 
 
