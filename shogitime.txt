@@ -111,7 +111,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 【将棋ウォーズの棋譜取得方法】
 
-自作のダウンローダをご利用ください。Windows用
+姉妹ソフトの「将棋ウォーズ棋譜ダウンローダ」をご利用ください。Windows用
 https://spelunker2.wordpress.com/2019/01/09/shogiwars/
 
 
