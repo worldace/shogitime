@@ -34,7 +34,7 @@ document.addEventListener('将棋タイム開始', function(event){
     }
 
     $.チャート = c3.generate({
-        bindto: '.将棋タイム-グラフ',
+        bindto: '.将棋タイム-チャート',
         data: {
             columns: [
                 ['評価値'].concat($.評価値),
