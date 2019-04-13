@@ -1,6 +1,6 @@
 
 document.addEventListener('将棋タイム開始', function(event){
-    var 設定 = {限界値: 5000};
+    var 設定 = {限界値: 5000}; //グラフのY幅。必要なら変更してください
 
     var $    = event.target.$;
     var kif  = $.args.kif.split(/\r?\n/);
@@ -83,6 +83,8 @@ document.addEventListener('将棋タイム開始', function(event){
         },
     });
 });
+
+
 
 document.addEventListener('将棋タイム描画', function(event){
     event.target.$.チャート.xgrids([{value: event.target.$.手数}]);
