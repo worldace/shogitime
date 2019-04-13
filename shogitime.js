@@ -10,6 +10,9 @@ function 将棋タイム(args){
 
     if(args.myname && $.後手名.indexOf(args.myname) === 0){
         args.reverse = true;
+        for(var i = 0; i < $.評価値.length; i++){
+            $.評価値[i] = -$.評価値[i];
+        }
     }
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
@@ -39,6 +42,7 @@ function 将棋タイム(args){
             blue: el[i].getAttribute("blue"),
             nocp: el[i].hasAttribute("nocp"),
             myname: el[i].getAttribute("myname"),
+            chart: el[i].getAttribute("chart"),
         });
     }
 };
@@ -70,6 +74,9 @@ function 将棋タイム(args){
     }
     if(typeof args.comment === 'string'){
         args.comment = document.querySelector(args.comment);
+    }
+    if(typeof args.chart === 'string'){
+        args.chart = document.querySelector(args.chart);
     }
 
     args.start   = Number(args.start || 0);
@@ -173,6 +180,10 @@ function 将棋タイム(args){
     if($.args.comment){
         $.args.comment.textContent = $.全指し手[手数].コメント;
     }
+    //チャート
+    if($.チャート){
+        $.チャート.xgrids([{value: $.手数}]);
+    }
 
     将棋タイム.イベント発行('将棋タイム描画', $.$将棋タイム);
 };
@@ -250,12 +261,16 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
+    if($.args.chart){
+        $.チャート = 将棋タイム.初回描画.チャート($);
+    }
 
     将棋タイム.描画($);
 
     if($.args.el){
         $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
     }
+
 };
 
 
@@ -276,6 +291,61 @@ function 将棋タイム(args){
     }
 
     return fragment;
+};
+
+
+
+将棋タイム.初回描画.チャート = function ($){
+    return c3.generate({
+        bindto: $.args.chart,
+        data: {
+            columns: [
+                ['評価値'].concat($.評価値),
+            ],
+            type :'area',
+            onclick: function(event){
+                $.$指し手.selectedIndex = event.x;
+                $.$指し手.onchange();
+            },
+        },
+        axis: {
+            y: {
+                max: 3000, //ハードコーディング
+                min: -3000,
+                padding: {
+                    top: 0,
+                    bottom: 0,
+                },
+            },
+            x:{
+                padding:{
+                    left: 0,
+                    right: 0,
+                },
+            },
+        },
+        grid: {
+            y: {
+                lines: [{value: 0}],
+            },
+        },
+        legend: {
+            show: false,
+        },
+        tooltip:{
+            contents: function(data){
+                var html = '<table class="c3-tooltip"><tr><th>';
+                html += data[0].x;
+                html += '手</th></tr><tr><td>';
+                html += data[0].value + '<br>' + $.読み筋[data[0].x].replace(/ .*/, '');
+                html += '</td></tr></table>';
+                return html;
+            },
+        },
+        transition: {
+            duration: 0,
+        },
+    });
 };
 
 
@@ -349,7 +419,7 @@ function 将棋タイム(args){
 
 将棋タイム.KIF解析 = function(kif){
     var 解析結果 = {};
-    var 一次解析 = {局面図:[]};
+    var 一次解析 = {局面図:[], 解析:[]};
 
     kif = kif.split(/\r?\n/);
 
@@ -383,6 +453,8 @@ function 将棋タイム(args){
     解析結果.手合割   = 将棋タイム.KIF解析.手合割(一次解析.手合割);
     解析結果.全指し手 = 将棋タイム.KIF解析.指し手(一次解析.全指し手, 解析結果.開始手番);
     解析結果.総手数   = 解析結果.全指し手.length - 1;
+    解析結果.評価値   = 将棋タイム.KIF解析.評価値(一次解析.全指し手);
+    解析結果.読み筋   = 将棋タイム.KIF解析.読み筋(一次解析.全指し手);
     解析結果.初期局面 = {
         '駒'        : 将棋タイム.KIF解析.局面図(一次解析.局面図, 解析結果.手合割),
         '先手の持駒': 将棋タイム.KIF解析.持駒(一次解析.先手の持駒 || 一次解析.下手の持駒),
@@ -678,6 +750,54 @@ function 将棋タイム(args){
     }
 
     return 結果;
+};
+
+
+
+将棋タイム.KIF解析.評価値 = function (kif指し手){
+    var 全評価値 = [];
+    var 設定値   = 3000;
+
+    for(var i = 0; i < kif指し手.length; i++){
+        if(kif指し手[i].indexOf('**解析 0 ') !== 0){
+            continue;
+        }
+
+        var 評価値 = Number(kif指し手[i].match(/評価値 (-?\d+)/)[1]);
+
+        if(評価値 > 29000){
+            評価値 = 設定値 + 1;
+        }
+        else if(評価値 < -29000){
+            評価値 = -設定値 - 1;
+        }
+        else if(評価値 > 設定値){
+            評価値 = 設定値;
+        }
+        else if(評価値 < -設定値){
+            評価値 = -設定値;
+        }
+
+        全評価値.push(評価値);
+    }
+
+    return 全評価値;
+};
+
+
+
+将棋タイム.KIF解析.読み筋 = function (kif指し手){
+    var 全読み筋 = ['-'];
+
+    for(var i = 0; i < kif指し手.length; i++){
+        if(kif指し手[i].indexOf('**解析 0 ') !== 0){
+            continue;
+        }
+
+        全読み筋.push(String(kif指し手[i].match(/ 読み筋 (.*)/)[1]));
+    }
+
+    return 全読み筋;
 };
 
 
