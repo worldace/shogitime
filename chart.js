@@ -33,6 +33,10 @@ document.addEventListener('将棋タイム開始', function(event){
         }
     }
 
+    if(!$.評価値.length){
+        return;
+    }
+
     $.チャート = c3.generate({
         bindto: '.将棋タイム-チャート',
         data: {
@@ -64,7 +68,7 @@ document.addEventListener('将棋タイム開始', function(event){
         grid: {
             y: {
                 lines: [{value: 0}],
-            }
+            },
         },
         legend: {
             show: false,
@@ -88,5 +92,8 @@ document.addEventListener('将棋タイム開始', function(event){
 
 
 document.addEventListener('将棋タイム描画', function(event){
+    if(!event.target.$.チャート){
+        return;
+    }
     event.target.$.チャート.xgrids([{value: event.target.$.手数}]);
 });
