@@ -8,6 +8,10 @@ function 将棋タイム(args){
 
     var $ = 将棋タイム.SilverState(将棋タイム, 将棋タイム.HTML, 将棋タイム.CSS, 将棋タイム.KIF解析(args.kif));
 
+    if(args.myname && $.後手名.indexOf(args.myname) === 0){
+        args.reverse = true;
+    }
+
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
     $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
     $.data   = {'reverse': args.reverse};
@@ -34,6 +38,7 @@ function 将棋タイム(args){
             red: el[i].getAttribute("red"),
             blue: el[i].getAttribute("blue"),
             nocp: el[i].hasAttribute("nocp"),
+            myname: el[i].getAttribute("myname"),
         });
     }
 };
@@ -70,6 +75,7 @@ function 将棋タイム(args){
     args.start   = Number(args.start || 0);
     args.reverse = Boolean(args.reverse);
     args.nocp    = Boolean(args.nocp);
+    args.myname  = String(args.myname);
 
 
     if(args.green){

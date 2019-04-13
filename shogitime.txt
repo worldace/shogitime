@@ -140,6 +140,14 @@ kifタグにreverse属性を追加します
 
 
 
+◆特定の名前が後手の場合、開始時に盤を反転して始める
+
+kifタグにmyname属性を追加して、値に名前を入力してください
+
+<script type="kif" myname="hogehoge">
+
+
+
 ◆指し手コメントを表示する
 
 将棋タイムにはコメントを表示するUIはありませんが
@@ -195,6 +203,7 @@ kifタグにnocp属性を追加します
     kif     : KIF形式のテキストかKIFファイルのURL
     start   : 開始したい手数
     reverse : 開始時に盤を反転させるか。trueで反転する
+    myname  : 特定の名前が後手の場合、開始時に盤を反転して始める。文字列
     comment : コメント表示部を指し示すCSSセレクタかDOM要素。
     green   : 緑色でハイライトしたいマス番号(2桁の数字＝XY)。複数のマスを指定したい場合はコンマで区切る。文字列か数字
     red     : 同上
@@ -203,6 +212,64 @@ kifタグにnocp属性を追加します
 }
 
 ※プレイヤ自身を示すセレクタは ".将棋タイム" です
+
+
+
+
+■高度な使い方
+------------------------------------
+
+
+◆実況する
+
+将棋タイムには実況機能がありませんが、少し工夫すれば実況することも可能です。
+次のscriptタグをHTMLの下部に追加すると、60秒毎にkifファイルを読みにいき盤面を最新に書き換えます。
+
+※kifファイルのURLは各自変更してください
+
+
+<script>
+setInterval(将棋タイム, 60*1000, {
+    el: '.将棋タイム',
+    kif: 'http://example.com/example.kif' + '?' + Date.now(),
+    start: -1,
+});
+</script>
+
+
+
+◆評価値グラフを表示する
+
+ShogiGUIでKIFファイルを解析すると、評価値グラフを表示することもできます。
+
+
+1. ShogiGUIで棋譜ファイルを解析します。メニューの「対局」→「棋譜解析」から
+   必ず「棋譜コメントに読み筋を入れる」にチェックを入れてから解析してください
+
+   解析が終わったらファイルを保存してください
+
+
+2. head内に次の4つのタグを追加で貼り付けます
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.0/c3.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.0/c3.min.js"></script>
+<script src="shogitime/chart.js"></script>
+
+
+※「shogitime/chart.js」のURLは各自変更してください
+
+
+
+3. グラフを表示したい場所に、次のタグを貼り付けます。
+
+
+<div id="chart" style="width:1200px; height:200px; margin:0 auto;"></div>
+
+
+幅1200px、高さ200pxのグラフがセンタリングされて表示されます
+
 
 
 
