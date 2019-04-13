@@ -10,27 +10,30 @@ document.addEventListener('将棋タイム開始', function(event){
     $.読み筋 = ['-'];
 
     for(var i = 0; i < kif.length; i++){
-        if(kif[i].match(/^\*\*解析/)){
-            var 解析   = kif[i].match(/評価値 (-?\d+) 読み筋 (.*)/);
-            var 評価値 = Number(解析[1]);
-            if(反転){
-                評価値 = -評価値;
-            }
-            if(評価値 > 29000){
-                評価値 = 設定.限界値 + 1;
-            }
-            else if(評価値 < -29000){
-                評価値 = -設定.限界値 - 1;
-            }
-            else if(評価値 > 設定.限界値){
-                評価値 = 設定.限界値;
-            }
-            else if(評価値 < -設定.限界値){
-                評価値 = -設定.限界値;
-            }
-            $.評価値.push(評価値);
-            $.読み筋.push(String(解析[2]));
+        if(!kif[i].match(/^\*\*解析/)){
+            continue;
         }
+        var 解析   = kif[i].match(/評価値 (-?\d+) 読み筋 (.*)/);
+        var 評価値 = Number(解析[1]);
+        if(反転){
+            評価値 = -評価値;
+        }
+        
+        if(評価値 > 29000){
+            評価値 = 設定.限界値 + 1;
+        }
+        else if(評価値 < -29000){
+            評価値 = -設定.限界値 - 1;
+        }
+        else if(評価値 > 設定.限界値){
+            評価値 = 設定.限界値;
+        }
+        else if(評価値 < -設定.限界値){
+            評価値 = -設定.限界値;
+        }
+
+        $.評価値.push(評価値);
+        $.読み筋.push(String(解析[2]));
     }
 
     if(!$.評価値.length){
@@ -92,8 +95,7 @@ document.addEventListener('将棋タイム開始', function(event){
 
 
 document.addEventListener('将棋タイム描画', function(event){
-    if(!event.target.$.チャート){
-        return;
+    if(event.target.$.チャート){
+        event.target.$.チャート.xgrids([{value: event.target.$.手数}]);
     }
-    event.target.$.チャート.xgrids([{value: event.target.$.手数}]);
 });
