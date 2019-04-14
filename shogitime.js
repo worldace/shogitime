@@ -10,9 +10,6 @@ function 将棋タイム(args){
 
     if(args.myname && $.後手名.indexOf(args.myname) === 0){
         args.reverse = true;
-        for(var i = 0; i < $.評価値.length; i++){
-            $.評価値[i] = -$.評価値[i];
-        }
     }
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
