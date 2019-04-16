@@ -259,7 +259,7 @@ function 将棋タイム(args){
         $.$コントロールパネル.style.display = 'none';
     }
     if($.args.graph && $.評価値.length && window.c3){
-        $.グラフ = 将棋タイム.初回描画.グラフ($);
+        $.グラフ = 将棋タイム.グラフ描画($);
     }
 
     将棋タイム.描画($);
@@ -292,7 +292,11 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.初回描画.グラフ = function ($){
+将棋タイム.グラフ描画 = function ($){
+    var Ymax = 3000;
+    if($.data.reverse){
+        Ymax = -Ymax;
+    }
     return window.c3.generate({
         bindto: $.args.graph,
         data: {
@@ -307,8 +311,8 @@ function 将棋タイム(args){
         },
         axis: {
             y: {
-                max: 3000, //ハードコーディング
-                min: -3000,
+                max: Ymax,
+                min: -Ymax,
                 padding: {
                     top: 0,
                     bottom: 0,
@@ -879,7 +883,9 @@ function 将棋タイム(args){
 
 将棋タイム.$反転ボタン_onmousedown = function(event){
     this.data.reverse = !this.data.reverse;
+    this.グラフ = 将棋タイム.グラフ描画(this);
     将棋タイム.描画(this);
+
 };
 
 
