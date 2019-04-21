@@ -18,7 +18,6 @@ function 将棋タイム(args){
     $.args   = args;
 
     将棋タイム.初回描画($);
-    将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
 
     return $.$将棋タイム;
 }
@@ -181,8 +180,6 @@ function 将棋タイム(args){
     if($.グラフ){
         $.グラフ.xgrids([{value: $.手数}]);
     }
-
-    将棋タイム.イベント発行('将棋タイム描画', $.$将棋タイム);
 };
 
 
@@ -268,6 +265,7 @@ function 将棋タイム(args){
         $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
     }
 
+    将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
 };
 
 
@@ -293,10 +291,8 @@ function 将棋タイム(args){
 
 
 将棋タイム.グラフ描画 = function ($){
-    var Ymax = 3000;
-    if($.data.reverse){
-        Ymax = -Ymax;
-    }
+    var Ymax = ($.data.reverse) ? -3000 : 3000;
+
     return window.c3.generate({
         bindto: $.args.graph,
         data: {
