@@ -297,7 +297,7 @@ function 将棋タイム(args){
         bindto: $.args.graph,
         data: {
             columns: [
-                ['評価値'].concat($.評価値),
+                ['評価値'].concat(将棋タイム.グラフ描画.グラフ用評価値($.評価値, 3000)),
             ],
             type :'area',
             onclick: function(event){
@@ -334,7 +334,7 @@ function 将棋タイム(args){
                 var html = '<table class="c3-tooltip"><tr><th>';
                 html += data[0].x;
                 html += '手</th></tr><tr><td>';
-                html += data[0].value + '<br>' + $.読み筋[data[0].x].replace(/ .*/, '');
+                html += $.評価値[data[0].x] + '<br>' + $.読み筋[data[0].x].replace(/ .*/, '');
                 html += '</td></tr></table>';
                 return html;
             },
@@ -344,6 +344,31 @@ function 将棋タイム(args){
         },
     });
 };
+
+
+
+将棋タイム.グラフ描画.グラフ用評価値 = function (評価値, 設定値){
+    var グラフ用評価値 = [];
+
+    for(var i = 0; i < 評価値.length; i++){
+        if(評価値[i] === '+詰' || 評価値[i] > 29000){
+            グラフ用評価値.push(設定値 + 1);
+        }
+        else if(評価値[i] === '-詰' || 評価値[i] < -29000){
+            グラフ用評価値.push(-設定値 - 1);
+        }
+        else if(評価値[i] > 設定値){
+            グラフ用評価値.push(設定値);
+        }
+        else if(評価値[i] < -設定値){
+            グラフ用評価値.push(-設定値);
+        }
+        else{
+            グラフ用評価値.push(評価値[i]);
+        }
+    }
+    return グラフ用評価値;
+}
 
 
 
@@ -755,33 +780,16 @@ function 将棋タイム(args){
 
 
 将棋タイム.KIF解析.評価値 = function (kif指し手){
-    var 全評価値 = [];
-    var 設定値   = 3000;
+    var 評価値 = [];
 
     for(var i = 0; i < kif指し手.length; i++){
         if(kif指し手[i].indexOf('**解析 0 ') !== 0){
             continue;
         }
-
-        var 評価値 = kif指し手[i].match(/評価値 (\S+)/)[1].replace(/↓|↑/, '');
-
-        if(評価値 === '+詰' || 評価値 > 29000){
-            評価値 = 設定値 + 1;
-        }
-        else if(評価値 === '-詰' || 評価値 < -29000){
-            評価値 = -設定値 - 1;
-        }
-        else if(評価値 > 設定値){
-            評価値 = 設定値;
-        }
-        else if(評価値 < -設定値){
-            評価値 = -設定値;
-        }
-
-        全評価値.push(評価値);
+        評価値.push(kif指し手[i].match(/評価値 (\S+)/)[1].replace(/↓|↑/, ''));
     }
 
-    return 全評価値;
+    return 評価値;
 };
 
 
