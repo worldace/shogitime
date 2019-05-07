@@ -64,6 +64,7 @@ function 将棋タイム(args){
         将棋タイム.引数確認.ファイル取得(args);
         return false;
    }
+    args.kif = args.kif.replace(/<|>/g, '');
 
     if(typeof args.el === 'string'){
         args.el = document.querySelector(args.el);
