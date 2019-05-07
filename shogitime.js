@@ -291,12 +291,13 @@ function 将棋タイム(args){
 
 
 将棋タイム.グラフ描画 = function ($){
-    var Ymax = ($.data.reverse) ? -3000 : 3000;
+    var 設定値 = 3000;
+    var Ymax   = ($.data.reverse) ? -設定値 : 設定値;
 
     return window.c3.generate({
         bindto: $.args.graph,
         data: {
-            columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 3000)],
+            columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 設定値)],
             type :'area',
             onclick: function(event){
                 $.$指し手.selectedIndex = event.x;
