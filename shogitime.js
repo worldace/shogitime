@@ -296,9 +296,7 @@ function 将棋タイム(args){
     return window.c3.generate({
         bindto: $.args.graph,
         data: {
-            columns: [
-                ['評価値'].concat(将棋タイム.グラフ描画.グラフ用評価値($.評価値, 3000)),
-            ],
+            columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 3000)],
             type :'area',
             onclick: function(event){
                 $.$指し手.selectedIndex = event.x;
@@ -348,7 +346,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.グラフ描画.グラフ用評価値 = function (評価値, 設定値){
-    var グラフ用評価値 = [];
+    var グラフ用評価値 = ['評価値'];
 
     for(var i = 0; i < 評価値.length; i++){
         if(評価値[i] === '+詰' || 評価値[i] > 29000){
