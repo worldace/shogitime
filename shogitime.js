@@ -11,6 +11,9 @@ function 将棋タイム(args){
     if(args.myname && $.後手名.indexOf(args.myname) === 0){
         args.reverse = true;
     }
+    if($.最終手){
+        args.blue = [$.最終手];
+    }
 
     $.手数   = 将棋タイム.手数正規化(args.start, $.総手数);
     $.全局面 = 将棋タイム.全局面構築($.全指し手, $.初期局面);
@@ -136,13 +139,13 @@ function 将棋タイム(args){
     }
     else{
         if(Array.isArray($.args.green)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.green, '緑') );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.green, '緑', 反転) );
         }
         if(Array.isArray($.args.red)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.red, '赤') );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.red, '赤', 反転) );
         }
         if(Array.isArray($.args.blue)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.blue, '青') );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.blue, '青', 反転) );
         }
     }
 
@@ -228,7 +231,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.マスハイライトDOM作成 = function(マス, 色名){
+将棋タイム.描画.マスハイライトDOM作成 = function(マス, 色名, 反転){
     var fragment = document.createDocumentFragment();
 
     for(var i = 0; i < マス.length; i++){
@@ -236,6 +239,10 @@ function 将棋タイム(args){
         div.className = '将棋タイム-' + 色名;
         div.dataset.x = マス[i].substring(0, 1);
         div.dataset.y = マス[i].substring(1, 2);
+        if(反転){
+            div.dataset.x = 10 - div.dataset.x;
+            div.dataset.y = 10 - div.dataset.y;
+        }
         fragment.appendChild(div);
     }
     return fragment;
@@ -479,6 +486,9 @@ function 将棋タイム(args){
         else if(kif[i] === "先手番" || kif[i] === "下手番"){
             一次解析.開始手番 = "先手";
         }
+        else if(kif[i].match(/手数＝\d/)){
+            一次解析.最終手 = kif[i];
+        }
         else if(kif[i].match(/^\s*1\s/) || kif[i].match(/^\*/)){
             一次解析.全指し手 = kif.slice(i);
             break;
@@ -488,6 +498,7 @@ function 将棋タイム(args){
     解析結果.先手名   = 一次解析.先手 || 一次解析.下手 || '';
     解析結果.後手名   = 一次解析.後手 || 一次解析.上手 || '';
     解析結果.開始手番 = 将棋タイム.KIF解析.開始手番(一次解析.開始手番, 一次解析.手合割);
+    解析結果.最終手   = 将棋タイム.KIF解析.最終手(一次解析.最終手);
     解析結果.手合割   = 将棋タイム.KIF解析.手合割(一次解析.手合割);
     解析結果.全指し手 = 将棋タイム.KIF解析.指し手(一次解析.全指し手, 解析結果.開始手番);
     解析結果.総手数   = 解析結果.全指し手.length - 1;
@@ -512,6 +523,22 @@ function 将棋タイム(args){
         return "後手";
     }
     return "先手";
+};
+
+
+
+将棋タイム.KIF解析.最終手 = function(最終手){
+    if(!最終手){
+        return;
+    }
+    var 解析 = 最終手.match(/手数＝\d+\s+(.)(.)/);
+    if(!解析){
+        return;
+    }
+    var 全数字   = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9};
+    var 漢数字   = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9};
+    
+    return String(全数字[解析[1]]) + String(漢数字[解析[2]]);
 };
 
 
