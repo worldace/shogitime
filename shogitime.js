@@ -531,7 +531,7 @@ function 将棋タイム(args){
     if(!最終手){
         return;
     }
-    var 解析 = 最終手.match(/手数＝\d+\s+(.)(.)/);
+    var 解析 = 最終手.match(/([１２３４５６７８９])(.)/);
     if(!解析){
         return;
     }
