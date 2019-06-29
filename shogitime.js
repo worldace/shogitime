@@ -63,7 +63,7 @@ function 将棋タイム(args){
     args.kif = args.kif || '';
     args.kif = args.kif.trim();
 
-    if(args.kif.match(/^https?:/)){
+    if(args.kif.match(/^https?:/) || args.kif.match(/\.kifu?$/i)){
         将棋タイム.引数確認.ファイル取得(args);
         return false;
    }
@@ -759,6 +759,8 @@ function 将棋タイム(args){
     
     return 全指し手;
 };
+
+
 
 将棋タイム.KIF解析.指し手.現在の手 = function(全指し手, kif, 手数, 開始手番){
     var 全数字   = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9};
