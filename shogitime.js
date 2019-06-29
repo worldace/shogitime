@@ -483,7 +483,7 @@ function 将棋タイム(args){
         else if(kif[i].match(/手数＝\d/)){
             一次解析.最終手 = kif[i];
         }
-        else if(kif[i].match(/^\s*1\s/) || kif[i].match(/^\*/)){
+        else if(kif[i].match(/^1\s/) || kif[i].match(/^\*/)){
             一次解析.全指し手 = kif.slice(i);
             break;
         }
@@ -773,11 +773,10 @@ function 将棋タイム(args){
         else if(現在の手 === 'パス'){
             全指し手.push({'手数':手数, '手番':手番, '手':'パス', '駒':'', '前X':0, '前Y':0, '後X':0, '後Y':0, '成り':false, 'コメント':''});
         }
-        else if(終局表記.indexOf(現在の手) >= 0){
-            全指し手.勝敗 = 将棋タイム.KIF解析.指し手.勝敗(現在の手, 手番);
-            break;
-        }
         else{
+            if(終局表記.indexOf(現在の手) >= 0){
+                全指し手.勝敗 = 将棋タイム.KIF解析.指し手.勝敗(現在の手, 手番);
+            }
             break;
         }
 
