@@ -333,28 +333,31 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.指し手選択 = function (全指し手){
-    var fragment = document.createDocumentFragment();
+将棋タイム.描画.指し手選択 = function ($){
+    var 全指し手 = $.全指し手[$.変化];
+
+    $.$指し手選択.innerHTML = '';
+    var option   = document.createElement('option');
+    option.textContent = '開始局面';
+    $.$指し手選択.appendChild(option);
 
     for(var i = 1; i < 全指し手.length; i++){
-        var option = document.createElement('option');
+        option = document.createElement('option');
         option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手;
-        fragment.appendChild(option);
+        $.$指し手選択.appendChild(option);
     }
 
-    if(全指し手.勝敗){
+    if(全指し手.勝敗 && !$.変化){
         var option = document.createElement('option');
         option.textContent = 全指し手.勝敗.表記;
-        fragment.appendChild(option);
+        $.$指し手選択.appendChild(option);
     }
-
-    return fragment;
 };
 
 
 
 将棋タイム.初回描画 = function ($){
-    $.$指し手選択.appendChild( 将棋タイム.描画.指し手選択($.全指し手[0]) );
+    将棋タイム.描画.指し手選択($);
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
@@ -1081,7 +1084,7 @@ function 将棋タイム(args){
     <div class="将棋タイム-前に移動ボタン"></div>
     <div class="将棋タイム-次に移動ボタン"></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
-    <select class="将棋タイム-指し手選択"><option selected>開始局面</option></select>
+    <select class="将棋タイム-指し手選択"></select>
     <div class="将棋タイム-ダイアログボタン"></div>
     <div class="将棋タイム-反転ボタン"></div>
   </div>
