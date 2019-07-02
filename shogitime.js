@@ -866,13 +866,13 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$将棋盤_onmousedown = function (event){
-    this.$次に移動ボタン.onmousedown();
+将棋タイム.$将棋盤_onclick = function (event){
+    this.$次に移動ボタン.onclick();
 };
 
 
 
-将棋タイム.$最初に移動ボタン_onmousedown = function (event){
+将棋タイム.$最初に移動ボタン_onclick = function (event){
     this.手数 = 0;
     if(this.変化){
         this.変化 = 0;
@@ -883,7 +883,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$前に移動ボタン_onmousedown = function (event){
+将棋タイム.$前に移動ボタン_onclick = function (event){
     if(this.$指し手選択.selectedIndex > this.総手数){
         this.$指し手選択.selectedIndex = this.$指し手選択.length - 2;
     }
@@ -895,7 +895,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$次に移動ボタン_onmousedown = function(event){
+将棋タイム.$次に移動ボタン_onclick = function(event){
     if(this.手数 < this.総手数){
         this.手数++;
         将棋タイム.描画(this);
@@ -908,7 +908,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$最後に移動ボタン_onmousedown = function(event){
+将棋タイム.$最後に移動ボタン_onclick = function(event){
     this.手数 = this.総手数;
     将棋タイム.描画(this);
     this.$指し手選択.selectedIndex = this.$指し手選択.length - 1;
@@ -918,7 +918,7 @@ function 将棋タイム(args){
 
 将棋タイム.$指し手選択_onchange = function (event){
     if(this.$指し手選択.selectedIndex > this.総手数){
-        this.$最後に移動ボタン.onmousedown();
+        this.$最後に移動ボタン.onclick();
     }
     else{
         this.手数 = this.$指し手選択.selectedIndex;
@@ -928,13 +928,13 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$ダイアログボタン_onmousedown = function(event){
+将棋タイム.$ダイアログボタン_onclick = function(event){
     this.$将棋タイム.hasAttribute('data-dialog') ? this.$将棋タイム.removeAttribute('data-dialog') : this.$将棋タイム.setAttribute('data-dialog', '');
 };
 
 
 
-将棋タイム.$反転ボタン_onmousedown = function(event){
+将棋タイム.$反転ボタン_onclick = function(event){
     this.data.reverse = !this.data.reverse;
     if(this.グラフ){
         this.グラフ = 将棋タイム.グラフ描画(this);
@@ -951,7 +951,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$ダイアログ_棋譜コピーボタン_onmousedown = function(event){
+将棋タイム.$ダイアログ_棋譜コピーボタン_onclick = function(event){
     var el = this.$ダイアログ_棋譜テキスト;
 
     //参考 https://mamewaza.com/support/blog/javascript-copy.html
@@ -967,6 +967,18 @@ function 将棋タイム(args){
 
     document.execCommand("copy");
     el.style.display = 'none';
+};
+
+
+
+将棋タイム.$変化選択_onclick = function(event){
+    event.stopPropagation();
+    if(event.target.tagName !== 'LI'){
+        return;
+    }
+    this.変化 = event.target.変化;
+    将棋タイム.描画.指し手選択(this);
+    this.$次に移動ボタン.onclick();
 };
 
 
