@@ -238,7 +238,7 @@ function 将棋タイム(args){
     }
 
     //指し手
-    $.$指し手.selectedIndex = 手数;
+    $.$指し手選択.selectedIndex = 手数;
     
     //名前
     if($.先手名){
@@ -333,7 +333,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.指し手DOM作成 = function (全指し手){
+将棋タイム.描画.指し手選択 = function (全指し手){
     var fragment = document.createDocumentFragment();
 
     for(var i = 1; i < 全指し手.length; i++){
@@ -354,7 +354,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.初回描画 = function ($){
-    $.$指し手.appendChild( 将棋タイム.描画.指し手DOM作成($.全指し手[0]) );
+    $.$指し手選択.appendChild( 将棋タイム.描画.指し手選択($.全指し手[0]) );
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
@@ -386,8 +386,8 @@ function 将棋タイム(args){
             columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 設定値)],
             type :'area',
             onclick: function(event){
-                $.$指し手.selectedIndex = event.x;
-                $.$指し手.onchange();
+                $.$指し手選択.selectedIndex = event.x;
+                $.$指し手選択.onchange();
             },
         },
         axis: {
@@ -877,8 +877,8 @@ function 将棋タイム(args){
 
 
 将棋タイム.$前に移動ボタン_onmousedown = function (event){
-    if(this.$指し手.selectedIndex > this.総手数){
-        this.$指し手.selectedIndex = this.$指し手.length - 2;
+    if(this.$指し手選択.selectedIndex > this.総手数){
+        this.$指し手選択.selectedIndex = this.$指し手選択.length - 2;
     }
     else if(this.手数 > 0){
         this.手数--;
@@ -895,7 +895,7 @@ function 将棋タイム(args){
         将棋タイム.駒音.再生();
     }
     else{
-        this.$指し手.selectedIndex = this.$指し手.length - 1;
+        this.$指し手選択.selectedIndex = this.$指し手選択.length - 1;
     }
 };
 
@@ -904,17 +904,17 @@ function 将棋タイム(args){
 将棋タイム.$最後に移動ボタン_onmousedown = function(event){
     this.手数 = this.総手数;
     将棋タイム.描画(this);
-    this.$指し手.selectedIndex = this.$指し手.length - 1;
+    this.$指し手選択.selectedIndex = this.$指し手選択.length - 1;
 };
 
 
 
-将棋タイム.$指し手_onchange = function (event){
-    if(this.$指し手.selectedIndex > this.総手数){
+将棋タイム.$指し手選択_onchange = function (event){
+    if(this.$指し手選択.selectedIndex > this.総手数){
         this.$最後に移動ボタン.onmousedown();
     }
     else{
-        this.手数 = this.$指し手.selectedIndex;
+        this.手数 = this.$指し手選択.selectedIndex;
         将棋タイム.描画(this);
     }
 };
@@ -1081,7 +1081,7 @@ function 将棋タイム(args){
     <div class="将棋タイム-前に移動ボタン"></div>
     <div class="将棋タイム-次に移動ボタン"></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
-    <select class="将棋タイム-指し手"><option selected>開始局面</option></select>
+    <select class="将棋タイム-指し手選択"><option selected>開始局面</option></select>
     <div class="将棋タイム-ダイアログボタン"></div>
     <div class="将棋タイム-反転ボタン"></div>
   </div>
@@ -1423,7 +1423,7 @@ function 将棋タイム(args){
 .将棋タイム-最後に移動ボタン{
     background-image: url('最後に移動ボタン.svg');
 }
-.将棋タイム-指し手{
+.将棋タイム-指し手選択{
     margin: 0 8px;
 }
 .将棋タイム-ダイアログボタン{
