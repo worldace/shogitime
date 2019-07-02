@@ -248,17 +248,25 @@ function 将棋タイム(args){
         $['$'+後手+'名'].textContent = "△" + $.後手名;
     }
 
-    //data属性
-    将棋タイム.描画.data属性($.$将棋タイム, $.data);
-
     //コメント
     if($.args.comment){
         $.args.comment.textContent = 指し手.コメント;
     }
+
     //グラフ
     if($.グラフ){
-        $.グラフ.xgrids([{value: $.手数}]);
+        $.グラフ.xgrids([{value: 手数}]);
     }
+
+    //変化選択
+    $.data.henka = false;
+    if($.全指し手.変化手数.indexOf(手数) > -1){
+        //$.data.henka = true;
+        将棋タイム.描画.変化選択($);
+    }
+
+    //data属性
+    将棋タイム.描画.data属性($.$将棋タイム, $.data);
 };
 
 
@@ -351,6 +359,22 @@ function 将棋タイム(args){
         option = document.createElement('option');
         option.textContent = 全指し手.勝敗.表記;
         $.$指し手選択.appendChild(option);
+    }
+};
+
+
+
+将棋タイム.描画.変化選択 = function ($){
+    $.$変化選択.innerHTML = '';
+    console.dir($.全指し手.変化手数);
+    //次の手を取り出す
+    for(var i = 0; i < $.全指し手.変化手数.length; i++){
+        if($.全指し手.変化手数[i] !== $.手数){
+            continue;
+        }
+        option = document.createElement('option');
+        option.textContent = $.全指し手[i+1][$.手数+1].手番 + $.全指し手[i+1][$.手数+1].手;
+        $.$変化選択.appendChild(option);
     }
 };
 
@@ -1524,6 +1548,10 @@ function 将棋タイム(args){
 
 .将棋タイム-変化選択{
     display: none;
+}
+
+.将棋タイム[data-henka] .将棋タイム-変化選択{
+    display: block;
 }
 
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
