@@ -334,13 +334,13 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.指し手選択 = function ($){
-    var 全指し手 = $.全指し手[$.変化];
-
     $.$指し手選択.innerHTML = '';
-    var option   = document.createElement('option');
+
+    var option = document.createElement('option');
     option.textContent = '開始局面';
     $.$指し手選択.appendChild(option);
 
+    var 全指し手 = $.全指し手[$.変化];
     for(var i = 1; i < 全指し手.length; i++){
         option = document.createElement('option');
         option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手;
@@ -348,7 +348,7 @@ function 将棋タイム(args){
     }
 
     if(全指し手.勝敗 && !$.変化){
-        var option = document.createElement('option');
+        option = document.createElement('option');
         option.textContent = 全指し手.勝敗.表記;
         $.$指し手選択.appendChild(option);
     }
