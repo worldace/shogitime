@@ -874,6 +874,10 @@ function 将棋タイム(args){
 
 将棋タイム.$最初に移動ボタン_onmousedown = function (event){
     this.手数 = 0;
+    if(this.変化){
+        this.変化 = 0;
+        将棋タイム.描画.指し手選択(this);
+    }
     将棋タイム.描画(this);
 };
 
@@ -1099,7 +1103,7 @@ function 将棋タイム(args){
       <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.1</a></div>
     </div>
   </div>
-  <ul class="将棋タイム-変化"></ul>
+  <ul class="将棋タイム-変化選択"></ul>
 </div>
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
 
@@ -1506,7 +1510,7 @@ function 将棋タイム(args){
     display: block;
 }
 
-.将棋タイム-変化{
+.将棋タイム-変化選択{
     display: none;
 }
 
