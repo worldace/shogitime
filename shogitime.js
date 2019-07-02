@@ -333,8 +333,28 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.描画.指し手DOM作成 = function (全指し手){
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 1; i < 全指し手.length; i++){
+        var option = document.createElement('option');
+        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手;
+        fragment.appendChild(option);
+    }
+
+    if(全指し手.勝敗){
+        var option = document.createElement('option');
+        option.textContent = 全指し手.勝敗.表記;
+        fragment.appendChild(option);
+    }
+
+    return fragment;
+};
+
+
+
 将棋タイム.初回描画 = function ($){
-    $.$指し手.appendChild( 将棋タイム.初回描画.指し手DOM作成($.全指し手[0]) );
+    $.$指し手.appendChild( 将棋タイム.描画.指し手DOM作成($.全指し手[0]) );
 
     $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
 
@@ -352,26 +372,6 @@ function 将棋タイム(args){
     }
 
     将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
-};
-
-
-
-将棋タイム.初回描画.指し手DOM作成 = function (全指し手){
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 1; i < 全指し手.length; i++){
-        var option = document.createElement('option');
-        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手;
-        fragment.appendChild(option);
-    }
-
-    if(全指し手.勝敗){
-        var option = document.createElement('option');
-        option.textContent = 全指し手.勝敗.表記;
-        fragment.appendChild(option);
-    }
-
-    return fragment;
 };
 
 
@@ -1096,6 +1096,7 @@ function 将棋タイム(args){
       <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.1</a></div>
     </div>
   </div>
+  <ul class="将棋タイム-変化"></ul>
 </div>
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
 
@@ -1500,6 +1501,10 @@ function 将棋タイム(args){
 
 .将棋タイム[data-dialog] .将棋タイム-ダイアログ{
     display: block;
+}
+
+.将棋タイム-変化{
+    display: none;
 }
 
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
