@@ -372,7 +372,7 @@ function 将棋タイム(args){
             continue;
         }
         var li = document.createElement('li');
-        li.textContent = $.全指し手[i+1][$.手数+1].手番 + $.全指し手[i+1][$.手数+1].手;
+        li.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
         li.変化        = i + 1;
         $.$変化選択.appendChild(li);
     }
@@ -389,7 +389,7 @@ function 将棋タイム(args){
             continue;
         }
         var li = document.createElement('li');
-        li.textContent = $.全指し手[i+1][$.手数+1].手番 + $.全指し手[i+1][$.手数+1].手;
+        li.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
         li.変化        = i + 1;
         $.$変化選択.appendChild(li);
     }
@@ -799,9 +799,10 @@ function 将棋タイム(args){
             将棋タイム.KIF解析.指し手.現在の手(全指し手[変化], kif[i], 手数, 開始手番);
         }
         else if(kif[i].indexOf('変化：') === 0){
-            手数 = kif[i].match(/変化：(\d+)/)[1] - 1;
-            全指し手.push(全指し手[0].slice(0, 手数+1));
+            手数 = Number(kif[i].match(/変化：(\d+)/)[1]);
+            全指し手.push(全指し手[0].slice(0, 手数));
             全指し手.変化手数.push(手数);
+            手数--;
             変化++;
         }
     }
@@ -1024,8 +1025,10 @@ function 将棋タイム(args){
     }
     this.変化 = event.target.変化;
     this.変化手数 = this.手数;
+    this.手数--;
 
     将棋タイム.描画.指し手選択(this);
+
     this.$次に移動ボタン.onclick();
 };
 
