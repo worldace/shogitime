@@ -958,9 +958,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最後に移動ボタン_onclick = function(event){
-    var 総手数 = this.全指し手[this.変化].length - 1;
-
-    this.手数 = 総手数;
+    this.手数 = this.全指し手[this.変化].length - 1;
     将棋タイム.描画(this);
     this.$指し手選択.selectedIndex = this.$指し手選択.length - 1;
 };
