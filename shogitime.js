@@ -261,7 +261,7 @@ function 将棋タイム(args){
     //変化選択
     $.$変化選択.innerHTML = '';
     if(!$.変化 && $.全指し手.変化手数.indexOf(手数) > -1){
-        //将棋タイム.描画.変化選択($);
+        将棋タイム.描画.変化選択($);
     }
     else if($.変化 && $.変化手数 === 手数){
         将棋タイム.描画.変化中の変化選択($);
@@ -943,7 +943,9 @@ function 将棋タイム(args){
 
 
 将棋タイム.$次に移動ボタン_onclick = function(event){
-    if(this.手数 < this.総手数){
+    var 総手数 = this.全指し手[this.変化].length - 1;
+
+    if(this.手数 < 総手数){
         this.手数++;
         将棋タイム.描画(this);
         将棋タイム.駒音.再生();
@@ -956,7 +958,9 @@ function 将棋タイム(args){
 
 
 将棋タイム.$最後に移動ボタン_onclick = function(event){
-    this.手数 = this.総手数;
+    var 総手数 = this.全指し手[this.変化].length - 1;
+
+    this.手数 = 総手数;
     将棋タイム.描画(this);
     this.$指し手選択.selectedIndex = this.$指し手選択.length - 1;
 };
@@ -1163,7 +1167,7 @@ function 将棋タイム(args){
     <div class="将棋タイム-ダイアログ-コンテンツ">
       <div class="将棋タイム-ダイアログ-棋譜コピーボタン">棋譜をコピーする</div>
       <textarea class="将棋タイム-ダイアログ-棋譜テキスト" readonly></textarea>
-      <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.1</a></div>
+      <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.2</a></div>
     </div>
   </div>
 </div>
@@ -1577,23 +1581,23 @@ function 将棋タイム(args){
 }
 .将棋タイム-変化選択{
     position: relative;
-    padding: 5px 16px 0 16px;
     color: #fff;
     font-size: 16px;
     background: rgba(0, 0, 0, 0.8);
     list-style-type: none;
     z-index: 5;
     width: 150px;
-    margin-left: calc(((100vw - 100%) / 2) * -1);
-    margin-right: calc(((100vw - 100%) / 2) * -1);
+    margin-left: calc((100vw - 100%) / -2);
+    margin-right: calc((100vw - 100%) / -2);
     margin-top: calc(100% + 15px);
+    padding: 0;
 }
 .将棋タイム-変化選択 li{
-    padding-bottom: 6px;
-    cursor: pointer;
+    margin: 6px 6px 6px 16px;
 }
 .将棋タイム-変化選択 li:hover{
     color: yellow;
+    cursor: pointer;
 }
 .将棋タイム-変化選択::after {
     content: "";
