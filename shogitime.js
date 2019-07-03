@@ -1146,7 +1146,7 @@ function 将棋タイム(args){
   <div class="将棋タイム-コントロールパネル">
     <div class="将棋タイム-最初に移動ボタン"></div>
     <div class="将棋タイム-前に移動ボタン"></div>
-    <div class="将棋タイム-次に移動ボタン"></div>
+    <div class="将棋タイム-次に移動ボタン"><ul class="将棋タイム-変化選択"></ul></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
     <select class="将棋タイム-指し手選択"></select>
     <div class="将棋タイム-ダイアログボタン"></div>
@@ -1163,7 +1163,6 @@ function 将棋タイム(args){
       <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.1</a></div>
     </div>
   </div>
-  <ul class="将棋タイム-変化選択"></ul>
 </div>
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
 
@@ -1485,6 +1484,7 @@ function 将棋タイム(args){
     background-image: url('前に移動ボタン.svg');
 }
 .将棋タイム-次に移動ボタン{
+    position: relative;
     background-image: url('次に移動ボタン.svg');
 }
 .将棋タイム-最後に移動ボタン{
@@ -1572,6 +1572,34 @@ function 将棋タイム(args){
 
 .将棋タイム-変化選択:empty{
     display: none;
+}
+.将棋タイム-変化選択{
+    position: absolute;
+    top: 100%;
+    left: calc(-75px + 50%);
+    padding: 5px 16px 0 16px;
+    color: #fff;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.8);
+    list-style-type: none;
+    z-index: 5;
+    width: 150px;
+}
+.将棋タイム-変化選択 li{
+    padding-bottom: 6px;
+    cursor: pointer;
+}
+.将棋タイム-変化選択 li:hover{
+    color: yellow;
+}
+.将棋タイム-変化選択::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    margin-left: -10px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.8);
 }
 
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
