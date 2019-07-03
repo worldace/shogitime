@@ -1472,7 +1472,7 @@ function 将棋タイム(args){
     height: 40px;
     display: flex;
     justify-content:center;
-    align-items: center;
+    align-items: flex-start;
     margin: 0 3px;
     cursor: pointer;
     background-color: #fff;
@@ -1487,7 +1487,6 @@ function 将棋タイム(args){
     background-image: url('前に移動ボタン.svg');
 }
 .将棋タイム-次に移動ボタン{
-    position: relative;
     background-image: url('次に移動ボタン.svg');
 }
 .将棋タイム-最後に移動ボタン{
@@ -1577,9 +1576,7 @@ function 将棋タイム(args){
     display: none;
 }
 .将棋タイム-変化選択{
-    position: absolute;
-    top: 100%;
-    left: calc(-75px + 50%);
+    position: relative;
     padding: 5px 16px 0 16px;
     color: #fff;
     font-size: 16px;
@@ -1587,6 +1584,9 @@ function 将棋タイム(args){
     list-style-type: none;
     z-index: 5;
     width: 150px;
+    margin-left: calc(((100vw - 100%) / 2) * -1);
+    margin-right: calc(((100vw - 100%) / 2) * -1);
+    margin-top: calc(100% + 15px);
 }
 .将棋タイム-変化選択 li{
     padding-bottom: 6px;
