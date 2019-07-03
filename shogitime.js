@@ -1081,16 +1081,20 @@ function 将棋タイム(args){
         if(name.indexOf('$') !== 0){
             continue;
         }
-        var names = name.substring(1).split('_');
-        if(names.length < 2){
-            continue;
+        
+        var pos = name.lastIndexOf('_');
+        if(pos === -1){
+            $[name] = (typeof app[name] === 'function') ? app[name].bind($) : app[name];
         }
-        var propName = names.pop();
-        var idName   = '$' + names.join('_');
-        if(!(idName in $)){
-            $[idName] = {};
+        else{
+            var $id  = name.substring(0, pos);
+            var prop = name.substring(pos+1);
+
+            if(!($id in $)){
+                $[$id] = {};
+            }
+            $[$id][prop] = (typeof app[name] === 'function')  ?  app[name].bind($)  :  app[name];
         }
-        $[idName][propName] = (typeof app[name] === 'function')  ?  app[name].bind($)  :  app[name];
     }
 
     $['$'+appName].$ = $;
