@@ -1592,10 +1592,12 @@ function 将棋タイム(args){
     margin-left: calc((100vw - 100%) / -2);
     margin-right: calc((100vw - 100%) / -2);
     margin-top: calc(100% + 15px);
+    margin-bottom: 0;
     padding: 0;
 }
 .将棋タイム-変化選択 li{
     margin: 6px 6px 6px 16px;
+    padding: 0;
 }
 .将棋タイム-変化選択 li:hover{
     color: yellow;
