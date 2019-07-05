@@ -371,10 +371,10 @@ function 将棋タイム(args){
         if($.全指し手.変化手数[i] !== $.手数){
             continue;
         }
-        var li = document.createElement('li');
-        li.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
-        li.変化        = i + 1;
-        $.$変化選択.appendChild(li);
+        var div = document.createElement('div');
+        div.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
+        div.変化        = i + 1;
+        $.$変化選択.appendChild(div);
     }
 };
 
@@ -388,16 +388,16 @@ function 将棋タイム(args){
         if($.変化 === i + 1){
             continue;
         }
-        var li = document.createElement('li');
-        li.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
-        li.変化        = i + 1;
-        $.$変化選択.appendChild(li);
+        var div = document.createElement('div');
+        div.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
+        div.変化        = i + 1;
+        $.$変化選択.appendChild(div);
     }
 
-    li = document.createElement('li');
-    li.textContent = '本線に戻る';
-    li.変化        = 0;
-    $.$変化選択.appendChild(li);
+    div = document.createElement('div');
+    div.textContent = '本線に戻る';
+    div.変化        = 0;
+    $.$変化選択.appendChild(div);
 };
 
 
@@ -1022,7 +1022,7 @@ function 将棋タイム(args){
 
 将棋タイム.$変化選択_onclick = function(event){
     event.stopPropagation();
-    if(event.target.tagName !== 'LI'){
+    if(!('変化' in event.target)){
         return;
     }
     this.変化 = event.target.変化;
@@ -1155,7 +1155,7 @@ function 将棋タイム(args){
   <div class="将棋タイム-コントロールパネル">
     <div class="将棋タイム-最初に移動ボタン"></div>
     <div class="将棋タイム-前に移動ボタン"></div>
-    <div class="将棋タイム-次に移動ボタン"><ul class="将棋タイム-変化選択"></ul></div>
+    <div class="将棋タイム-次に移動ボタン"><div class="将棋タイム-変化選択"></div></div>
     <div class="将棋タイム-最後に移動ボタン"></div>
     <select class="将棋タイム-指し手選択"></select>
     <div class="将棋タイム-ダイアログボタン"></div>
@@ -1595,11 +1595,11 @@ function 将棋タイム(args){
     margin-bottom: 0;
     padding: 0;
 }
-.将棋タイム-変化選択 li{
+.将棋タイム-変化選択 > div{
     margin: 6px 6px 6px 16px;
     padding: 0;
 }
-.将棋タイム-変化選択 li:hover{
+.将棋タイム-変化選択 >div:hover{
     color: yellow;
     cursor: pointer;
 }
