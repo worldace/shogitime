@@ -789,7 +789,7 @@ function 将棋タイム(args){
     for(var i = 0; i < kif.length; i++){
         kif[i] = kif[i].trim();
 
-        if(kif[i].indexOf('*') === 0){ //指し手コメント
+        if(kif[i].indexOf('*') === 0 && 全指し手[変化][手数]){ //指し手コメント
             全指し手[変化][手数].コメント += kif[i].replace(/^\*/, '') + '\n';
         }
         else if(kif[i].match(/^\d/)){
