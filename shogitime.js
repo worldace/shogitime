@@ -385,19 +385,17 @@ function 将棋タイム(args){
         if($.全指し手.変化手数[i] !== $.変化手数){
             continue;
         }
-        if($.変化 === i + 1){
-            continue;
-        }
         var div = document.createElement('div');
-        div.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
-        div.変化        = i + 1;
+        if($.変化 === i + 1){
+            div.textContent = '本線に戻る';
+            div.変化        = 0;
+        }
+        else{
+            div.textContent = $.全指し手[i+1][$.手数].手番 + $.全指し手[i+1][$.手数].手;
+            div.変化        = i + 1;
+        }
         $.$変化選択.appendChild(div);
     }
-
-    div = document.createElement('div');
-    div.textContent = '本線に戻る';
-    div.変化        = 0;
-    $.$変化選択.appendChild(div);
 };
 
 
