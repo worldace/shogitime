@@ -1182,6 +1182,7 @@ function 将棋タイム(args){
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    touch-action: manipulation;
     width: 514px;
     margin: 50px auto;
     position: relative;
