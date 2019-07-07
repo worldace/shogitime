@@ -204,17 +204,17 @@ function 将棋タイム(args){
 
     //マスハイライト
     if(手数 !== 0){
-        $.$将棋盤.appendChild( 将棋タイム.描画.最終手ハイライトDOM作成(指し手.後X, 指し手.後Y, 反転) );
+        $.$将棋盤.appendChild( 将棋タイム.描画.最終手ハイライト(指し手.後X, 指し手.後Y, 反転) );
     }
     else{
         if(Array.isArray($.args.green)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.green, '緑', 反転) );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライト($.args.green, '緑', 反転) );
         }
         if(Array.isArray($.args.red)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.red, '赤', 反転) );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライト($.args.red, '赤', 反転) );
         }
         if(Array.isArray($.args.blue)){
-            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライトDOM作成($.args.blue, '青', 反転) );
+            $.$将棋盤.appendChild( 将棋タイム.描画.マスハイライト($.args.blue, '青', 反転) );
         }
     }
 
@@ -223,7 +223,7 @@ function 将棋タイム(args){
     for(var y in 局面.駒){
         for(var x in 局面.駒[y]){
             if(局面.駒[y][x]){
-                $.$将棋盤.appendChild( 将棋タイム.描画.駒DOM作成(局面.駒[y][x], x, y, 反転) );
+                $.$将棋盤.appendChild( 将棋タイム.描画.駒(局面.駒[y][x], x, y, 反転) );
             }
         }
     }
@@ -273,7 +273,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.駒DOM作成 = function(駒, x, y, 反転){
+将棋タイム.描画.駒 = function(駒, x, y, 反転){
     if(反転){
         x = 10 - x;
         y = 10 - y;
@@ -291,7 +291,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.最終手ハイライトDOM作成 = function (x, y, 反転){
+将棋タイム.描画.最終手ハイライト = function (x, y, 反転){
     if(反転){
         x = 10 - x;
         y = 10 - y;
@@ -310,7 +310,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.描画.マスハイライトDOM作成 = function(マス, 色名, 反転){
+将棋タイム.描画.マスハイライト = function(マス, 色名, 反転){
     var fragment = document.createDocumentFragment();
 
     for(var i = 0; i < マス.length; i++){
