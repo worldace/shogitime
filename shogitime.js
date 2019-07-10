@@ -433,8 +433,8 @@ function 将棋タイム(args){
             columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 設定値)],
             type :'area',
             onclick: function(event){
-                $.$指し手選択.selectedIndex = event.x;
-                $.$指し手選択.onchange();
+                $.手数 = event.x;
+                将棋タイム.描画($);
             },
         },
         axis: {
