@@ -191,6 +191,29 @@ function 将棋タイム(args){
 
 
 
+将棋タイム.初回描画 = function ($){
+    将棋タイム.描画.指し手選択($);
+
+    $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
+
+    if($.args.nocp === true){
+        $.$コントロールパネル.style.display = 'none';
+    }
+    if($.args.graph && $.評価値.length && window.c3){
+        $.グラフ = 将棋タイム.グラフ描画($);
+    }
+
+    将棋タイム.描画($);
+
+    if($.args.el){
+        $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
+    }
+
+    将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
+};
+
+
+
 将棋タイム.描画 = function($){
     var 手数   = $.手数;
     var 局面   = $.全局面[$.変化][手数];
@@ -396,29 +419,6 @@ function 将棋タイム(args){
         }
         $.$変化選択.appendChild(div);
     }
-};
-
-
-
-将棋タイム.初回描画 = function ($){
-    将棋タイム.描画.指し手選択($);
-
-    $.$ダイアログ_棋譜テキスト.value = $.args.kif + "\n";
-
-    if($.args.nocp === true){
-        $.$コントロールパネル.style.display = 'none';
-    }
-    if($.args.graph && $.評価値.length && window.c3){
-        $.グラフ = 将棋タイム.グラフ描画($);
-    }
-
-    将棋タイム.描画($);
-
-    if($.args.el){
-        $.args.el.parentNode.replaceChild($.$将棋タイム, $.args.el);
-    }
-
-    将棋タイム.イベント発行('将棋タイム開始', $.$将棋タイム);
 };
 
 
