@@ -199,7 +199,7 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
-    if($.args.graph && $.評価値.length && window.c3){
+    if($.args.graph && $.評価値.length){
         $.グラフ = 将棋タイム.グラフ描画($);
     }
 
@@ -278,7 +278,8 @@ function 将棋タイム(args){
 
     //グラフ
     if($.グラフ){
-        $.グラフ.xgrids([{value: 手数}]);
+        将棋タイム.グラフ描画.現在線($.グラフ, 手数);
+        将棋タイム.グラフ描画.ヒント($.グラフ, 手数, $.評価値[手数], $.読み筋[手数]);
     }
 
     //変化選択
@@ -315,6 +316,9 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.最終手ハイライト = function (x, y, 反転){
+    if(!x || x > 9){
+        x = y = 0;
+    }
     if(反転){
         x = 10 - x;
         y = 10 - y;
@@ -324,10 +328,6 @@ function 将棋タイム(args){
     div.className = '将棋タイム-最終手';
     div.dataset.x = x;
     div.dataset.y = y;
-    
-    if(x < 1 || x > 9){
-        div.style.display = 'none';
-    }
     return div;
 };
 
@@ -424,83 +424,145 @@ function 将棋タイム(args){
 
 
 将棋タイム.グラフ描画 = function ($){
-    var 設定値 = 3000;
-    var Ymax   = ($.data.reverse) ? -設定値 : 設定値;
+    var Ymax   = 3000;
+    var parent = $.args.graph;
+    var width  = parent.getBoundingClientRect().width  || 800;
+    var height = parent.getBoundingClientRect().height || 200;
+    var 座標   = 将棋タイム.グラフ描画.座標計算($.評価値, width, height, Ymax, $.data.reverse);
 
-    return window.c3.generate({
-        bindto: $.args.graph,
-        data: {
-            columns: [将棋タイム.グラフ描画.グラフ用評価値($.評価値, 設定値)],
-            type :'area',
-            onclick: function(event){
-                $.手数 = event.x;
-                将棋タイム.描画($);
-            },
-        },
-        axis: {
-            y: {
-                max: Ymax,
-                min: -Ymax,
-                padding: {
-                    top: 0,
-                    bottom: 0,
-                },
-            },
-            x:{
-                padding:{
-                    left: 0,
-                    right: 0,
-                },
-            },
-        },
-        grid: {
-            y: {
-                lines: [{value: 0}],
-            },
-        },
-        legend: {
-            show: false,
-        },
-        tooltip:{
-            contents: function(data){
-                var html = '<table class="c3-tooltip"><tr><th>';
-                html += data[0].x;
-                html += '手</th></tr><tr><td>';
-                html += $.評価値[data[0].x] + '<br>' + $.読み筋[data[0].x].replace(/ .*/, '');
-                html += '</td></tr></table>';
-                return html;
-            },
-        },
-        transition: {
-            duration: 0,
-        },
-    });
+    var svg = 将棋タイム.グラフ描画.svg(null, 'svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
+    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
+    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
+    将棋タイム.グラフ描画.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ描画.塗り潰し(座標)});
+    将棋タイム.グラフ描画.svg(svg, 'polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ描画.折れ線(座標)});
+    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
+    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
+    
+    for(var i = 0; i < 座標.length; i++){
+        将棋タイム.グラフ描画.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'data-v':$.評価値[i], 'data-n':$.読み筋[i], 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
+    }
+
+    parent.innerHTML = '';
+    parent.appendChild(svg);
+    parent.insertAdjacentHTML('beforeend', '<div class="将棋タイム-グラフ-ヒント"><div class="将棋タイム-グラフ-ヒント手数"></div><div class="将棋タイム-グラフ-ヒント評価値"></div></div>');
+    parent.style.position = 'relative';
+
+    svg.onclick      = 将棋タイム.グラフ描画.onclick;
+    svg.将棋タイム   = $.$将棋タイム;
+    svg.座標         = 座標;
+    svg.現在線       = parent.querySelector(".将棋タイム-グラフ-現在線");
+    svg.ヒント       = parent.querySelector(".将棋タイム-グラフ-ヒント");
+    svg.ヒント手数   = parent.querySelector(".将棋タイム-グラフ-ヒント手数");
+    svg.ヒント評価値 = parent.querySelector(".将棋タイム-グラフ-ヒント評価値");
+
+    return svg;
 };
 
 
 
-将棋タイム.グラフ描画.グラフ用評価値 = function (評価値, 設定値){
-    var グラフ用評価値 = ['評価値'];
+将棋タイム.グラフ描画.座標計算 = function (評価値, width, height, Ymax, 反転){
+    var 座標  = [];
+    var X刻み = width / (評価値.length-1);
+    var Y半分 = height / 2;
 
     for(var i = 0; i < 評価値.length; i++){
-        if(評価値[i] === '+詰' || 評価値[i] > 29000){
-            グラフ用評価値.push(設定値 + 1);
+        var y = 評価値[i];
+        if(y > Ymax || y === '+詰'){
+            y = Ymax;
         }
-        else if(評価値[i] === '-詰' || 評価値[i] < -29000){
-            グラフ用評価値.push(-設定値 - 1);
+        else if(y < -Ymax || y === '-詰'){
+            y = -Ymax;
         }
-        else if(評価値[i] > 設定値){
-            グラフ用評価値.push(設定値);
+        if(反転){
+            y = -y;
         }
-        else if(評価値[i] < -設定値){
-            グラフ用評価値.push(-設定値);
-        }
-        else{
-            グラフ用評価値.push(評価値[i]);
-        }
+        座標.push({'x':i*X刻み, 'y':Y半分-(y/Ymax*Y半分)});
     }
-    return グラフ用評価値;
-}
+    
+    return 座標
+};
+
+
+
+
+将棋タイム.グラフ描画.塗り潰し = function (座標){
+    var result = "";
+
+    for(var i = 0; i < 座標.length; i++){
+        result += 'L' + 座標[i].x + ',' + 座標[i].y;
+    }
+    for(var i = 座標.length - 1; i >= 0; i--){
+        result += 'L' + 座標[i].x + ',' + 100;
+    }
+    result  = result.replace('L', 'M');
+    result += 'Z';
+    return result;
+};
+
+
+
+将棋タイム.グラフ描画.折れ線 = function (座標){
+    var result = "";
+
+    for(var i = 0; i < 座標.length; i++){
+        result += 座標[i].x + ',' + 座標[i].y + ' ';
+    }
+    return result.trim();
+};
+
+
+
+将棋タイム.グラフ描画.現在線 = function (svg, 手数){
+    if(!(手数 in svg.座標)){
+        return;
+    }
+    if(手数 > 0){
+        svg.現在線.setAttribute("x1", svg.座標[手数].x);
+        svg.現在線.setAttribute("x2", svg.座標[手数].x);
+        svg.現在線.setAttribute("stroke-opacity", 1);
+    }
+    else{
+        svg.現在線.setAttribute("stroke-opacity", 0);
+    }
+};
+
+
+
+将棋タイム.グラフ描画.ヒント = function (svg, 手数, 評価値, 読み筋){
+    if(!手数){
+        svg.ヒント.style.display = 'none';
+        return;
+    }
+
+    読み筋 = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
+    svg.ヒント手数.textContent = 手数 + '手目';
+    svg.ヒント評価値.innerHTML = 評価値 + '<br>' + 読み筋;
+    svg.ヒント.style.display = 'block';
+};
+
+
+
+将棋タイム.グラフ描画.svg = function (svgel, tagName, attr){
+    var el = document.createElementNS('http://www.w3.org/2000/svg', tagName);
+    for(var k in attr){
+        el.setAttribute(k, attr[k]);
+    }
+    if(svgel){
+        svgel.appendChild(el);
+    }
+    return el;
+};
+
+
+
+将棋タイム.グラフ描画.onclick = function (event){
+    if(event.target.tagName !== 'circle'){
+        return;
+    }
+    var svg = event.target.ownerSVGElement;
+    svg.将棋タイム.$.手数 = Number(event.target.getAttribute("data-x"));
+    将棋タイム.描画(svg.将棋タイム.$);
+};
 
 
 
@@ -1611,7 +1673,66 @@ function 将棋タイム(args){
     border: 10px solid transparent;
     border-bottom: 10px solid rgba(0, 0, 0, 0.8);
 }
-
+.将棋タイム-グラフ{
+    z-index: 2;
+}
+.将棋タイム-グラフ-X軸{
+    stroke: #999;
+    stroke-width: 2px;
+}
+.将棋タイム-グラフ-Y軸{
+    stroke: #999;
+    stroke-width: 2px;
+}
+.将棋タイム-グラフ-中心線{
+    stroke: #ccc;
+    stroke-width: 1px;
+}
+.将棋タイム-グラフ-現在線{
+    stroke: #ccc;
+    stroke-width: 1px;
+}
+.将棋タイム-グラフ-折れ線{
+    stroke-width: 1px;
+    fill: none;
+    stroke: #3986bc;
+}
+.将棋タイム-グラフ-塗り潰し{
+    fill: #d2e4f0;
+}
+.将棋タイム-グラフ-点{
+    fill: #1f77b4;
+    stroke: #1f77b4;
+    stroke-opacity: 0;
+    stroke-width: 6px;
+}
+.将棋タイム-グラフ-点:hover{
+    cursor: pointer;
+    stroke-opacity: 1;
+}
+.将棋タイム-グラフ-ヒント{
+    background-color: #fff;
+    opacity: 0.9;
+    font-size: 16px;
+    font-family: "Noto Sans CJK JP", meiryo, sans-serif;
+    display: none;
+    position: absolute;
+    top: -1px;
+    left 0;
+    width: 130px;
+    border: solid 1px #aaa;
+    z-index: 1;
+}
+.将棋タイム-グラフ-ヒント手数{
+    border-bottom: solid 1px #aaa;
+    background-color: #eee;
+    padding: 4px 8px;
+    text-align: center;
+    font-weight: bold;
+}
+.将棋タイム-グラフ-ヒント評価値{
+    padding: 2px 4px;
+}
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
 
 

@@ -215,16 +215,7 @@ ShogiGUIでKIFファイルを解析すると、評価値グラフを表示する
    解析が終わったらファイルを保存してください
 
 
-2. HTMLの<head>内に次の3つのタグを追加で貼り付けます
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.0/c3.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.0/c3.min.css" rel="stylesheet">
-
-
-
-3. kifタグにgraph属性を追加し、その値にグラフ表示部を指し示す「CSSセレクタ」を記述します
+2. kifタグにgraph属性を追加し、その値にグラフ表示部を指し示す「CSSセレクタ」を記述します
 
 
 <script type="kif" graph="#graph1">
@@ -232,12 +223,12 @@ ShogiGUIでKIFファイルを解析すると、評価値グラフを表示する
 ※このサンプルでは「id="graph1"」のタグにグラフを表示します
 
 
-4. グラフを表示したい場所に、次のようなdivタグを貼り付けます。
+3. グラフを表示したい場所に、次のような空のdivタグを貼り付けます。
 
 
-<div id="graph1" style="width:1200px; height:200px; margin:0 auto;"></div>
+<div id="graph1" style="width:1000px; height:200px; margin:0 auto;"></div>
 
-※このサンプルでは幅1200px、高さ200pxのグラフが中央に表示されます。スタイルは各自調整してください
+※このサンプルでは幅1000px、高さ200pxのグラフが中央に表示されます。スタイルは各自調整してください
 
 
 
