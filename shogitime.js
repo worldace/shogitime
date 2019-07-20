@@ -67,7 +67,6 @@ function 将棋タイム(args){
         将棋タイム.引数確認.ファイル取得(args);
         return false;
    }
-    args.kif = args.kif.replace(/<|>/g, '');
 
     if(typeof args.el === 'string'){
         args.el = document.querySelector(args.el);
@@ -444,7 +443,7 @@ function 将棋タイム(args){
 
     parent.innerHTML = '';
     parent.appendChild(svg);
-    parent.insertAdjacentHTML('beforeend', '<div class="将棋タイム-グラフ-ヒント"><div class="将棋タイム-グラフ-ヒント手数"></div><div class="将棋タイム-グラフ-ヒント評価値"></div></div>');
+    parent.insertAdjacentHTML('beforeend', '<div class="将棋タイム-グラフ-ヒント"><div class="将棋タイム-グラフ-ヒント手数"></div><div class="将棋タイム-グラフ-ヒント評価値"></div><div class="将棋タイム-グラフ-ヒント読み筋"></div></div>');
     parent.style.position = 'relative';
 
     svg.onclick      = 将棋タイム.グラフ描画.onclick;
@@ -454,6 +453,7 @@ function 将棋タイム(args){
     svg.ヒント       = parent.querySelector(".将棋タイム-グラフ-ヒント");
     svg.ヒント手数   = parent.querySelector(".将棋タイム-グラフ-ヒント手数");
     svg.ヒント評価値 = parent.querySelector(".将棋タイム-グラフ-ヒント評価値");
+    svg.ヒント読み筋 = parent.querySelector(".将棋タイム-グラフ-ヒント読み筋");
 
     return svg;
 };
@@ -535,8 +535,9 @@ function 将棋タイム(args){
     }
 
     読み筋 = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
-    svg.ヒント手数.textContent = 手数 + '手目';
-    svg.ヒント評価値.innerHTML = 評価値 + '<br>' + 読み筋;
+    svg.ヒント手数.textContent   = 手数 + '手目';
+    svg.ヒント評価値.textContent = 評価値;
+    svg.ヒント読み筋.textContent = 読み筋;
     svg.ヒント.style.display = 'block';
 };
 
@@ -1713,7 +1714,7 @@ function 将棋タイム(args){
 .将棋タイム-グラフ-ヒント{
     background-color: #fff;
     opacity: 0.9;
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Noto Sans CJK JP", meiryo, sans-serif;
     display: none;
     position: absolute;
@@ -1722,16 +1723,13 @@ function 将棋タイム(args){
     width: 130px;
     border: solid 1px #aaa;
     z-index: 1;
+    text-align: center;
 }
 .将棋タイム-グラフ-ヒント手数{
     border-bottom: solid 1px #aaa;
     background-color: #eee;
-    padding: 4px 8px;
-    text-align: center;
+    padding: 2px 0;
     font-weight: bold;
-}
-.将棋タイム-グラフ-ヒント評価値{
-    padding: 2px 4px;
 }
 */}).toString().match(/\/\*([^]*)\*\//)[1].trim();
 
