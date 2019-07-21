@@ -19,14 +19,14 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 https://github.com/worldace/shogitime/archive/master.zip
 
 
-[2] 「shogitime.js」を読み込みます。HTMLのどこに記述してもOK
+[2] HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
 
 
 <script src="shogitime.js"></script>
 
 
-[3] type="kif"属性を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
-    scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます。
+[3] 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
+    scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます
 
 
 <script type="kif">
@@ -186,26 +186,9 @@ kifタグにnocp属性を追加します
 
 
 
-◆実況する
-
-将棋タイムには実況機能がありませんが、少し工夫すれば実況することも可能です。
-次のようなタグをHTMLに貼り付けると、60秒毎にkifファイルを読みにいき盤面を最新に書き換えます
-
-
-<script>
-setInterval(将棋タイム, 60*1000, {
-    el: '.将棋タイム',
-    kif: 'http://example.com/example.kif' + '?' + Date.now(),
-    start: -1,
-});
-</script>
-
-※kifファイルのURLに「?現在の時間」を付与して、ブラウザのキャッシュから読まれることを阻止しています
-
-
 ◆評価値グラフを表示する
 
-ShogiGUIで解析したKIFファイルなら、評価値グラフを表示できます。
+ShogiGUIで解析したKIFファイルなら、評価値グラフを表示できます
 
 
 1. ShogiGUIでKIFファイルを解析します。メニューの「対局」→「棋譜解析」から解析できます
@@ -218,7 +201,8 @@ ShogiGUIで解析したKIFファイルなら、評価値グラフを表示でき
 
 <div id="example" style="width:1000px; height:200px; margin:0 auto;"></div>
 
-※このサンプルのスタイルは一例です
+
+※グラフのサイズは、このdivタグのスタイルで指定します
 
 
 3. kifタグにgraph属性を追加し、値にグラフ表示部を示すCSSセレクタを記述すれば完了です
@@ -258,6 +242,39 @@ ShogiGUIで解析したKIFファイルなら、評価値グラフを表示でき
     nocp    : コントロールパネルを非表示にするか。trueで非表示
     graph   : 評価値グラフの表示部を示すCSSセレクタ/DOM要素
 }
+
+
+■手動実行の使用例
+------------------------------------
+
+◆実況
+
+将棋タイムには実況機能はありませんが、工夫することで実況を可能にします。
+次のようなタグをHTMLに貼り付けると、60秒毎にkifファイルを読みにいき盤面を最新に書き換えます
+
+
+<script>
+setInterval(将棋タイム, 60*1000, {
+    el: '.将棋タイム',
+    kif: 'http://example.com/example.kif' + '?' + Date.now(),
+    start: -1,
+});
+</script>
+
+
+※kifファイルのURLに「?現在の時間」を付与して、ブラウザのキャッシュから読まれることを阻止しています
+
+
+
+◆ファイル選択
+
+セレクトボックスで選択した棋譜を表示します
+
+
+<select onchange="将棋タイム({el:'.将棋タイム', kif:this.value})">
+  <option value="http://example.com/1.kif">棋譜1</option>
+  <option value="http://example.com/2.kif">棋譜2</option>
+</select>
 
 
 
