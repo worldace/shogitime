@@ -198,7 +198,7 @@ function 将棋タイム(args){
     if($.args.nocp === true){
         $.$コントロールパネル.style.display = 'none';
     }
-    if($.args.graph && $.評価値.length){
+    if($.args.graph && $.評価値.length > 1){
         $.グラフ = 将棋タイム.グラフ描画($);
     }
 
