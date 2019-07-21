@@ -431,7 +431,7 @@ function 将棋タイム(args){
     var svg = 将棋タイム.グラフ描画.svg(null, 'svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
     将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
     将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
-    将棋タイム.グラフ描画.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ描画.塗り潰し(座標)});
+    将棋タイム.グラフ描画.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ描画.塗り潰し(座標, height)});
     将棋タイム.グラフ描画.svg(svg, 'polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ描画.折れ線(座標)});
     将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
     将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
@@ -504,14 +504,15 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.塗り潰し = function (座標){
+将棋タイム.グラフ描画.塗り潰し = function (座標, height){
     var result = "";
+    var Y半分  = height / 2;
 
     for(var i = 0; i < 座標.length; i++){
         result += 'L' + 座標[i].x + ',' + 座標[i].y;
     }
     for(var i = 座標.length - 1; i >= 0; i--){
-        result += 'L' + 座標[i].x + ',' + 100;
+        result += 'L' + 座標[i].x + ',' + Y半分;
     }
     result  = result.replace('L', 'M');
     result += 'Z';
