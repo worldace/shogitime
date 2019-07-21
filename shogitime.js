@@ -277,8 +277,7 @@ function 将棋タイム(args){
 
     //グラフ
     if($.グラフ){
-        将棋タイム.グラフ描画.現在線($.グラフ, 手数);
-        将棋タイム.グラフ描画.ヒント($.グラフ, 手数, $.評価値[手数], $.読み筋[手数]);
+        将棋タイム.グラフ描画.更新($.グラフ, 手数, $.評価値[手数], $.読み筋[手数]);
     }
 
     //変化選択
@@ -438,7 +437,7 @@ function 将棋タイム(args){
     将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
     
     for(var i = 0; i < 座標.length; i++){
-        将棋タイム.グラフ描画.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'data-v':$.評価値[i], 'data-n':$.読み筋[i], 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
+        将棋タイム.グラフ描画.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
     }
 
     parent.innerHTML = '';
@@ -456,6 +455,26 @@ function 将棋タイム(args){
     svg.ヒント読み筋 = parent.querySelector(".将棋タイム-グラフ-ヒント読み筋");
 
     return svg;
+};
+
+
+
+将棋タイム.グラフ描画.更新 = function (svg, 手数, 評価値, 読み筋){
+    if(!手数){
+        svg.現在線.setAttribute("stroke-opacity", 0);
+        svg.ヒント.style.display = 'none';
+    }
+    else{
+        svg.現在線.setAttribute("x1", svg.座標[手数].x);
+        svg.現在線.setAttribute("x2", svg.座標[手数].x);
+        svg.現在線.setAttribute("stroke-opacity", 1);
+
+        読み筋 = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
+        svg.ヒント手数.textContent   = 手数 + '手目';
+        svg.ヒント評価値.textContent = 評価値;
+        svg.ヒント読み筋.textContent = 読み筋;
+        svg.ヒント.style.display = 'block';
+    }
 };
 
 
@@ -508,37 +527,6 @@ function 将棋タイム(args){
         result += 座標[i].x + ',' + 座標[i].y + ' ';
     }
     return result.trim();
-};
-
-
-
-将棋タイム.グラフ描画.現在線 = function (svg, 手数){
-    if(!(手数 in svg.座標)){
-        return;
-    }
-    if(手数 > 0){
-        svg.現在線.setAttribute("x1", svg.座標[手数].x);
-        svg.現在線.setAttribute("x2", svg.座標[手数].x);
-        svg.現在線.setAttribute("stroke-opacity", 1);
-    }
-    else{
-        svg.現在線.setAttribute("stroke-opacity", 0);
-    }
-};
-
-
-
-将棋タイム.グラフ描画.ヒント = function (svg, 手数, 評価値, 読み筋){
-    if(!手数){
-        svg.ヒント.style.display = 'none';
-        return;
-    }
-
-    読み筋 = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
-    svg.ヒント手数.textContent   = 手数 + '手目';
-    svg.ヒント評価値.textContent = 評価値;
-    svg.ヒント読み筋.textContent = 読み筋;
-    svg.ヒント.style.display = 'block';
 };
 
 
