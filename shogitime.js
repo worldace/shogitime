@@ -1218,7 +1218,7 @@ function 将棋タイム(args){
     <div class="将棋タイム-ダイアログ-コンテンツ">
       <div class="将棋タイム-ダイアログ-棋譜コピーボタン">棋譜をコピーする</div>
       <textarea class="将棋タイム-ダイアログ-棋譜テキスト" readonly></textarea>
-      <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.2</a></div>
+      <div class="将棋タイム-ダイアログ-フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver0.3</a></div>
     </div>
   </div>
 </div>
