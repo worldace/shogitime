@@ -199,7 +199,7 @@ function 将棋タイム(args){
         $.$コントロールパネル.style.display = 'none';
     }
     if($.args.graph && $.評価値.length > 1){
-        $.グラフ = 将棋タイム.グラフ描画($);
+        $.グラフ = 将棋タイム.グラフ($);
     }
 
     将棋タイム.描画($);
@@ -277,7 +277,7 @@ function 将棋タイム(args){
 
     //グラフ
     if($.グラフ){
-        将棋タイム.グラフ描画.更新($.グラフ, 手数, $.評価値[手数], $.読み筋[手数]);
+        将棋タイム.グラフ.更新($.グラフ, 手数, $.評価値[手数], $.読み筋[手数]);
     }
 
     //変化選択
@@ -421,23 +421,23 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画 = function ($){
+将棋タイム.グラフ = function ($){
     var Ymax   = 3000;
     var parent = $.args.graph;
     var width  = parent.getBoundingClientRect().width  || 800;
     var height = parent.getBoundingClientRect().height || 200;
-    var 座標   = 将棋タイム.グラフ描画.座標計算($.評価値, width, height, Ymax, $.data.reverse);
+    var 座標   = 将棋タイム.グラフ.座標計算($.評価値, width, height, Ymax, $.data.reverse);
 
-    var svg = 将棋タイム.グラフ描画.svg(null, 'svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
-    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
-    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
-    将棋タイム.グラフ描画.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ描画.塗り潰し(座標, height)});
-    将棋タイム.グラフ描画.svg(svg, 'polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ描画.折れ線(座標)});
-    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
-    将棋タイム.グラフ描画.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
+    var svg = 将棋タイム.グラフ.svg(null, 'svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
+    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
+    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
+    将棋タイム.グラフ.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ.塗り潰し(座標, height)});
+    将棋タイム.グラフ.svg(svg, 'polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ.折れ線(座標)});
+    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
+    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
     
     for(var i = 0; i < 座標.length; i++){
-        将棋タイム.グラフ描画.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
+        将棋タイム.グラフ.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
     }
 
     parent.innerHTML = '';
@@ -445,7 +445,7 @@ function 将棋タイム(args){
     parent.insertAdjacentHTML('beforeend', '<div class="将棋タイム-グラフ-ヒント"><div class="将棋タイム-グラフ-ヒント手数"></div><div class="将棋タイム-グラフ-ヒント評価値"></div><div class="将棋タイム-グラフ-ヒント読み筋"></div></div>');
     parent.style.position = 'relative';
 
-    svg.onclick      = 将棋タイム.グラフ描画.onclick;
+    svg.onclick      = 将棋タイム.グラフ.onclick;
     svg.将棋タイム   = $.$将棋タイム;
     svg.座標         = 座標;
     svg.現在線       = parent.querySelector(".将棋タイム-グラフ-現在線");
@@ -459,7 +459,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.更新 = function (svg, 手数, 評価値, 読み筋){
+将棋タイム.グラフ.更新 = function (svg, 手数, 評価値, 読み筋){
     if(!手数){
         svg.現在線.setAttribute("stroke-opacity", 0);
         svg.ヒント.style.display = 'none';
@@ -469,17 +469,16 @@ function 将棋タイム(args){
         svg.現在線.setAttribute("x2", svg.座標[手数].x);
         svg.現在線.setAttribute("stroke-opacity", 1);
 
-        読み筋 = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
         svg.ヒント手数.textContent   = 手数 + '手目';
         svg.ヒント評価値.textContent = 評価値;
-        svg.ヒント読み筋.textContent = 読み筋;
-        svg.ヒント.style.display = 'block';
+        svg.ヒント読み筋.textContent = (読み筋 || '').replace(/ .*/, '').replace(/　/, '');
+        svg.ヒント.style.display     = 'block';
     }
 };
 
 
 
-将棋タイム.グラフ描画.座標計算 = function (評価値, width, height, Ymax, 反転){
+将棋タイム.グラフ.座標計算 = function (評価値, width, height, Ymax, 反転){
     var 座標  = [];
     var X刻み = width / (評価値.length-1);
     var Y半分 = height / 2;
@@ -504,7 +503,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.塗り潰し = function (座標, height){
+将棋タイム.グラフ.塗り潰し = function (座標, height){
     var result = "";
     var Y半分  = height / 2;
 
@@ -521,7 +520,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.折れ線 = function (座標){
+将棋タイム.グラフ.折れ線 = function (座標){
     var result = "";
 
     for(var i = 0; i < 座標.length; i++){
@@ -532,7 +531,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.svg = function (svgel, tagName, attr){
+将棋タイム.グラフ.svg = function (svgel, tagName, attr){
     var el = document.createElementNS('http://www.w3.org/2000/svg', tagName);
     for(var k in attr){
         el.setAttribute(k, attr[k]);
@@ -545,7 +544,7 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ描画.onclick = function (event){
+将棋タイム.グラフ.onclick = function (event){
     if(event.target.tagName !== 'circle'){
         return;
     }
@@ -1036,7 +1035,7 @@ function 将棋タイム(args){
 将棋タイム.$反転ボタン_onclick = function(event){
     this.data.reverse = !this.data.reverse;
     if(this.グラフ){
-        this.グラフ = 将棋タイム.グラフ描画(this);
+        this.グラフ = 将棋タイム.グラフ(this);
     }
     将棋タイム.描画(this);
 
