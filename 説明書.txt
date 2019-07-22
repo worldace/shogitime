@@ -34,7 +34,7 @@ https://github.com/worldace/shogitime/archive/master.zip
 </script>
 
 <script type="kif">
-http://example.jp/example.kif
+http://example.com/example.kif
 </script>
 
 
@@ -144,7 +144,7 @@ kifタグにreverse属性を追加します
 
 kifタグにmyname属性を追加して、値に名前を入力してください。部分一致で可
 
-<script type="kif" myname="hogehoge">
+<script type="kif" myname="example">
 
 
 

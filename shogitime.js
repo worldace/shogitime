@@ -1664,6 +1664,12 @@ function 将棋タイム(args){
     border-bottom: 10px solid rgba(0, 0, 0, 0.8);
 }
 .将棋タイム-グラフ{
+    -webkit-tap-highlight-color: transparent;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
     z-index: 2;
 }
 .将棋タイム-グラフ-X軸{
