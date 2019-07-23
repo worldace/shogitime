@@ -428,16 +428,16 @@ function 将棋タイム(args){
     var height = parent.getBoundingClientRect().height || 200;
     var 座標   = 将棋タイム.グラフ.座標計算($.評価値, width, height, Ymax, $.data.reverse);
 
-    var svg = 将棋タイム.グラフ.svg(null, 'svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
-    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
-    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
-    将棋タイム.グラフ.svg(svg, 'path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ.塗り潰し(座標, height)});
-    将棋タイム.グラフ.svg(svg, 'polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ.折れ線(座標)});
-    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
-    将棋タイム.グラフ.svg(svg, 'line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
-    
+    var svg = 将棋タイム.グラフ.svg('svg', {'class':'将棋タイム-グラフ', 'width':width, 'height':height, 'viewBox':'-1,1,' + width + ',' + height});
+    svg.追加('line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
+    svg.追加('line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
+    svg.追加('path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ.塗り潰し(座標, height)});
+    svg.追加('polyline', {'class':'将棋タイム-グラフ-折れ線', 'points':将棋タイム.グラフ.折れ線(座標)});
+    svg.追加('line', {'class':'将棋タイム-グラフ-中心線', 'x1':0, 'y1':height/2, 'x2':width, 'y2':height/2});
+    svg.追加('line', {'class':'将棋タイム-グラフ-現在線', 'x1':0, 'y1':0, 'x2':0, 'y2':height, 'stroke-opacity':0});
+
     for(var i = 0; i < 座標.length; i++){
-        将棋タイム.グラフ.svg(svg, 'circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
+        svg.追加('circle', {'class':'将棋タイム-グラフ-点', 'data-x':i, 'cx':座標[i].x, 'cy':座標[i].y, 'r':3});
     }
 
     parent.innerHTML = '';
@@ -531,13 +531,18 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.グラフ.svg = function (svgel, tagName, attr){
+将棋タイム.グラフ.svg = function (tagName, attr){
     var el = document.createElementNS('http://www.w3.org/2000/svg', tagName);
-    for(var k in attr){
-        el.setAttribute(k, attr[k]);
+    if(attr){
+        for(var k in attr){
+            el.setAttribute(k, attr[k]);
+        }
     }
-    if(svgel){
-        svgel.appendChild(el);
+    if(tagName === 'svg'){
+        el.追加 = 将棋タイム.グラフ.svg.bind(el);
+    }
+    else{
+        this.appendChild(el);
     }
     return el;
 };
