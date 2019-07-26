@@ -15,17 +15,17 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 ■使い方
 ------------------------------------
 
-[1] 将棋タイムをダウンロードしたら解凍し、shogitimeフォルダ一式をアップロードします
+◆1 将棋タイムをダウンロードしたら解凍し、shogitimeフォルダ一式をアップロードします
 https://github.com/worldace/shogitime/archive/master.zip
 
 
-[2] HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
+◆2 HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
 
 
 <script src="shogitime.js"></script>
 
 
-[3] 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
+◆3 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
     scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます
 
 
@@ -46,16 +46,19 @@ http://example.com/example.kif
 ■KIF形式の作成方法
 ------------------------------------
 
-【Web上で作成する】
+◆Web上で作成する
 局面図をWebで作成 http://sfenreader.appspot.com/ja/create_board.html
 ※作れるのは局面図だけです
 
-【Windows上で作成する】推奨
+
+
+◆Windows上で作成する 推奨
 ShogiGUI http://shogigui.siganus.com/
 「編集 → 棋譜コピー → KIF形式」 または 「ファイル → 名前を付けて保存(KIF形式)」
 
 
-【KIF形式サンプル1】
+
+◆KIF形式サンプル1
 指し手のみの最もシンプルなKIF形式
 
 1 ２六歩(27)
@@ -71,7 +74,8 @@ ShogiGUI http://shogigui.siganus.com/
 11 ２六銀(27)
 
 
-【KIF形式サンプル2】
+
+◆KIF形式サンプル2
 局面図のみ。これもKIF形式。
 
 
@@ -91,7 +95,8 @@ ShogiGUI http://shogigui.siganus.com/
 先手の持駒：なし
 
 
-【詰将棋の作り方】
+
+◆詰将棋の作り方
 
 解答付き詰将棋の作り方をShogiGUIで説明します。
 
@@ -109,7 +114,7 @@ ShogiGUI http://shogigui.siganus.com/
 
 
 
-【将棋ウォーズの棋譜取得方法】
+◆将棋ウォーズの棋譜取得方法
 
 姉妹ソフトの「将棋ウォーズ棋譜ダウンローダ」をご利用ください。Windows用
 https://spelunker2.wordpress.com/2019/01/09/shogiwars/
@@ -201,8 +206,6 @@ ShogiGUIで解析したKIFファイルなら、評価値グラフを表示でき
 
 <div id="example" style="width:1000px; height:200px; margin:0 auto;"></div>
 
-※グラフのサイズは、このタグのスタイルで指定してください
-
 
 3. kifタグにgraph属性を追加し、値にグラフ表示部を示すCSSセレクタを記述すれば完了です
 
@@ -211,6 +214,7 @@ ShogiGUIで解析したKIFファイルなら、評価値グラフを表示でき
 
 
 
+※グラフのサイズはスタイルで指定してください
 ※変化が存在したり部分解析の棋譜は動作対象外です
 
 
@@ -221,11 +225,12 @@ ShogiGUIで解析したKIFファイルなら、評価値グラフを表示でき
 
 将棋タイムは自動的に実行されますが、JavaScriptの知識があれば手動で実行できます
 
-【実行方法】
+
+◆実行方法
 将棋タイム({起動オプション});
 
 
-【起動オプション一覧】
+◆起動オプション一覧
 起動オプションはオブジェクトです。'el'と'kif'が重要です
 
 {
