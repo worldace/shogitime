@@ -428,7 +428,7 @@ function 将棋タイム(args){
     var height = parent.getBoundingClientRect().height || 200;
     var 座標   = 将棋タイム.グラフ.座標計算($.評価値, width, height, Ymax, $.data.reverse);
 
-    var svg = 将棋タイム.グラフ.svg('svg', {'class':'将棋タイム-グラフ', 'viewBox':'-1,1,' + width + ',' + height});
+    var svg = 将棋タイム.グラフ.svg('svg', {'class':'将棋タイム-グラフ', 'viewBox':'0,0,' + width + ',' + height});
     svg.追加('line', {'class':'将棋タイム-グラフ-X軸', 'x1':0, 'y1':height, 'x2':width, 'y2':height});
     svg.追加('line', {'class':'将棋タイム-グラフ-Y軸', 'x1':0, 'y1':0, 'x2':0, 'y2':height});
     svg.追加('path', {'class':'将棋タイム-グラフ-塗り潰し', 'd':将棋タイム.グラフ.塗り潰し(座標, height)});
