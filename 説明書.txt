@@ -15,17 +15,17 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 ■使い方
 ------------------------------------
 
-◆1 将棋タイムをダウンロードしたら解凍し、shogitimeフォルダ一式をアップロードします
+
+1. 将棋タイムをダウンロードしたら解凍し、shogitimeフォルダ一式をアップロードします
 https://github.com/worldace/shogitime/archive/master.zip
 
 
-◆2 HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
-
+2. HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
 
 <script src="shogitime.js"></script>
 
 
-◆3 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
+3. 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
     scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます
 
 
