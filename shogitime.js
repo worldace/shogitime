@@ -1158,7 +1158,7 @@ function 将棋タイム(args){
 
 
 将棋タイム.オブジェクトコピー = function(from){
-    var to = {};
+    var to = Array.isArray(from) ? [] : {};
     for(var key in from){
         to[key] = (from[key] instanceof Object)  ?  将棋タイム.オブジェクトコピー(from[key])  :  from[key];
     }
