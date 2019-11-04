@@ -967,8 +967,8 @@ function 将棋タイム(args){
 
 
 
-将棋タイム.$将棋盤_onclick = function (event){
-    var rect = this.$将棋盤.getBoundingClientRect();
+将棋タイム.$局面_onclick = function (event){
+    var rect = this.$局面.getBoundingClientRect();
     (event.clientX-rect.left < rect.width/2) ? this.$前に移動ボタン.onclick() : this.$次に移動ボタン.onclick();
 };
 
