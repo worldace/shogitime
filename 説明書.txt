@@ -20,17 +20,18 @@ JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 https://github.com/worldace/shogitime/archive/master.zip
 
 
-2. HTMLから「shogitime.js」を読み込みます。どこに記述してもOK
+2. 次のようなタグで「shogitime.js」を読み込みます。どこに記述してもOK
+
 
 <script src="shogitime.js"></script>
 
 
-3. 属性「type="kif"」を持つタグを用意し、中に「KIF形式のテキスト」か「KIFファイルのURL」を貼り付けます
-    scriptタグを推奨しますが、他のタグでもOK。このkifタグが将棋盤に置換されます
+3. 次のようなkifタグを用意します。属性が「type="kif"」で、中身が「kif形式のテキスト」か「kifファイルのURL」
+   このタグが将棋盤に置換されます
 
 
 <script type="kif">
-ここにKIF形式のテキストを貼り付ける
+ここにkif形式のテキストを貼り付ける
 </script>
 
 <script type="kif">
@@ -38,9 +39,8 @@ http://example.com/example.kif
 </script>
 
 
-※ KIFファイルは原則として、サイトと同一サーバに置く必要があります。(JavaScriptのクロスドメイン制約)
-※ KIFファイルの文字コードはShiftJISです。UTF-8の場合は、KIFファイルの拡張子を「.kifu」にする必要があります
-
+※ kifファイルは原則として、サイトと同一サーバに置く必要があります。(JavaScriptのクロスドメイン制約)
+※ kifファイルの文字コードはShift-JISです。UTF-8にする場合は、kifファイルの拡張子を「.kifu」にする必要があります
 
 
 ■KIF形式の作成方法
