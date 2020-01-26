@@ -365,23 +365,17 @@ function 将棋タイム(args){
 
 
 将棋タイム.描画.指し手選択 = function ($){
-    $.$指し手選択.innerHTML = '';
-
-    var option = document.createElement('option');
-    option.textContent = '開始局面';
-    $.$指し手選択.appendChild(option);
-
     var 全指し手 = $.全指し手[$.変化];
+
+    $.$指し手選択.innerHTML = '';
+    $.$指し手選択.add(new Option('開始局面'));
+
     for(var i = 1; i < 全指し手.length; i++){
-        option = document.createElement('option');
-        option.textContent = 全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手;
-        $.$指し手選択.appendChild(option);
+        $.$指し手選択.add(new Option(全指し手[i].手数 + ' ' + 全指し手[i].手番 + 全指し手[i].手));
     }
 
     if(全指し手.勝敗 && !$.変化){
-        option = document.createElement('option');
-        option.textContent = 全指し手.勝敗.表記;
-        $.$指し手選択.appendChild(option);
+        $.$指し手選択.add(new Option(全指し手.勝敗.表記));
     }
 };
 
