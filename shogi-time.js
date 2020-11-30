@@ -878,37 +878,31 @@ class グラフ extends HTMLElement{
         this.$中心線.setAttribute('x2', width)
         this.$中心線.setAttribute('y1', height/2)
         this.$中心線.setAttribute('y2', height/2)
-        this.$現在線.setAttribute('y2', height) //?
+        this.$現在線.setAttribute('y2', height)
         this.$折れ線.setAttribute('points', this.折れ線計算(this.座標))
         this.$塗り潰し.setAttribute('d', this.塗り潰し計算(this.座標, height))
 
         this.$g.innerHTML = ''
         for(let i = 0; i < this.座標.length; i++){
-            this.点描画(i, this.座標[i].x, this.座標[i].y)
+            const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+            el.setAttribute('class', '点')
+            el.setAttribute('data-i', i)
+            el.setAttribute('cx', this.座標[i].x)
+            el.setAttribute('cy', this.座標[i].y)
+            el.setAttribute('r', 3)
+            this.$g.append(el)
         }
-    }
-
-
-
-    点描画(i, x, y){
-        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-        el.setAttribute('class', '点')
-        el.setAttribute('data-i', i)
-        el.setAttribute('cx', x)
-        el.setAttribute('cy', y)
-        el.setAttribute('r', 3)
-        this.$g.append(el)
     }
 
 
 
     更新(手数, 評価値, 読み筋){
         if(手数 == 0){
-            this.$現在線.setAttribute('stroke-opacity', 0)
+            this.$現在線.setAttribute('x1', 0)
+            this.$現在線.setAttribute('x2', 0)
             this.$ヒント.style.display = 'none'
         }
         else{
-            this.$現在線.setAttribute('stroke-opacity', 1)
             this.$現在線.setAttribute('x1', this.座標[手数].x)
             this.$現在線.setAttribute('x2', this.座標[手数].x)
 
@@ -984,7 +978,7 @@ class グラフ extends HTMLElement{
             <path id="塗り潰し" d=""></path>
             <polyline id="折れ線" points=""></polyline>
             <line id="中心線" x1="0" x2="0" y1="0" y2="0"></line>
-            <line id="現在線" x1="0" x2="0" y1="0" y2="0" stroke-opacity="0"></line>
+            <line id="現在線" x1="0" x2="0" y1="0" y2="0"></line>
             <g id="g"></g>
           </svg>
           <div id="ヒント">
