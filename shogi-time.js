@@ -1,4 +1,3 @@
-// 変化確認・最終手確認
 
 
 class 将棋タイム extends HTMLElement{
@@ -10,11 +9,11 @@ class 将棋タイム extends HTMLElement{
             this.kif = await this.棋譜ダウンロード(this.src)
         }
         if(this.comment){
-            this.$コメント = document.querySelector(this.comment)
+            this.$コメント = document.getElementById(this.comment)
         }
         if(this.graph){
-            this.$グラフ = document.querySelector(this.graph)
-            this.$グラフ.parent = this
+            this.$グラフ = document.getElementById(this.graph)
+            this.$グラフ.owner = this
         }
 
         Object.assign(this, 棋譜.解析(this.kif))
@@ -67,7 +66,10 @@ class 将棋タイム extends HTMLElement{
         this.$将棋盤.innerHTML = ''
 
         //マスハイライト
-        if(手数 !== 0){
+        if(this.最終手){
+            this.$将棋盤.append(this.描画_ハイライト(this.最終手.charAt(0), this.最終手.charAt(1), 反転))
+        }
+        else if(手数 !== 0){
             this.$将棋盤.append(this.描画_ハイライト(指し手.後X, 指し手.後Y, 反転))
         }
 
@@ -864,7 +866,7 @@ class グラフ extends HTMLElement{
         const width  = this.getAttribute('width') || 800
         const height = this.getAttribute('height')|| 200
 
-        this.座標 = this.座標計算(this.parent.評価値, width, height, Ymax, this.parent.reverse)
+        this.座標 = this.座標計算(this.owner.評価値, width, height, Ymax, this.owner.reverse)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -880,12 +882,22 @@ class グラフ extends HTMLElement{
         this.$折れ線.setAttribute('points', this.折れ線計算(this.座標))
         this.$塗り潰し.setAttribute('d', this.塗り潰し計算(this.座標, height))
 
-        for(const el of this.$svg.querySelectorAll('circle')){
-            el.remove()
-        }
+        this.$g.innerHTML = ''
         for(let i = 0; i < this.座標.length; i++){
             this.点描画(i, this.座標[i].x, this.座標[i].y)
         }
+    }
+
+
+
+    点描画(i, x, y){
+        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        el.setAttribute('class', '点')
+        el.setAttribute('data-i', i)
+        el.setAttribute('cx', x)
+        el.setAttribute('cy', y)
+        el.setAttribute('r', 3)
+        this.$g.append(el)
     }
 
 
@@ -955,21 +967,9 @@ class グラフ extends HTMLElement{
 
 
 
-    点描画(i, x, y){
-        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-        el.setAttribute('class', '点')
-        el.setAttribute('data-i', i)
-        el.setAttribute('cx', x)
-        el.setAttribute('cy', y)
-        el.setAttribute('r', 3)
-        this.$svg.append(el)
-    }
-
-
-
     $グラフ_click(event){
         if(event.target.tagName === 'circle'){
-            this.parent.go(event.target.getAttribute('data-i'))
+            this.owner.go(event.target.getAttribute('data-i'))
         }
     }
 
@@ -985,6 +985,7 @@ class グラフ extends HTMLElement{
             <polyline id="折れ線" points=""></polyline>
             <line id="中心線" x1="0" x2="0" y1="0" y2="0"></line>
             <line id="現在線" x1="0" x2="0" y1="0" y2="0" stroke-opacity="0"></line>
+            <g id="g"></g>
           </svg>
           <div id="ヒント">
             <div id="手数"></div>
@@ -1116,14 +1117,14 @@ class 棋譜{
             else if(v.startsWith('**Engines')){
                 result.解析済み = true
             }
+            else if(v.startsWith('手数＝')){
+                result.最終手 = v
+            }
             else if(v === '先手番' || v === '下手番'){
                 result.開始手番 = '先手'
             }
             else if(v === '後手番' || v === '上手番'){
                 result.開始手番 = '後手'
-            }
-            else if(v.match(/手数＝\d/)){
-                result.最終手 = v
             }
             else if(v.match(/^[1\*]/)){
                 result.全指し手 = kif.slice(i)
