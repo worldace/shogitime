@@ -32,6 +32,14 @@ class 将棋タイム extends HTMLElement{
 
 
 
+    disconnectedCallback(){
+        if(this.$グラフ){
+            this.$グラフ.remove()
+        }
+    }
+
+
+
     attributeChangedCallback(name, oldValue, newValue){
         this[name] = newValue
     }
@@ -894,6 +902,14 @@ class グラフ extends HTMLElement{
 
 
 
+    $グラフ_click(event){
+        if(event.target.tagName === 'circle'){
+            this.owner.go(event.target.getAttribute('data-i'))
+        }
+    }
+
+
+
     座標計算(評価値, width, height, Ymax, 反転){
         const 座標  = []
         const X刻み = width / (評価値.length-1)
@@ -936,14 +952,6 @@ class グラフ extends HTMLElement{
             result += `L${座標[i].x},${height/2}`
         }
         return result.replace('L', 'M') + 'Z'
-    }
-
-
-
-    $グラフ_click(event){
-        if(event.target.tagName === 'circle'){
-            this.owner.go(event.target.getAttribute('data-i'))
-        }
     }
 
 
