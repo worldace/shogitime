@@ -73,7 +73,7 @@ class 将棋タイム extends HTMLElement{
 
         //マスハイライト
         if(this.最終手){
-            this.$将棋盤.append(this.描画_ハイライト(this.最終手.charAt(0), this.最終手.charAt(1), 反転))
+            this.$将棋盤.append(this.描画_ハイライト(this.最終手[0], this.最終手[1], 反転))
         }
         else if(手数 !== 0){
             this.$将棋盤.append(this.描画_ハイライト(指し手.後X, 指し手.後Y, 反転))
@@ -1303,12 +1303,9 @@ class 棋譜{
             return 初期持駒
         }
 
-        for(const v of 持駒.split(/\s/)){
-            const 駒 = v[0]
-            const 数 = v[1]
-
+        for(const [駒, 数] of 持駒.split(/\s/)){
             if(駒 in 初期持駒){
-                初期持駒[駒] = (数) ? 漢数字[数] : 1
+                初期持駒[駒] = 数 ? 漢数字[数] : 1
             }
         }
         return 初期持駒
@@ -1425,7 +1422,7 @@ class 棋譜{
 
         for(const v of kif){
             if(v.includes('**解析 0 ')){
-                全読み筋.push(String(v.match(/ 読み筋 (.*)/)[1]))
+                全読み筋.push(v.match(/ 読み筋 (.*)/)[1] || '')
             }
         }
         return 全読み筋
