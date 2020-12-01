@@ -6,7 +6,7 @@ class 将棋タイム extends HTMLElement{
         benry(this)
 
         if(this.src){
-            this.kif = await this.棋譜ダウンロード(this.src)
+            this.kif = await 棋譜.ダウンロード(this.src)
         }
         if(this.comment){
             this.$コメント = document.getElementById(this.comment)
@@ -39,17 +39,6 @@ class 将棋タイム extends HTMLElement{
 
     static get observedAttributes(){
         return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
-    }
-
-
-
-    async 棋譜ダウンロード(url){
-        const response = await fetch(url)
-        if(url.match(/kifu$/i)){
-            return await response.text()
-        }
-        const buffer = await response.arrayBuffer()
-        return new TextDecoder('shift-jis').decode(buffer)
     }
 
 
@@ -225,7 +214,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    手数確認(手数 = 0, 総手数){
+    手数確認(手数, 総手数){
         if(!手数 || !総手数){
             return 0
         }
@@ -240,7 +229,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    go(手数 = 0){
+    go(手数){
         this.手数 = this.手数確認(手数, this.総手数)
         this.描画()
     }
@@ -1125,6 +1114,17 @@ class 棋譜{
 
 
 
+    static async ダウンロード(url){
+        const response = await fetch(url)
+        if(url.match(/kifu$/i)){
+            return await response.text()
+        }
+        const buffer = await response.arrayBuffer()
+        return new TextDecoder('shift-jis').decode(buffer)
+    }
+
+
+
     static 開始手番(開始手番, 手合割){
         if(開始手番){
             return 開始手番
@@ -1506,7 +1506,7 @@ function benry(self){
     self.$shadow.innerHTML += self.constructor.html || ''
 
     for(const el of self.$shadow.querySelectorAll('[id]')){
-        self['$'+el.id] = el
+        self[`$${el.id}`] = el
     }
 
     for(const name of Object.getOwnPropertyNames(self.constructor.prototype)){
@@ -1525,5 +1525,5 @@ function benry(self){
 
 
 
-customElements.define('shogi-time', 将棋タイム)
 customElements.define('shogi-time-graph', グラフ)
+customElements.define('shogi-time', 将棋タイム)
