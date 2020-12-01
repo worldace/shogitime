@@ -1523,5 +1523,5 @@ function benry(self){
 
 
 
-customElements.define('shogi-time', 将棋タイム)
 customElements.define('shogi-time-graph', グラフ)
+customElements.define('shogi-time', 将棋タイム)
