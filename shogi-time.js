@@ -884,20 +884,12 @@ class グラフ extends HTMLElement{
 
 
     更新(手数 = 0, 評価値 = '', 読み筋 = ''){
-        if(手数 == 0){
-            this.$現在線.setAttribute('x1', 0)
-            this.$現在線.setAttribute('x2', 0)
-            this.$ヒント.style.display = 'none'
-        }
-        else{
-            this.$現在線.setAttribute('x1', this.座標[手数].x)
-            this.$現在線.setAttribute('x2', this.座標[手数].x)
-
-            this.$手数.textContent     = `${手数}手目`
-            this.$評価値.textContent   = 評価値
-            this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
-            this.$ヒント.style.display = 'block'
-        }
+        this.$現在線.setAttribute('x1', this.座標[手数].x)
+        this.$現在線.setAttribute('x2', this.座標[手数].x)
+        this.$手数.textContent     = `${手数}手目`
+        this.$評価値.textContent   = 評価値
+        this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
+        this.$ヒント.style.display = 手数 ? 'block' : 'none'
     }
 
 
