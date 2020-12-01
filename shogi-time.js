@@ -183,10 +183,11 @@ class 将棋タイム extends HTMLElement{
 
 
     描画_変化選択(){
-        for(let i = 0; i < this.全指し手.変化手数.length; i++){
-            if(this.全指し手.変化手数[i] !== this.手数){
+        for(const [i, v] of this.全指し手.変化手数.entries()){
+            if(v !== this.手数){
                 continue
             }
+
             const div = document.createElement('div')
             div.textContent = this.全指し手[i+1][this.手数].手番 + this.全指し手[i+1][this.手数].手
             div.変化        = i + 1
@@ -197,10 +198,11 @@ class 将棋タイム extends HTMLElement{
 
 
     描画_変化中選択(){
-        for(let i = 0; i < this.全指し手.変化手数.length; i++){
-            if(this.全指し手.変化手数[i] !== this.変化手数){
+        for(const [i, v] of this.全指し手.変化手数.entries()){
+            if(v !== this.変化手数){
                 continue
             }
+
             const div = document.createElement('div')
             if(this.変化 === i + 1){
                 div.textContent = '本線に戻る'
@@ -870,12 +872,12 @@ class グラフ extends HTMLElement{
         this.$塗り潰し.setAttribute('d', this.塗り潰し計算(this.座標, height))
 
         this.$g.innerHTML = ''
-        for(let i = 0; i < this.座標.length; i++){
+        for(const [i, v] of this.座標.entries()){
             const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
             el.setAttribute('class', '点')
             el.setAttribute('data-i', i)
-            el.setAttribute('cx', this.座標[i].x)
-            el.setAttribute('cy', this.座標[i].y)
+            el.setAttribute('cx', v.x)
+            el.setAttribute('cy', v.y)
             el.setAttribute('r', 3)
             this.$g.append(el)
         }
@@ -905,11 +907,8 @@ class グラフ extends HTMLElement{
     座標計算(評価値, width, height, Ymax, 反転){
         const 座標  = []
         const X刻み = width / (評価値.length-1)
-        const Y半分 = height / 2
 
-        for(let i = 0; i < 評価値.length; i++){
-            let y = 評価値[i]
-
+        for(let [i, y] of 評価値.entries()){
             if(y > Ymax || y === '+詰'){
                 y = Ymax
             }
@@ -920,7 +919,7 @@ class グラフ extends HTMLElement{
                 y = -y
             }
 
-            座標.push({'x':i*X刻み, 'y':Y半分-(y/Ymax*Y半分)})
+            座標.push({'x':i*X刻み, 'y':(height/2)-(y/Ymax*height/2)})
         }
 
         return 座標
@@ -940,8 +939,8 @@ class グラフ extends HTMLElement{
         for(const v of 座標){
             result += `L${v.x},${v.y}`
         }
-        for(let i = 座標.length - 1; i >= 0; i--){
-            result += `L${座標[i].x},${height/2}`
+        for(const v of 座標.concat().reverse()){
+            result += `L${v.x},${height/2}`
         }
         return result.replace('L', 'M') + 'Z'
     }
@@ -1074,24 +1073,24 @@ class 棋譜{
         const result = {局面図:[]}
         const kif    = text.trim().split(/\r?\n/)
 
-        for(let i = 0; i < kif.length; i++){
-            const v = kif[i].trim()
+        for(let [i, v] of kif.entries()){
+            v = v.trim()
 
             if(v.startsWith('#')){
                 continue
             }
+            else if(v.startsWith('**Engines')){
+                result.解析済み = true
+            }
             else if(v.startsWith('|')){
                 result.局面図.push(v)
+            }
+            else if(v.startsWith('手数＝')){
+                result.最終手 = v
             }
             else if(v.includes('：')){
                 const [name, value] = v.split('：')
                 result[name] = value
-            }
-            else if(v.startsWith('**Engines')){
-                result.解析済み = true
-            }
-            else if(v.startsWith('手数＝')){
-                result.最終手 = v
             }
             else if(v === '先手番' || v === '下手番'){
                 result.開始手番 = '先手'
@@ -1149,33 +1148,31 @@ class 棋譜{
 
         const 局面 = this.局面図_駒無し()
         const 変換 = {'王':'玉', '竜':'龍'}
-        let   先手 = true
-        let   x    = 10
 
         for(let y = 0; y < 9; y++){
-            x = 10
-            const str = 局面図[y]
-            for(let i = 1; i < str.length; i++){
-                if(str[i] === ' '){
+            let 先手 = true
+            let x    = 10
+ 
+            for(let v of 局面図[y].slice(1)){
+                if(v === ' '){
                     先手 = true
                     x -= 1
                     continue
                 }
-                else if(str[i] === 'v'){
+                else if(v === 'v'){
                     先手 = false
                     x -= 1
                     continue
                 }
-                else if(str[i] === '・'){
+                else if(v === '・'){
                     continue
                 }
-                else if(str[i] === '|'){
+                else if(v === '|'){
                     break
                 }
 
-                let 駒 = str[i]
-                駒 = (駒 in 変換) ? 変換[駒] : 駒
-                局面[y+1][x] = 先手 ? 駒 : `${駒}_`
+                v = (v in 変換) ? 変換[v] : v
+                局面[y+1][x] = 先手 ? v : `${v}_`
             }
         }
         return 局面
@@ -1300,17 +1297,15 @@ class 棋譜{
 
     static 持駒(持駒){
         const 初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0}
+        const 漢数字   = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9, '十':10, '十一':11, '十二':12, '十三':13, '十四':14, '十五':15, '十六':16, '十七':17, '十八':18}
 
         if(!持駒 || 持駒.includes('なし')){
             return 初期持駒
         }
 
-        const 漢数字 = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9, '十':10, '十一':11, '十二':12, '十三':13, '十四':14, '十五':15, '十六':16, '十七':17, '十八':18}
-        const str    = 持駒.split(/\s/)
-
-        for(let i = 0; i < str.length; i++){
-            const 駒 = str[i][0]
-            const 数 = str[i][1]
+        for(const v of 持駒.split(/\s/)){
+            const 駒 = v[0]
+            const 数 = v[1]
 
             if(駒 in 初期持駒){
                 初期持駒[駒] = (数) ? 漢数字[数] : 1
@@ -1322,27 +1317,27 @@ class 棋譜{
 
 
     static 全指し手(kif, 開始手番){
-        const result = [[{手数:0, コメント:''}]]
-        let 変化     = 0
-        let 手数     = 0
-
+        const result    = [[{手数:0, コメント:''}]]
         result.変化手数 = []
+        let 変化 = 0
+        let 手数 = 0
+
         if(!kif){
             return result
         }
 
-        for(let i = 0; i < kif.length; i++){
-            kif[i] = kif[i].trim()
+        for(let v of kif){
+            v = v.trim()
 
-            if(kif[i].indexOf('*') === 0 && result[変化][手数]){ //指し手コメント
-                result[変化][手数].コメント += kif[i].replace(/^\*/, '') + '\n'
+            if(v.startsWith('*') && result[変化][手数]){ //指し手コメント
+                result[変化][手数].コメント += v.replace(/^\*/, '') + '\n'
             }
-            else if(kif[i].match(/^\d/)){
+            else if(v.match(/^\d/)){
                 手数++
-                this.指し手_現在の手(result[変化], kif[i], 手数, 開始手番)
+                this.指し手_現在の手(result[変化], v, 手数, 開始手番)
             }
-            else if(kif[i].includes('変化：')){
-                手数 = Number(kif[i].match(/変化：(\d+)/)[1])
+            else if(v.includes('変化：')){
+                手数 = Number(v.match(/変化：(\d+)/)[1])
                 result.push(result[0].slice(0, 手数))
                 result.変化手数.push(手数)
                 手数--
@@ -1415,9 +1410,9 @@ class 棋譜{
     static 評価値(kif){
         const 評価値 = []
 
-        for(let i = 0; i < kif.length; i++){
-            if(kif[i].includes('**解析 0 ')){
-                評価値.push(kif[i].match(/評価値 (\S+)/)[1].replace(/↓|↑/, ''))
+        for(const v of kif){
+            if(v.includes('**解析 0 ')){
+                評価値.push(v.match(/評価値 (\S+)/)[1].replace(/↓|↑/, ''))
             }
         }
         return 評価値
@@ -1428,9 +1423,9 @@ class 棋譜{
     static 読み筋(kif){
         const 全読み筋 = ['-']
 
-        for(let i = 0; i < kif.length; i++){
-            if(kif[i].includes('**解析 0 ')){
-                全読み筋.push(String(kif[i].match(/ 読み筋 (.*)/)[1]))
+        for(const v of kif){
+            if(v.includes('**解析 0 ')){
+                全読み筋.push(String(v.match(/ 読み筋 (.*)/)[1]))
             }
         }
         return 全読み筋
@@ -1441,7 +1436,7 @@ class 棋譜{
     static 全局面作成(全指し手, 初期局面){
         const result = []
 
-        for(let i = 0; i < 全指し手.length; i++){
+        for(const i of 全指し手.keys()){
             result[i] = [初期局面]
             for(let j = 1; j < 全指し手[i].length; j++){
                 result[i].push(this.各局面作成(全指し手[i][j], result[i][j-1]))
@@ -1465,7 +1460,10 @@ class 棋譜{
             return 局面
         }
 
-        if(指し手.前X !== 0){ //駒を移動する場合
+        if(指し手.前X === 0){ //駒を打つ場合
+            局面[`${手番}の持駒`][駒]--
+        }
+        else{ //駒を移動する場合
             局面.駒[指し手.前Y][指し手.前X] = null
 
             if(指し手.成り){ //駒が成る場合
@@ -1477,9 +1475,6 @@ class 棋譜{
                 取った駒 = (取った駒 in 逆変換) ? 逆変換[取った駒] : 取った駒
                 局面[`${手番}の持駒`][取った駒]++
             }
-        }
-        else{ //駒を打つ場合
-            局面[`${手番}の持駒`][駒]--
         }
 
         if(手番 === '後手'){
