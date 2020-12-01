@@ -3,7 +3,7 @@
 class 将棋タイム extends HTMLElement{
 
     async connectedCallback(){
-        chori(this)
+        benry(this)
 
         if(this.src){
             this.kif = await this.棋譜ダウンロード(this.src)
@@ -50,6 +50,21 @@ class 将棋タイム extends HTMLElement{
         }
         const buffer = await response.arrayBuffer()
         return new TextDecoder('shift-jis').decode(buffer)
+    }
+
+
+
+    初回描画(){
+        if(this.controller === 'none'){
+            this.$コントローラー.style.display = 'none'
+        }
+        if(this.$グラフ){
+            this.$グラフ.描画()
+        }
+
+        this.駒音 = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
+        this.描画_指し手選択()
+        this.描画()
     }
 
 
@@ -119,21 +134,6 @@ class 将棋タイム extends HTMLElement{
         else if(this.変化 && this.変化手数 === 手数){
             this.描画_変化中選択()
         }
-    }
-
-
-
-    初回描画(){
-        if(this.controller === 'none'){
-            this.$コントローラー.style.display = 'none'
-        }
-        if(this.$グラフ){
-            this.$グラフ.描画()
-        }
-
-        this.駒音 = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
-        this.描画_指し手選択()
-        this.描画()
     }
 
 
@@ -856,7 +856,7 @@ class 将棋タイム extends HTMLElement{
 class グラフ extends HTMLElement{
 
     connectedCallback(){
-        chori(this)
+        benry(this)
     }
 
 
@@ -1489,7 +1489,7 @@ class 棋譜{
             }
         }
         else{ //駒を打つ場合
-            局面[手番+'の持駒'][駒]--
+            局面[`${手番}の持駒`][駒]--
         }
 
         if(手番 === '後手'){
@@ -1505,7 +1505,7 @@ class 棋譜{
 
 
 
-function chori(self){
+function benry(self){
     self.$shadow = self.attachShadow({mode:'open'})
     self.$shadow.innerHTML =  `<style id="css">${self.constructor.css || ''}</style>`
     self.$shadow.innerHTML += self.constructor.html || ''
