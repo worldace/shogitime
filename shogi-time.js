@@ -8,6 +8,7 @@ class 将棋タイム extends HTMLElement{
         if(this.src){
             this.kif = await 棋譜.ダウンロード(this.src)
         }
+
         Object.assign(this, 棋譜.解析(this.kif))
 
         this.手数   = this.手数確認(this.start, this.総手数)
@@ -1521,7 +1522,6 @@ function benry(self){
         }
     }
 }
-
 
 
 customElements.define('shogi-time-graph', グラフ)
