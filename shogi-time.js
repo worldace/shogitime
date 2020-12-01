@@ -18,7 +18,7 @@ class 将棋タイム extends HTMLElement{
 
         Object.assign(this, 棋譜.解析(this.kif))
 
-        this.手数   = this.手数初期値(this.start, this.総手数)
+        this.手数   = this.手数確認(this.start, this.総手数)
         this.全局面 = 棋譜.全局面作成(this.全指し手, this.初期局面)
 
         if(this.後手名.includes(this.myname)){
@@ -225,7 +225,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    手数初期値(手数 = 0, 総手数){
+    手数確認(手数 = 0, 総手数){
         if(!手数 || !総手数){
             return 0
         }
@@ -241,7 +241,7 @@ class 将棋タイム extends HTMLElement{
 
 
     go(手数 = 0){
-        this.手数 = this.手数初期値(手数, this.総手数)
+        this.手数 = this.手数確認(手数, this.総手数)
         this.描画()
     }
 
@@ -891,7 +891,7 @@ class グラフ extends HTMLElement{
 
 
 
-    更新(手数, 評価値, 読み筋){
+    更新(手数 = 0, 評価値 = '', 読み筋 = ''){
         if(手数 == 0){
             this.$現在線.setAttribute('x1', 0)
             this.$現在線.setAttribute('x2', 0)
@@ -903,7 +903,7 @@ class グラフ extends HTMLElement{
 
             this.$手数.textContent     = `${手数}手目`
             this.$評価値.textContent   = 評価値
-            this.$読み筋.textContent   = (読み筋 || '').replace(/ .*/, '').replace(/　/, '')
+            this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
             this.$ヒント.style.display = 'block'
         }
     }
