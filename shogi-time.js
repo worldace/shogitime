@@ -1,4 +1,4 @@
-
+//グラフの読み筋の同を数字にする
 
 class 将棋タイム extends HTMLElement{
 
@@ -240,7 +240,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    go(手数){
+    go(手数 = 0){
         this.手数 = this.手数初期値(手数, this.総手数)
         this.描画()
     }
@@ -255,12 +255,11 @@ class 将棋タイム extends HTMLElement{
 
 
     $最初に移動ボタン_click(event){
-        this.手数 = 0
         if(this.変化){
             this.変化 = 0
             this.描画_指し手選択()
         }
-        this.描画()
+        this.go(0)
     }
 
 
@@ -270,8 +269,7 @@ class 将棋タイム extends HTMLElement{
             this.$指し手選択.selectedIndex = this.$指し手選択.length - 2
         }
         else if(this.手数 > 0){
-            this.手数--
-            this.描画()
+            this.go(this.手数-1)
         }
     }
 
@@ -281,8 +279,7 @@ class 将棋タイム extends HTMLElement{
         const 総手数 = this.全指し手[this.変化].length - 1
 
         if(this.手数 < 総手数){
-            this.手数++
-            this.描画()
+            this.go(this.手数+1)
             this.駒音再生()
         }
         else{
@@ -293,8 +290,7 @@ class 将棋タイム extends HTMLElement{
 
 
     $最後に移動ボタン_click(event){
-        this.手数 = this.全指し手[this.変化].length - 1
-        this.描画()
+        this.go(this.全指し手[this.変化].length - 1)
         this.$指し手選択.selectedIndex = this.$指し手選択.length - 1
     }
 
@@ -305,8 +301,7 @@ class 将棋タイム extends HTMLElement{
             this.$最後に移動ボタン.click()
         }
         else{
-            this.手数 = this.$指し手選択.selectedIndex
-            this.描画()
+            this.go(this.$指し手選択.selectedIndex)
         }
     }
 
