@@ -1142,7 +1142,7 @@ class 棋譜{
 
 
 
-    static 局面図 = function(局面図, 手合割){
+    static 局面図(局面図, 手合割){
         if(局面図.length !== 9){
             return 手合割 ? this.局面図_手合割(手合割) : this.局面図_平手()
         }
