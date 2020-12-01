@@ -13,6 +13,7 @@ class 将棋タイム extends HTMLElement{
 
         this.手数   = this.手数確認(this.start, this.総手数)
         this.全局面 = 棋譜.全局面作成(this.全指し手, this.初期局面)
+        this.駒音   = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
 
         if(this.後手名.includes(this.myname)){
             this.setAttribute('reverse', 'reverse')
@@ -26,7 +27,7 @@ class 将棋タイム extends HTMLElement{
             document.getElementById(this.graph).append(this.$グラフ)
         }
 
-        this.初回描画()
+        this.描画(true)
     }
 
 
@@ -43,28 +44,21 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    初回描画(){
-        if(this.controller === 'none'){
-            this.$コントローラー.style.display = 'none'
-        }
-        if(this.$グラフ){
-            this.$グラフ.描画()
-        }
-
-        this.駒音 = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
-        this.描画_指し手選択()
-        this.描画()
-    }
-
-
-
-    描画(){
+    描画(初回){
         const 手数   = this.手数
         const 局面   = this.全局面[this.変化][手数]
         const 指し手 = this.全指し手[this.変化][手数]
         const 反転   = this.reverse
         const 先手   = (反転) ? '後手' : '先手'
         const 後手   = (反転) ? '先手' : '後手'
+ 
+        //初回描画
+        if(初回){
+            if(this.controller === 'none'){
+                this.$コントローラー.style.display = 'none'
+            }
+            this.描画_指し手選択()
+        }
 
         //初期化
         this.$将棋盤.innerHTML = ''
@@ -841,6 +835,7 @@ class グラフ extends HTMLElement{
 
     connectedCallback(){
         benry(this)
+        this.描画()
     }
 
 
