@@ -1,4 +1,3 @@
-//グラフの読み筋の同を数字にする
 
 class 将棋タイム extends HTMLElement{
 
@@ -11,10 +10,6 @@ class 将棋タイム extends HTMLElement{
         if(this.comment){
             this.$コメント = document.getElementById(this.comment)
         }
-        if(this.graph){
-            this.$グラフ = document.getElementById(this.graph)
-            this.$グラフ.owner = this
-        }
 
         Object.assign(this, 棋譜.解析(this.kif))
 
@@ -25,8 +20,8 @@ class 将棋タイム extends HTMLElement{
             this.setAttribute('reverse', 'reverse')
         }
 
+        this.dispatchEvent(new CustomEvent('接続', {detail:{手数:this.手数}}))
         this.初回描画()
-        this.dispatchEvent(new CustomEvent('将棋タイム開始', {bubbles:true}))
     }
 
 
@@ -46,9 +41,6 @@ class 将棋タイム extends HTMLElement{
     初回描画(){
         if(this.controller === 'none'){
             this.$コントローラー.style.display = 'none'
-        }
-        if(this.$グラフ){
-            this.$グラフ.描画()
         }
 
         this.駒音 = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
@@ -110,11 +102,6 @@ class 将棋タイム extends HTMLElement{
             this.$コメント.textContent = 指し手.コメント
         }
 
-        //グラフ
-        if(this.$グラフ){
-            this.$グラフ.更新(手数, this.評価値[手数], this.読み筋[手数])
-        }
-
         //変化選択
         this.$変化選択.innerHTML = ''
         if(!this.変化 && this.全指し手.変化手数.includes(手数)){
@@ -123,6 +110,8 @@ class 将棋タイム extends HTMLElement{
         else if(this.変化 && this.変化手数 === 手数){
             this.描画_変化中選択()
         }
+
+        this.dispatchEvent(new CustomEvent('更新', {detail:{手数}}))
     }
 
 
@@ -298,9 +287,7 @@ class 将棋タイム extends HTMLElement{
 
     $反転ボタン_click(event){
         this.hasAttribute('reverse') ? this.removeAttribute('reverse') : this.setAttribute('reverse', 'reverse')
-        if(this.$グラフ){
-            this.$グラフ.描画()
-        }
+        this.dispatchEvent(new CustomEvent('反転', {detail:{手数:this.手数}}))
         this.描画()
     }
 
@@ -840,17 +827,18 @@ class 将棋タイム extends HTMLElement{
 class グラフ extends HTMLElement{
 
     connectedCallback(){
+        this.$owner = document.querySelector(`shogi-time[graph="${this.id}"]`)
         benry(this)
     }
 
 
 
-    描画(){
+    $owner_接続(){
         const Ymax   = 3000
         const width  = this.getAttribute('width') || 800
         const height = this.getAttribute('height')|| 200
 
-        this.座標 = this.座標計算(this.owner.評価値, width, height, Ymax, this.owner.reverse)
+        this.座標 = this.座標計算(this.$owner.評価値, width, height, Ymax, this.$owner.reverse)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -880,7 +868,17 @@ class グラフ extends HTMLElement{
 
 
 
-    更新(手数 = 0, 評価値 = '', 読み筋 = ''){
+    $owner_反転(event){
+        this.$owner_接続(event)
+    }
+
+
+
+    $owner_更新(event){
+        const 手数   = event.detail.手数
+        const 評価値 = this.$owner.評価値[手数]
+        const 読み筋 = this.$owner.読み筋[手数]
+
         if(手数 == 0){
             this.$現在線.setAttribute('x1', 0)
             this.$現在線.setAttribute('x2', 0)
@@ -947,7 +945,7 @@ class グラフ extends HTMLElement{
 
     $グラフ_click(event){
         if(event.target.tagName === 'circle'){
-            this.owner.go(event.target.getAttribute('data-i'))
+            this.$owner.go(event.target.getAttribute('data-i'))
         }
     }
 
@@ -1525,5 +1523,5 @@ function benry(self){
 
 
 
-customElements.define('shogi-time-graph', グラフ)
 customElements.define('shogi-time', 将棋タイム)
+customElements.define('shogi-time-graph', グラフ)
