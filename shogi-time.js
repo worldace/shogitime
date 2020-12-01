@@ -876,8 +876,6 @@ class グラフ extends HTMLElement{
 
     $owner_更新(event){
         const 手数   = event.detail.手数
-        const 評価値 = this.$owner.評価値[手数]
-        const 読み筋 = this.$owner.読み筋[手数]
 
         if(手数 == 0){
             this.$現在線.setAttribute('x1', 0)
@@ -889,8 +887,8 @@ class グラフ extends HTMLElement{
             this.$現在線.setAttribute('x2', this.座標[手数].x)
 
             this.$手数.textContent     = `${手数}手目`
-            this.$評価値.textContent   = 評価値
-            this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
+            this.$評価値.textContent   = this.$owner.評価値[手数]
+            this.$読み筋.textContent   = this.$owner.読み筋[手数].replace(/ .*/, '').replace(/　/, '')
             this.$ヒント.style.display = 'block'
         }
     }
