@@ -240,7 +240,7 @@ class 将棋タイム extends HTMLElement{
 
     $局面_click(event){
         const {left, width} = this.$局面.getBoundingClientRect();
-        (event.clientX-left < width/2) ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
+        (event.clientX < left+width/2) ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
     }
 
 
