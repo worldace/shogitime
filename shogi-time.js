@@ -1,3 +1,4 @@
+//グラフの読み筋の同を数字にする
 
 class 将棋タイム extends HTMLElement{
 
@@ -7,10 +8,6 @@ class 将棋タイム extends HTMLElement{
         if(this.src){
             this.kif = await 棋譜.ダウンロード(this.src)
         }
-        if(this.comment){
-            this.$コメント = document.getElementById(this.comment)
-        }
-
         Object.assign(this, 棋譜.解析(this.kif))
 
         this.手数   = this.手数確認(this.start, this.総手数)
@@ -19,8 +16,15 @@ class 将棋タイム extends HTMLElement{
         if(this.後手名.includes(this.myname)){
             this.setAttribute('reverse', 'reverse')
         }
+        if(this.comment){
+            this.$コメント = document.getElementById(this.comment)
+        }
+        if(this.graph){
+            this.$グラフ = document.createElement('shogi-time-graph')
+            this.$グラフ.owner = this
+            document.getElementById(this.graph).append(this.$グラフ)
+        }
 
-        this.dispatchEvent(new CustomEvent('接続', {detail:{手数:this.手数}}))
         this.初回描画()
     }
 
@@ -33,7 +37,7 @@ class 将棋タイム extends HTMLElement{
 
 
     static get observedAttributes(){
-        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
+        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph', 'graph-width', 'graph-height']
     }
 
 
@@ -41,6 +45,9 @@ class 将棋タイム extends HTMLElement{
     初回描画(){
         if(this.controller === 'none'){
             this.$コントローラー.style.display = 'none'
+        }
+        if(this.$グラフ){
+            this.$グラフ.描画()
         }
 
         this.駒音 = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
@@ -102,6 +109,11 @@ class 将棋タイム extends HTMLElement{
             this.$コメント.textContent = 指し手.コメント
         }
 
+        //グラフ
+        if(this.$グラフ){
+            this.$グラフ.更新(手数, this.評価値[手数], this.読み筋[手数])
+        }
+
         //変化選択
         this.$変化選択.innerHTML = ''
         if(!this.変化 && this.全指し手.変化手数.includes(手数)){
@@ -110,8 +122,6 @@ class 将棋タイム extends HTMLElement{
         else if(this.変化 && this.変化手数 === 手数){
             this.描画_変化中選択()
         }
-
-        this.dispatchEvent(new CustomEvent('更新', {detail:{手数}}))
     }
 
 
@@ -287,7 +297,9 @@ class 将棋タイム extends HTMLElement{
 
     $反転ボタン_click(event){
         this.hasAttribute('reverse') ? this.removeAttribute('reverse') : this.setAttribute('reverse', 'reverse')
-        this.dispatchEvent(new CustomEvent('反転', {detail:{手数:this.手数}}))
+        if(this.$グラフ){
+            this.$グラフ.描画()
+        }
         this.描画()
     }
 
@@ -827,18 +839,17 @@ class 将棋タイム extends HTMLElement{
 class グラフ extends HTMLElement{
 
     connectedCallback(){
-        this.$owner = document.querySelector(`shogi-time[graph="${this.id}"]`)
         benry(this)
     }
 
 
 
-    $owner_接続(){
+    描画(){
         const Ymax   = 3000
-        const width  = this.getAttribute('width') || 800
-        const height = this.getAttribute('height')|| 200
+        const width  = this.owner.getAttribute('graph-width') || 800
+        const height = this.owner.getAttribute('graph-height')|| 200
 
-        this.座標 = this.座標計算(this.$owner.評価値, width, height, Ymax, this.$owner.reverse)
+        this.座標 = this.座標計算(this.owner.評価値, width, height, Ymax, this.owner.reverse)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -868,15 +879,7 @@ class グラフ extends HTMLElement{
 
 
 
-    $owner_反転(event){
-        this.$owner_接続(event)
-    }
-
-
-
-    $owner_更新(event){
-        const 手数   = event.detail.手数
-
+    更新(手数 = 0, 評価値 = '', 読み筋 = ''){
         if(手数 == 0){
             this.$現在線.setAttribute('x1', 0)
             this.$現在線.setAttribute('x2', 0)
@@ -887,17 +890,9 @@ class グラフ extends HTMLElement{
             this.$現在線.setAttribute('x2', this.座標[手数].x)
 
             this.$手数.textContent     = `${手数}手目`
-            this.$評価値.textContent   = this.$owner.評価値[手数]
-            this.$読み筋.textContent   = this.$owner.読み筋[手数].replace(/ .*/, '').replace(/　/, '')
+            this.$評価値.textContent   = 評価値
+            this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
             this.$ヒント.style.display = 'block'
-        }
-    }
-
-
-
-    $グラフ_click(event){
-        if(event.target.tagName === 'circle'){
-            this.$owner.go(event.target.getAttribute('data-i'))
         }
     }
 
@@ -945,6 +940,14 @@ class グラフ extends HTMLElement{
             result += `L${座標[i].x},${height/2}`
         }
         return result.replace('L', 'M') + 'Z'
+    }
+
+
+
+    $グラフ_click(event){
+        if(event.target.tagName === 'circle'){
+            this.owner.go(event.target.getAttribute('data-i'))
+        }
     }
 
 
