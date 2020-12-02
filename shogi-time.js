@@ -1486,11 +1486,11 @@ class 棋譜{
 
 
 function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
-    self.$shadow = self.attachShadow({mode:'open'})
-    self.$shadow.innerHTML =  `<style id="css">${self.css || ''}</style>`
-    self.$shadow.innerHTML += self.html || ''
+    self.$ = self.attachShadow({mode:'open'})
+    self.$.innerHTML =  `<style id="css">${self.css || ''}</style>`
+    self.$.innerHTML += self.html || ''
 
-    for(const el of self.$shadow.querySelectorAll('[id]')){
+    for(const el of self.$.querySelectorAll('[id]')){
         self[`$${el.id}`] = el
     }
 
