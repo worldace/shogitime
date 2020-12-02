@@ -24,7 +24,7 @@ class 将棋タイム extends HTMLElement{
         }
         if(this.graph){
             this.$グラフ = document.createElement('shogi-time-graph')
-            this.$グラフ.owner = this
+            this.$グラフ.$本体 = this
             document.getElementById(this.graph).append(this.$グラフ)
         }
 
@@ -394,7 +394,7 @@ class 将棋タイム extends HTMLElement{
             <div id="ダイアログ_コンテンツ">
               <div id="ダイアログ_棋譜コピーボタン">棋譜をコピーする</div>
               <textarea id="ダイアログ_棋譜テキスト" readonly></textarea>
-              <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.1</a></div>
+              <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.2</a></div>
             </div>
           </div>
         </div>`
@@ -750,7 +750,7 @@ class 将棋タイム extends HTMLElement{
             width: 20px;
             height: 20px;
             background-repeat: no-repeat;
-            background-image: url('ダイアログ-閉じるボタン.svg');
+            background-image: url('ダイアログ_閉じるボタン.svg');
             background-size: 20px;
             cursor: pointer;
         }
@@ -841,10 +841,10 @@ class グラフ extends HTMLElement{
 
     描画(){
         const Ymax   = 3000
-        const width  = this.owner.getAttribute('graph-width') || 800
-        const height = this.owner.getAttribute('graph-height')|| 200
+        const width  = this.$本体.getAttribute('graph-width') || 800
+        const height = this.$本体.getAttribute('graph-height')|| 200
 
-        this.座標 = this.座標計算(this.owner.評価値, width, height, Ymax, this.owner.reverse)
+        this.座標 = this.座標計算(this.$本体.評価値, width, height, Ymax, this.$本体.reverse)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -887,7 +887,7 @@ class グラフ extends HTMLElement{
 
     $グラフ_click(event){
         if(event.target.tagName === 'circle'){
-            this.owner.go(event.target.getAttribute('data-i'))
+            this.$本体.go(event.target.getAttribute('data-i'))
         }
     }
 
