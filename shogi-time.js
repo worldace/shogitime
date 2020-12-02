@@ -2,8 +2,21 @@
 
 class 将棋タイム extends HTMLElement{
 
+    static get observedAttributes(){
+        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph', 'graphwidth', 'graphheight']
+    }
+
+
+
+    attributeChangedCallback(name, oldValue, newValue){
+        this[name] = newValue
+    }
+
+
+
     async connectedCallback(){
         this.baseurl = import.meta.url.replace(/[^\/]*$/, '')
+
         benry(this)
 
         if(this.src){
@@ -37,18 +50,6 @@ class 将棋タイム extends HTMLElement{
         if(this.$グラフ){
             this.$グラフ.remove()
         }
-    }
-
-
-
-    attributeChangedCallback(name, oldValue, newValue){
-        this[name] = newValue
-    }
-
-
-
-    static get observedAttributes(){
-        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph', 'graph-width', 'graph-height']
     }
 
 
@@ -219,6 +220,20 @@ class 将棋タイム extends HTMLElement{
 
 
 
+    駒音再生(){
+        this.駒音.currentTime = 0
+        this.駒音.play()
+    }
+
+
+
+    go(手数){
+        this.手数 = this.手数確認(手数, this.総手数)
+        this.描画()
+    }
+
+
+
     手数確認(手数, 総手数){
         if(!手数 || !総手数){
             return 0
@@ -230,13 +245,6 @@ class 将棋タイム extends HTMLElement{
             return Number(総手数)
         }
         return Number(手数)
-    }
-
-
-
-    go(手数){
-        this.手数 = this.手数確認(手数, this.総手数)
-        this.描画()
     }
 
 
@@ -340,13 +348,6 @@ class 将棋タイム extends HTMLElement{
 
         this.描画_指し手選択()
         this.$次に移動ボタン.click()
-    }
-
-
-
-    駒音再生(){
-        this.駒音.currentTime = 0
-        this.駒音.play()
     }
 
 
@@ -841,8 +842,8 @@ class グラフ extends HTMLElement{
 
     描画(){
         const Ymax   = 3000
-        const width  = this.$本体.getAttribute('graph-width') || 800
-        const height = this.$本体.getAttribute('graph-height')|| 200
+        const width  = this.$本体.graphwidth  || 800
+        const height = this.$本体.graphheight || 200
 
         this.座標 = this.座標計算(this.$本体.評価値, width, height, Ymax, this.$本体.reverse)
 
@@ -1323,7 +1324,7 @@ class 棋譜{
             }
             else if(v.match(/^\d/)){
                 手数++
-                this.指し手_現在の手(result[変化], v, 手数, 開始手番)
+                this.全指し手_現在の手(result[変化], v, 手数, 開始手番)
             }
             else if(v.includes('変化：')){
                 手数 = Number(v.match(/変化：(\d+)/)[1])
@@ -1338,7 +1339,7 @@ class 棋譜{
 
 
 
-    static 指し手_現在の手(全指し手, kif, 手数, 開始手番){
+    static 全指し手_現在の手(全指し手, kif, 手数, 開始手番){
         const 全数字   = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9}
         const 漢数字   = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9}
         const 終局表記 = ['中断', '投了', '持将棋', '千日手', '詰み', '切れ負け', '反則勝ち', '反則負け', '入玉勝ち']
@@ -1365,13 +1366,13 @@ class 棋譜{
             全指し手.push({'手数':手数, '手番':手番, '手':'パス', '駒':'', '前X':0, '前Y':0, '後X':0, '後Y':0, '成り':false, 'コメント':''})
         }
         else if(終局表記.includes(現在の手)){
-            全指し手.勝敗 = this.指し手_勝敗(現在の手, 手番)
+            全指し手.勝敗 = this.全指し手_勝敗(現在の手, 手番)
         }
     }
 
 
 
-    static 指し手_勝敗(理由, 手番){
+    static 全指し手_勝敗(理由, 手番){
         const result = {'勝者':'', '敗者':'', '理由':理由, '表記':''}
 
         if(理由 === '投了' || 理由 === '詰み' || 理由 === '切れ負け' || 理由 === '反則負け'){
