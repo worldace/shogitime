@@ -865,10 +865,10 @@ class グラフ extends HTMLElement{
         for(const [i, v] of this.座標.entries()){
             const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
             el.setAttribute('class', '点')
-            el.setAttribute('data-i', i)
+            el.setAttribute('r', 3)
             el.setAttribute('cx', v.x)
             el.setAttribute('cy', v.y)
-            el.setAttribute('r', 3)
+            el.setAttribute('data-i', i)
             this.$g.append(el)
         }
     }
@@ -888,7 +888,7 @@ class グラフ extends HTMLElement{
 
     $グラフ_click(event){
         if(event.target.tagName === 'circle'){
-            this.$本体.go(event.target.getAttribute('data-i'))
+            this.$本体.go(event.target.dataset.i)
         }
     }
 
