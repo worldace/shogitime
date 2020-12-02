@@ -861,16 +861,7 @@ class グラフ extends HTMLElement{
         this.$折れ線.setAttribute('points', this.折れ線計算(this.座標))
         this.$塗り潰し.setAttribute('d', this.塗り潰し計算(this.座標, height))
 
-        this.$g.innerHTML = ''
-        for(const [i, v] of this.座標.entries()){
-            const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-            el.setAttribute('class', '点')
-            el.setAttribute('r', 3)
-            el.setAttribute('cx', v.x)
-            el.setAttribute('cy', v.y)
-            el.setAttribute('data-i', i)
-            this.$g.append(el)
-        }
+        this.$g.innerHTML = this.座標.map((v, i) => `<circle cx="${v.x}" cy="${v.y}" data-i="${i}"></circle>`).join()
     }
 
 
@@ -995,13 +986,14 @@ class グラフ extends HTMLElement{
         #塗り潰し{
             fill: #d2e4f0;
         }
-        .点{
+        circle{
             fill: #1f77b4;
+            r: 3px;
             stroke: #1f77b4;
             stroke-opacity: 0;
             stroke-width: 6px;
         }
-        .点:hover{
+        circle:hover{
             cursor: pointer;
             stroke-opacity: 1;
         }
@@ -1482,6 +1474,7 @@ class 棋譜{
         return 棋譜.解析(text)
     }
 }
+
 
 
 
