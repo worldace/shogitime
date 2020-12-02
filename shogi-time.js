@@ -1,8 +1,9 @@
-//グラフの読み筋の同を数字にする
+
 
 class 将棋タイム extends HTMLElement{
 
     async connectedCallback(){
+        this.baseurl = import.meta.url.replace(/[^\/]*$/, '')
         benry(this)
 
         if(this.src){
@@ -13,7 +14,7 @@ class 将棋タイム extends HTMLElement{
 
         this.手数   = this.手数確認(this.start, this.総手数)
         this.全局面 = 棋譜.全局面作成(this.全指し手, this.初期局面)
-        this.駒音   = new Audio(`${将棋タイム.baseurl}駒音.mp3`)
+        this.駒音   = new Audio(`${this.baseurl}駒音.mp3`)
 
         if(this.後手名.includes(this.myname)){
             this.setAttribute('reverse', 'reverse')
@@ -338,7 +339,6 @@ class 将棋タイム extends HTMLElement{
         this.手数--
 
         this.描画_指し手選択()
-
         this.$次に移動ボタン.click()
     }
 
@@ -351,13 +351,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    static get baseurl(){
-        return import.meta.url.replace(/[^\/]*$/, '')
-    }
-
-
-
-    static get html(){
+    get html(){
         return `
         <div id="将棋タイム">
           <div id="後手名"></div>
@@ -408,7 +402,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    static get css(){
+    get css(){
         return `
         #将棋タイム{
             user-select: none;
@@ -832,7 +826,7 @@ class 将棋タイム extends HTMLElement{
             margin-left: -10px;
             border: 10px solid transparent;
             border-bottom: 10px solid rgba(0, 0, 0, 0.8);
-        }`.replace(/url\(\'/g, `url('${将棋タイム.baseurl}`)
+        }`.replace(/url\(\'/g, `$&${this.baseurl}`)
     }
 }
 
@@ -947,7 +941,7 @@ class グラフ extends HTMLElement{
 
 
 
-    static get html(){
+    get html(){
         return `
         <div id="グラフ">
           <svg id="svg" viewBox="0,0,0,0">
@@ -969,7 +963,7 @@ class グラフ extends HTMLElement{
 
 
 
-    static get css(){
+    get css(){
         return `
         #グラフ{
             position: relative;
@@ -1489,8 +1483,8 @@ class 棋譜{
 
 function benry(self){
     self.$shadow = self.attachShadow({mode:'open'})
-    self.$shadow.innerHTML =  `<style id="css">${self.constructor.css || ''}</style>`
-    self.$shadow.innerHTML += self.constructor.html || ''
+    self.$shadow.innerHTML =  `<style id="css">${self.css || ''}</style>`
+    self.$shadow.innerHTML += self.html || ''
 
     for(const el of self.$shadow.querySelectorAll('[id]')){
         self[`$${el.id}`] = el
