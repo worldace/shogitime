@@ -17,7 +17,7 @@ class 将棋タイム extends HTMLElement{
         this.駒音   = new Audio(`${this.baseurl}駒音.mp3`)
 
         if(this.後手名.includes(this.myname)){
-            this.setAttribute('reverse', 'reverse')
+            this.reverse = true
         }
         if(this.comment){
             this.$コメント = document.getElementById(this.comment)
@@ -91,10 +91,10 @@ class 将棋タイム extends HTMLElement{
 
         //持駒
         for(let 駒 in 局面.先手の持駒){
-            this[`$${先手}駒台_${駒}`].setAttribute('data-num', 局面.先手の持駒[駒])
+            this[`$${先手}駒台_${駒}`].dataset.num = 局面.先手の持駒[駒]
         }
         for(let 駒 in 局面.後手の持駒){
-            this[`$${後手}駒台_${駒}`].setAttribute('data-num', 局面.後手の持駒[駒])
+            this[`$${後手}駒台_${駒}`].dataset.num = 局面.後手の持駒[駒]
         }
 
         //指し手
@@ -302,7 +302,7 @@ class 将棋タイム extends HTMLElement{
 
 
     $反転ボタン_click(event){
-        this.hasAttribute('reverse') ? this.removeAttribute('reverse') : this.setAttribute('reverse', 'reverse')
+        this.reverse = !this.reverse
         if(this.$グラフ){
             this.$グラフ.描画()
         }
@@ -1487,7 +1487,7 @@ class 棋譜{
 
 function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
     self.$ = self.attachShadow({mode:'open'})
-    self.$.innerHTML =  `<style id="css">${self.css || ''}</style>`
+    self.$.innerHTML  = `<style id="css">${self.css || ''}</style>`
     self.$.innerHTML += self.html || ''
 
     for(const el of self.$.querySelectorAll('[id]')){
