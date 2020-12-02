@@ -12,8 +12,8 @@ class 将棋タイム extends HTMLElement{
 
         Object.assign(this, 棋譜.解析(this.kif))
 
-        this.手数   = this.手数確認(this.start, this.総手数)
         this.全局面 = 棋譜.全局面作成(this.全指し手, this.初期局面)
+        this.手数   = this.手数確認(this.start, this.総手数)
         this.駒音   = new Audio(`${this.baseurl}駒音.mp3`)
 
         if(this.後手名.includes(this.myname)){
@@ -1476,12 +1476,18 @@ class 棋譜{
 
         return 局面
     }
+
+
+
+    constructor(text){  // インラインワーカー用 https://qiita.com/economist/items/cf52cbbcc19ad6864023
+        return 棋譜.解析(text)
+    }
 }
 
 
 
 
-function benry(self){
+function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
     self.$shadow = self.attachShadow({mode:'open'})
     self.$shadow.innerHTML =  `<style id="css">${self.css || ''}</style>`
     self.$shadow.innerHTML += self.html || ''
