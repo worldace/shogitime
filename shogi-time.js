@@ -896,7 +896,7 @@ class グラフ extends HTMLElement{
 
     座標計算(評価値, width, height, Ymax, 反転){
         const 座標  = []
-        const X刻み = width / (評価値.length-1)
+        const step  = width / (評価値.length-1)
 
         for(let [i, y] of 評価値.entries()){
             if(y > Ymax || y === '+詰'){
@@ -909,7 +909,7 @@ class グラフ extends HTMLElement{
                 y = -y
             }
 
-            座標.push({'x':i*X刻み, 'y':(height/2)-(y/Ymax*height/2)})
+            座標.push({'x':i*step, 'y':height/2*(1-y/Ymax)})
         }
 
         return 座標
