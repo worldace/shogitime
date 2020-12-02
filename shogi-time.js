@@ -1477,7 +1477,7 @@ class 棋譜{
 
 
 
-    constructor(text){  // インラインワーカー用 https://qiita.com/economist/items/cf52cbbcc19ad6864023
+    constructor(text){  // https://qiita.com/economist/items/cf52cbbcc19ad6864023
         return 棋譜.解析(text)
     }
 }
