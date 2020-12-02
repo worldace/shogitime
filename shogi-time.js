@@ -472,11 +472,6 @@ class 将棋タイム extends HTMLElement{
         #後手駒台 > div[data-num='0']{
             display: none;
         }
-        #先手駒台 > div[data-num='1'],
-        #後手駒台 > div[data-num='1']{
-            color: transparent;
-            text-shadow: none;
-        }
 
         #将棋盤{
             width: 410px;
@@ -1297,7 +1292,10 @@ class 棋譜{
             return 初期持駒
         }
 
-        for(const [駒, 数] of 持駒.split(/\s/)){
+        for(const v of 持駒.split(/\s/)){
+            const 駒 = v[0]
+            const 数 = v.slice(1)
+
             if(駒 in 初期持駒){
                 初期持駒[駒] = 数 ? 漢数字[数] : 1
             }
