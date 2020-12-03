@@ -395,7 +395,8 @@ class 将棋タイム extends HTMLElement{
               <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.2</a></div>
             </div>
           </div>
-        </div>`
+        </div>
+        `
     }
 
 
@@ -819,7 +820,8 @@ class 将棋タイム extends HTMLElement{
             margin-left: -10px;
             border: 10px solid transparent;
             border-bottom: 10px solid rgba(0, 0, 0, 0.8);
-        }`.replace(/url\(\'/g, `$&${this.baseurl}`)
+        }
+        `.replace(/url\(\'/g, `$&${this.baseurl}`)
     }
 }
 
@@ -955,7 +957,8 @@ class グラフ extends HTMLElement{
             <div id="評価値"></div>
             <div id="読み筋"></div>
           </div>
-        </div>`
+        </div>
+        `
     }
 
 
@@ -1026,7 +1029,8 @@ class グラフ extends HTMLElement{
             background-color: #eee;
             padding: 2px 0;
             font-weight: bold;
-        }`
+        }
+        `
     }
 }
 
