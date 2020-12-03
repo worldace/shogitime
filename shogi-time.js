@@ -241,10 +241,10 @@ class 将棋タイム extends HTMLElement{
             return 0
         }
         if(手数 < 0){
-            手数 = 総手数 + 手数 + 1
+            return 総手数 + Number(手数) + 1
         }
         if(手数 > 総手数){
-            return Number(総手数)
+            return 総手数
         }
         return Number(手数)
     }
