@@ -67,6 +67,10 @@ class 将棋タイム extends HTMLElement{
             if(this.controller === 'none'){
                 this.$コントローラー.style.display = 'none'
             }
+            if(this.$グラフ){
+                this.$グラフ.描画(this.評価値, this.graphwidth, this.graphheight, this.reverse)
+            }
+
             this.描画_指し手選択()
         }
 
@@ -311,10 +315,7 @@ class 将棋タイム extends HTMLElement{
 
     $反転ボタン_click(event){
         this.reverse = !this.reverse
-        if(this.$グラフ){
-            this.$グラフ.描画()
-        }
-        this.描画()
+        this.描画(true)
     }
 
 
@@ -835,16 +836,12 @@ class グラフ extends HTMLElement{
 
     connectedCallback(){
         benry(this)
-        this.描画()
     }
 
 
 
-    描画(){
-        const Ymax   = 3000
-        const width  = this.$本体.graphwidth  || 800
-        const height = this.$本体.graphheight || 200
-        const 座標   = this.座標計算(this.$本体.評価値, width, height, Ymax, this.$本体.reverse)
+    描画(評価値, width=800, height=200, 反転){
+        const 座標 = this.座標計算(評価値, width, height, 反転)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -865,7 +862,7 @@ class グラフ extends HTMLElement{
 
 
 
-    更新(手数 = 0, 評価値 = '', 読み筋 = ''){
+    更新(手数=0, 評価値='', 読み筋=''){
         const x = this.$g.children[手数].getAttribute('cx')
 
         this.$現在線.setAttribute('x1', x)
@@ -886,9 +883,10 @@ class グラフ extends HTMLElement{
 
 
 
-    座標計算(評価値, width, height, Ymax, 反転){
-        const 座標  = []
-        const step  = width / (評価値.length-1)
+    座標計算(評価値, width, height, 反転){
+        const 座標 = []
+        const Ymax = 3000
+        const step = width / (評価値.length-1)
 
         for(let [i, y] of 評価値.entries()){
             if(y > Ymax || y === '+詰'){
