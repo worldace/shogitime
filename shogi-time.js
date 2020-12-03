@@ -3,7 +3,7 @@
 class 将棋タイム extends HTMLElement{
 
     static get observedAttributes(){
-        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph', 'graphwidth', 'graphheight']
+        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
     }
 
 
@@ -36,9 +36,7 @@ class 将棋タイム extends HTMLElement{
             this.$コメント = document.getElementById(this.comment)
         }
         if(this.graph){
-            this.$グラフ = document.createElement('shogi-time-graph')
-            this.$グラフ.$本体 = this
-            document.getElementById(this.graph).append(this.$グラフ)
+            this.$グラフ = document.getElementById(this.graph)
         }
 
         this.描画(true)
@@ -74,7 +72,7 @@ class 将棋タイム extends HTMLElement{
                 this.$コントローラー.style.display = 'none'
             }
             if(this.$グラフ){
-                this.$グラフ.描画(this.評価値, this.graphwidth, this.graphheight, 反転)
+                this.$グラフ.描画(this.評価値, 反転)
             }
 
             this.描画_指し手選択()
@@ -832,14 +830,29 @@ class 将棋タイム extends HTMLElement{
 
 class グラフ extends HTMLElement{
 
+    static get observedAttributes(){
+        return ['width', 'height']
+    }
+
+
+
+    attributeChangedCallback(name, oldValue, newValue){
+        this[name] = newValue
+    }
+
+
+
     connectedCallback(){
+        this.$本体 = document.querySelector(`shogi-time[graph="${this.id}"]`)
         benry(this)
     }
 
 
 
-    描画(評価値, width=800, height=200, 反転){
-        const 座標 = this.座標計算(評価値, width, height, 反転)
+    描画(評価値, 反転){
+        const width  = this.width  || 800
+        const height = this.height || 200
+        const 座標   = this.座標計算(評価値, width, height, 反転)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
