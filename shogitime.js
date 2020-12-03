@@ -1586,7 +1586,7 @@ function 将棋タイム(args){
     width: 20px;
     height: 20px;
     background-repeat: no-repeat;
-    background-image: url('ダイアログ-閉じるボタン.svg');
+    background-image: url('ダイアログ_閉じるボタン.svg');
     background-size: 20px;
     cursor: pointer;
 }
