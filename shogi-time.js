@@ -63,10 +63,10 @@ class 将棋タイム extends HTMLElement{
         //全描画
         if(全描画){
             if(this.先手名){
-                this[`$${先手}名`].textContent = '▲' + this.先手名
+                this[`$${先手}名`].textContent = `▲${this.先手名}`
             }
             if(this.後手名){
-                this[`$${後手}名`].textContent = '△' + this.後手名
+                this[`$${後手}名`].textContent = `△${this.後手名}`
             }
             if(this.controller === 'none'){
                 this.$コントローラー.style.display = 'none'
@@ -1296,8 +1296,7 @@ class 棋譜{
         }
 
         for(const v of 持駒.split(/\s/)){
-            const 駒 = v[0]
-            const 数 = v.slice(1)
+            const [, 駒, 数] = v.match(/(.)(.*)/)
 
             if(駒 in 初期持駒){
                 初期持駒[駒] = 数 ? 漢数字[数] : 1
