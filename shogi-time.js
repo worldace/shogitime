@@ -844,8 +844,7 @@ class グラフ extends HTMLElement{
         const Ymax   = 3000
         const width  = this.$本体.graphwidth  || 800
         const height = this.$本体.graphheight || 200
-
-        this.座標 = this.座標計算(this.$本体.評価値, width, height, Ymax, this.$本体.reverse)
+        const 座標   = this.座標計算(this.$本体.評価値, width, height, Ymax, this.$本体.reverse)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -858,17 +857,19 @@ class グラフ extends HTMLElement{
         this.$中心線.setAttribute('y1', height/2)
         this.$中心線.setAttribute('y2', height/2)
         this.$現在線.setAttribute('y2', height)
-        this.$折れ線.setAttribute('points', this.折れ線計算(this.座標))
-        this.$塗り潰し.setAttribute('d', this.塗り潰し計算(this.座標, height))
+        this.$折れ線.setAttribute('points', this.折れ線計算(座標))
+        this.$塗り潰し.setAttribute('d', this.塗り潰し計算(座標, height))
 
-        this.$g.innerHTML = this.座標.map((v, i) => `<circle cx="${v.x}" cy="${v.y}" data-i="${i}"></circle>`).join()
+        this.$g.innerHTML = 座標.map((v, i) => `<circle cx="${v.x}" cy="${v.y}" data-i="${i}"></circle>`).join()
     }
 
 
 
     更新(手数 = 0, 評価値 = '', 読み筋 = ''){
-        this.$現在線.setAttribute('x1', this.座標[手数].x)
-        this.$現在線.setAttribute('x2', this.座標[手数].x)
+        const x = this.$g.children[手数].getAttribute('cx')
+
+        this.$現在線.setAttribute('x1', x)
+        this.$現在線.setAttribute('x2', x)
         this.$手数.textContent     = `${手数}手目`
         this.$評価値.textContent   = 評価値
         this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
