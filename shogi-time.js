@@ -54,21 +54,27 @@ class 将棋タイム extends HTMLElement{
 
 
 
-    描画(初回){
+    描画(全描画){
         const 手数   = this.手数
         const 局面   = this.全局面[this.変化][手数]
         const 指し手 = this.全指し手[this.変化][手数]
         const 反転   = this.reverse
-        const 先手   = (反転) ? '後手' : '先手'
-        const 後手   = (反転) ? '先手' : '後手'
+        const 先手   = 反転 ? '後手' : '先手'
+        const 後手   = 反転 ? '先手' : '後手'
  
-        //初回描画
-        if(初回){
+        //全描画
+        if(全描画){
+            if(this.先手名){
+                this[`$${先手}名`].textContent = '▲' + this.先手名
+            }
+            if(this.後手名){
+                this[`$${後手}名`].textContent = '△' + this.後手名
+            }
             if(this.controller === 'none'){
                 this.$コントローラー.style.display = 'none'
             }
             if(this.$グラフ){
-                this.$グラフ.描画(this.評価値, this.graphwidth, this.graphheight, this.reverse)
+                this.$グラフ.描画(this.評価値, this.graphwidth, this.graphheight, 反転)
             }
 
             this.描画_指し手選択()
@@ -104,14 +110,6 @@ class 将棋タイム extends HTMLElement{
 
         //指し手
         this.$指し手選択.selectedIndex = 手数
-        
-        //名前
-        if(this.先手名){
-            this[`$${先手}名`].textContent = '▲' + this.先手名
-        }
-        if(this.後手名){
-            this[`$${後手}名`].textContent = '△' + this.後手名
-        }
 
         //コメント
         if(this.$コメント){
