@@ -854,7 +854,6 @@ class グラフ extends HTMLElement{
     描画(評価値, 反転){
         const width  = this.width  || 800
         const height = this.height || 200
-        const 座標   = this.座標計算(評価値, width, height, 反転)
 
         this.$グラフ.style.width  = `${width}px`
         this.$グラフ.style.height = `${height}px`
@@ -867,10 +866,14 @@ class グラフ extends HTMLElement{
         this.$中心線.setAttribute('y1', height/2)
         this.$中心線.setAttribute('y2', height/2)
         this.$現在線.setAttribute('y2', height)
-        this.$折れ線.setAttribute('points', this.折れ線計算(座標))
-        this.$塗り潰し.setAttribute('d', this.塗り潰し計算(座標, height))
 
-        this.$g.innerHTML = 座標.map((v, i) => `<circle cx="${v.x}" cy="${v.y}" data-i="${i}"></circle>`).join()
+        if(評価値.length > 1){
+            const 座標 = this.座標計算(評価値, width, height, 反転)
+
+            this.$折れ線.setAttribute('points', this.折れ線計算(座標))
+            this.$塗り潰し.setAttribute('d', this.塗り潰し計算(座標, height))
+            this.$g.innerHTML = 座標.map((v, i) => `<circle cx="${v.x}" cy="${v.y}" data-i="${i}"></circle>`).join()
+        }
     }
 
 
