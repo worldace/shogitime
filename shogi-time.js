@@ -3,7 +3,7 @@
 class 将棋タイム extends HTMLElement{
 
     static get observedAttributes(){
-        return ['kif', 'src', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
+        return ['kif', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
     }
 
 
@@ -17,8 +17,8 @@ class 将棋タイム extends HTMLElement{
     async connectedCallback(){
         benry(this)
 
-        if(this.src){
-            this.kif = await 棋譜.ダウンロード(this.src)
+        if(!this.kif.includes('\n')){
+            this.kif = await 棋譜.ダウンロード(this.kif)
         }
 
         Object.assign(this, 棋譜.解析(this.kif))
@@ -1151,11 +1151,13 @@ class 棋譜{
 
     static async ダウンロード(url){
         const response = await fetch(url)
-        if(url.match(/kifu$/i)){
+        if(url.match(/kif$/i)){
+            const buffer = await response.arrayBuffer()
+            return new TextDecoder('shift-jis').decode(buffer)
+        }
+        else{
             return await response.text()
         }
-        const buffer = await response.arrayBuffer()
-        return new TextDecoder('shift-jis').decode(buffer)
     }
 
 
