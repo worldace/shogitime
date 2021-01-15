@@ -2,18 +2,6 @@
 
 class 将棋タイム extends HTMLElement{
 
-    static get observedAttributes(){
-        return ['kif', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
-    }
-
-
-
-    attributeChangedCallback(name, oldValue, newValue){
-        this[name] = newValue
-    }
-
-
-
     async connectedCallback(){
         benry(this)
 
@@ -46,6 +34,18 @@ class 将棋タイム extends HTMLElement{
         if(this.$グラフ){
             this.$グラフ.remove()
         }
+    }
+
+
+
+    static get observedAttributes(){
+        return ['kif', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
+    }
+
+
+
+    attributeChangedCallback(name, oldValue, newValue){
+        this[name] = newValue
     }
 
 
@@ -874,6 +874,13 @@ class 将棋タイム extends HTMLElement{
 
 class グラフ extends HTMLElement{
 
+    connectedCallback(){
+        this.$本体 = document.querySelector(`shogi-time[graph="${this.id}"]`)
+        benry(this)
+    }
+
+
+
     static get observedAttributes(){
         return ['width', 'height']
     }
@@ -884,12 +891,6 @@ class グラフ extends HTMLElement{
         this[name] = newValue
     }
 
-
-
-    connectedCallback(){
-        this.$本体 = document.querySelector(`shogi-time[graph="${this.id}"]`)
-        benry(this)
-    }
 
 
 
