@@ -25,7 +25,7 @@ https://github.com/worldace/shogitime/archive/master.zip
 kif属性には「kifファイルのURL」か「kifファイルの内容」のどちらかを貼り付けてください。
 
 
-※kif属性にURLを指定した場合の注意点
+※kifにURLを指定した場合の注意点
 ・kifファイルは原則として、サイトと同じサーバに置く必要があります。(JavaScriptのクロスドメイン制約)
 ・kifファイルの文字コードがUTF-8の場合は、ファイルの拡張子を「.kifu」とする必要があります。(通常はShift-JISで「.kif」)
 
