@@ -28,7 +28,6 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     disconnectedCallback(){
         if(this.$グラフ){
             this.$グラフ.remove()
@@ -36,15 +35,103 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     static get observedAttributes(){
         return ['kif', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
     }
 
 
-
     attributeChangedCallback(name, oldValue, newValue){
         this[name] = newValue
+    }
+
+
+
+    $将棋盤_click(event){
+        const {left, width} = this.$将棋盤.getBoundingClientRect();
+        (event.clientX < left+width/2) ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
+    }
+
+
+    $最初に移動ボタン_click(event){
+        if(this.変化){
+            this.変化 = 0
+            this.描画_指し手選択()
+        }
+        this.go(0)
+    }
+
+
+    $前に移動ボタン_click(event){
+        if(this.$指し手選択.selectedIndex > this.総手数){
+            this.$指し手選択.selectedIndex = this.$指し手選択.length - 2
+        }
+        else if(this.手数 > 0){
+            this.go(this.手数-1)
+        }
+    }
+
+
+    $次に移動ボタン_click(event){
+        const 総手数 = this.全指し手[this.変化].length - 1
+
+        if(this.手数 < 総手数){
+            this.go(this.手数+1)
+            this.駒音再生()
+        }
+        else{
+            this.$指し手選択.selectedIndex = this.$指し手選択.length - 1
+        }
+    }
+
+
+    $最後に移動ボタン_click(event){
+        this.go(this.全指し手[this.変化].length - 1)
+        this.$指し手選択.selectedIndex = this.$指し手選択.length - 1
+    }
+
+
+    $指し手選択_change(event){
+        if(this.$指し手選択.selectedIndex > this.総手数){
+            this.$最後に移動ボタン.click()
+        }
+        else{
+            this.go(this.$指し手選択.selectedIndex)
+        }
+    }
+
+
+    $反転ボタン_click(event){
+        this.reverse = !this.reverse
+        this.描画(true)
+    }
+
+
+    $ダイアログボタン_click(event){
+        this.toggleAttribute('data-dialog')
+    }
+
+
+    $ダイアログ_閉じるボタン_click(event){
+        this.removeAttribute('data-dialog')
+    }
+
+
+    $ダイアログ_棋譜コピーボタン_click(event){
+        navigator.clipboard.writeText(this.kif)
+    }
+
+
+    $変化選択_click(event){
+        event.stopPropagation()
+        if(!('変化' in event.target)){
+            return
+        }
+        this.変化 = event.target.変化
+        this.変化手数 = this.手数
+        this.手数--
+
+        this.描画_指し手選択()
+        this.$次に移動ボタン.click()
     }
 
 
@@ -127,7 +214,6 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     描画_指し手選択(){
         const 全指し手 = this.全指し手[this.変化]
 
@@ -142,7 +228,6 @@ class 将棋タイム extends HTMLElement{
             this.$指し手選択.add(new Option(全指し手.勝敗.表記))
         }
     }
-
 
 
     描画_駒(駒, x, y, 反転){
@@ -162,7 +247,6 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     描画_ハイライト(x, y, 反転){
         if(!x || x > 9){
             x = y = 0
@@ -180,7 +264,6 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     描画_変化選択(){
         for(const [i, v] of this.全指し手.変化手数.entries()){
             if(v !== this.手数){
@@ -193,7 +276,6 @@ class 将棋タイム extends HTMLElement{
             this.$変化選択.append(div)
         }
     }
-
 
 
     描画_変化中選択(){
@@ -216,19 +298,16 @@ class 将棋タイム extends HTMLElement{
     }
 
 
-
     駒音再生(){
         this.$駒音.currentTime = 0
         this.$駒音.play()
     }
 
 
-
     go(手数){
         this.手数 = this.手数確認(手数, this.総手数)
         this.描画()
     }
-
 
 
     手数確認(手数, 総手数){
@@ -242,106 +321,6 @@ class 将棋タイム extends HTMLElement{
             return 総手数
         }
         return Number(手数)
-    }
-
-
-
-    $将棋盤_click(event){
-        const {left, width} = this.$将棋盤.getBoundingClientRect();
-        (event.clientX < left+width/2) ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
-    }
-
-
-
-    $最初に移動ボタン_click(event){
-        if(this.変化){
-            this.変化 = 0
-            this.描画_指し手選択()
-        }
-        this.go(0)
-    }
-
-
-
-    $前に移動ボタン_click(event){
-        if(this.$指し手選択.selectedIndex > this.総手数){
-            this.$指し手選択.selectedIndex = this.$指し手選択.length - 2
-        }
-        else if(this.手数 > 0){
-            this.go(this.手数-1)
-        }
-    }
-
-
-
-    $次に移動ボタン_click(event){
-        const 総手数 = this.全指し手[this.変化].length - 1
-
-        if(this.手数 < 総手数){
-            this.go(this.手数+1)
-            this.駒音再生()
-        }
-        else{
-            this.$指し手選択.selectedIndex = this.$指し手選択.length - 1
-        }
-    }
-
-
-
-    $最後に移動ボタン_click(event){
-        this.go(this.全指し手[this.変化].length - 1)
-        this.$指し手選択.selectedIndex = this.$指し手選択.length - 1
-    }
-
-
-
-    $指し手選択_change(event){
-        if(this.$指し手選択.selectedIndex > this.総手数){
-            this.$最後に移動ボタン.click()
-        }
-        else{
-            this.go(this.$指し手選択.selectedIndex)
-        }
-    }
-
-
-
-    $反転ボタン_click(event){
-        this.reverse = !this.reverse
-        this.描画(true)
-    }
-
-
-
-    $ダイアログボタン_click(event){
-        this.toggleAttribute('data-dialog')
-    }
-
-
-
-    $ダイアログ_閉じるボタン_click(event){
-        this.removeAttribute('data-dialog')
-    }
-
-
-
-    $ダイアログ_棋譜コピーボタン_click(event){
-        navigator.clipboard.writeText(this.kif)
-    }
-
-
-
-    $変化選択_click(event){
-        event.stopPropagation()
-        if(!('変化' in event.target)){
-            return
-        }
-        this.変化 = event.target.変化
-        this.変化手数 = this.手数
-        this.手数--
-
-        this.描画_指し手選択()
-        this.$次に移動ボタン.click()
     }
 
 
@@ -874,8 +853,6 @@ class 将棋タイム extends HTMLElement{
 
 
 
-
-
 class グラフ extends HTMLElement{
 
     connectedCallback(){
@@ -884,11 +861,9 @@ class グラフ extends HTMLElement{
     }
 
 
-
     static get observedAttributes(){
         return ['width', 'height']
     }
-
 
 
     attributeChangedCallback(name, oldValue, newValue){
@@ -896,6 +871,12 @@ class グラフ extends HTMLElement{
     }
 
 
+
+    $グラフ_click(event){
+        if(event.target.tagName === 'circle'){
+            this.$本体.go(event.target.dataset.i)
+        }
+    }
 
 
     描画(評価値, 反転){
@@ -924,7 +905,6 @@ class グラフ extends HTMLElement{
     }
 
 
-
     更新(手数=0, 評価値='', 読み筋=''){
         const x = this.$g.children[手数].getAttribute('cx')
 
@@ -935,15 +915,6 @@ class グラフ extends HTMLElement{
         this.$読み筋.textContent   = 読み筋.replace(/ .*/, '').replace(/　/, '')
         this.$ヒント.style.display = 手数 ? 'block' : 'none'
     }
-
-
-
-    $グラフ_click(event){
-        if(event.target.tagName === 'circle'){
-            this.$本体.go(event.target.dataset.i)
-        }
-    }
-
 
 
     座標計算(評価値, width, height, 反転){
@@ -969,11 +940,9 @@ class グラフ extends HTMLElement{
     }
 
 
-
     折れ線計算(座標){
         return 座標.map(v => `${v.x},${v.y}`).join(' ')
     }
-
 
 
     塗り潰し計算(座標, height){
@@ -1114,7 +1083,6 @@ class 棋譜{
     }
 
 
-
     static 一次解析(text){
         const result = {局面図:[]}
         const kif    = text.trim().split(/\r?\n/)
@@ -1153,7 +1121,6 @@ class 棋譜{
     }
 
 
-
     static async ダウンロード(url){
         const response = await fetch(url)
         if(url.match(/kif$/i)){
@@ -1166,14 +1133,12 @@ class 棋譜{
     }
 
 
-
     static 開始手番(開始手番, 手合割){
         if(開始手番){
             return 開始手番
         }
         return (手合割 && 手合割 !== '平手') ? '後手' : '先手'
     }
-
 
 
     static 最終手(最終手){
@@ -1186,7 +1151,6 @@ class 棋譜{
 
         return 全数字[x] + 漢数字[y]
     }
-
 
 
     static 局面図(局面図, 手合割){
@@ -1227,7 +1191,6 @@ class 棋譜{
     }
 
 
-
     static 局面図_平手(){
         return {
             '1': {'9': '香_', '8': '桂_', '7': '銀_', '6': '金_', '5': '玉_', '4': '金_', '3': '銀_', '2': '桂_', '1': '香_'},
@@ -1243,7 +1206,6 @@ class 棋譜{
     }
 
 
-
     static 局面図_駒無し() {
         return {
             '1': {'9': null, '8': null, '7': null, '6': null, '5': null, '4': null, '3': null, '2': null, '1': null},
@@ -1257,7 +1219,6 @@ class 棋譜{
             '9': {'9': null, '8': null, '7': null, '6': null, '5': null, '4': null, '3': null, '2': null, '1': null},
         }
     }
-
 
 
     static 局面図_手合割(手合割) {
@@ -1342,7 +1303,6 @@ class 棋譜{
     }
 
 
-
     static 持駒(持駒){
         const 初期持駒 = {'歩': 0, '香': 0, '桂': 0, '銀': 0, '金': 0, '飛': 0, '角': 0}
         const 漢数字   = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9, '十':10, '十一':11, '十二':12, '十三':13, '十四':14, '十五':15, '十六':16, '十七':17, '十八':18}
@@ -1358,7 +1318,6 @@ class 棋譜{
         }
         return 初期持駒
     }
-
 
 
     static 全指し手(kif, 開始手番){
@@ -1393,7 +1352,6 @@ class 棋譜{
     }
 
 
-
     static 全指し手_現在の手(全指し手, kif, 手数, 開始手番){
         const 全数字   = {'１':1, '２':2, '３':3, '４':4, '５':5, '６':6, '７':7, '８':8, '９':9}
         const 漢数字   = {'一':1, '二':2, '三':3, '四':4, '五':5, '六':6, '七':7, '八':8, '九':9}
@@ -1426,7 +1384,6 @@ class 棋譜{
     }
 
 
-
     static 全指し手_勝敗(理由, 手番){
         const result = {'勝者':'', '敗者':'', '理由':理由, '表記':''}
 
@@ -1451,7 +1408,6 @@ class 棋譜{
     }
 
 
-
     static 評価値(kif){
         const 評価値 = []
 
@@ -1462,7 +1418,6 @@ class 棋譜{
         }
         return 評価値
     }
-
 
 
     static 読み筋(kif){
@@ -1477,7 +1432,6 @@ class 棋譜{
     }
 
 
-
     static 全局面作成(全指し手, 初期局面){
         const result = []
 
@@ -1490,7 +1444,6 @@ class 棋譜{
 
         return result
     }
-
 
 
     static 各局面作成(指し手, 前局面){ // 指し手 = {'手数','手番','手','駒','前X','前Y','後X','後Y','成り'}
@@ -1526,7 +1479,6 @@ class 棋譜{
 
         return 局面
     }
-
 
 
     constructor(text){  // https://qiita.com/economist/items/cf52cbbcc19ad6864023
