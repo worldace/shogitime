@@ -9,20 +9,22 @@ WEBコンポーネント製で、KIF形式のテキストを美しいHTMLに変�
 
 
 1. プログラムをダウンロードしたら、shogi-time.jsをアップします
-https://github.com/worldace/shogitime/archive/master.zip
+
+    https://github.com/worldace/shogitime/archive/master.zip
 
 
-2. スクリプトを読み込むタグを記述する。scriptタグはどこに記述してもOKですが、type属性が必要です
+2. shogi-time.jsを読み込むタグを記述する。このタグはどこに記述してもOKですが、type属性が必要です
 
-<script src="shogi-time.js" type="module"></script>
+    <script src="shogi-time.js" type="module"></script>
 
 
-3. shogi-timeタグを記述して、kif属性を入力するとプレイヤーが表示されます。閉じタグは必須です
-  
-<shogi-time kif="kifファイルのURL"></shogi-time>
-<shogi-time kif="kifファイルの内容"></shogi-time>
+3. shogi-timeタグとkif属性を入力するとプレイヤーが表示されます。
 
-kif属性には「kifファイルのURL」か「kifファイルの内容」のどちらかを貼り付けてください。
+    <shogi-time kif="kifファイルのURL or 内容"></shogi-time>
+
+
+kif属性にはkifファイルのURLか内容のどちらかを貼り付けてください。
+閉じタグは必須です。
 
 
 ※kifにURLを指定した場合の注意点
