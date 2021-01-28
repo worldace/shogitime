@@ -2,7 +2,7 @@
 
 将棋タイムは、ブラウザ上で将棋の棋譜を再生するプレイヤーです。
 
-WEBコンポーネント製で、KIF形式のテキストを美しいHTMLに変換します。
+JavaScript製で、KIF形式のテキストを美しいHTMLに変換します。
 
 
 ■設置方法
@@ -15,10 +15,12 @@ WEBコンポーネント製で、KIF形式のテキストを美しいHTMLに変�
 
 2. shogi-time.jsを読み込むタグを記述する。このタグはどこに記述してもOKですが、type属性が必要です
 
+
     <script src="shogi-time.js" type="module"></script>
 
 
-3. shogi-timeタグとkif属性を入力するとプレイヤーが表示されます。
+3. shogi-timeタグとkif属性を記述すると、そこにプレイヤーが表示されます。
+
 
     <shogi-time kif="kifファイルのURL or 内容"></shogi-time>
 
