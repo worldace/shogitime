@@ -853,7 +853,7 @@ class 将棋タイム extends HTMLElement{
 
 
 
-class グラフ extends HTMLElement{
+class 将棋タイムグラフ extends HTMLElement{
 
     connectedCallback(){
         this.$本体 = document.querySelector(`shogi-time[graph="${this.id}"]`)
@@ -1513,5 +1513,5 @@ function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
 }
 
 
-customElements.define('shogi-time-graph', グラフ)
+customElements.define('shogi-time-graph', 将棋タイムグラフ)
 customElements.define('shogi-time', 将棋タイム)
