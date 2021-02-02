@@ -327,59 +327,7 @@ class 将棋タイム extends HTMLElement{
 
     get html(){
         return `
-        <div id="将棋タイム">
-          <div id="後手名"></div>
-          <div id="局面">
-            <div id="後手駒台">
-              <div id="後手駒台_歩" data-num="0" data-koma="歩_"></div>
-              <div id="後手駒台_香" data-num="0" data-koma="香_"></div>
-              <div id="後手駒台_桂" data-num="0" data-koma="桂_"></div>
-              <div id="後手駒台_銀" data-num="0" data-koma="銀_"></div>
-              <div id="後手駒台_金" data-num="0" data-koma="金_"></div>
-              <div id="後手駒台_角" data-num="0" data-koma="角_"></div>
-              <div id="後手駒台_飛" data-num="0" data-koma="飛_"></div>
-            </div>
-            <div id="将棋盤"></div>
-            <div id="先手駒台">
-              <div id="先手駒台_飛" data-num="0" data-koma="飛"></div>
-              <div id="先手駒台_角" data-num="0" data-koma="角"></div>
-              <div id="先手駒台_金" data-num="0" data-koma="金"></div>
-              <div id="先手駒台_銀" data-num="0" data-koma="銀"></div>
-              <div id="先手駒台_桂" data-num="0" data-koma="桂"></div>
-              <div id="先手駒台_香" data-num="0" data-koma="香"></div>
-              <div id="先手駒台_歩" data-num="0" data-koma="歩"></div>
-            </div>
-          </div>
-          <div id="先手名"></div>
-          <div id="コントローラー">
-            <div id="最初に移動ボタン"></div>
-            <div id="前に移動ボタン"></div>
-            <div id="次に移動ボタン"><div id="変化選択"></div></div>
-            <div id="最後に移動ボタン"></div>
-            <select id="指し手選択"></select>
-            <div id="ダイアログボタン"></div>
-            <div id="反転ボタン"></div>
-          </div>
-          <div id="ダイアログ">
-            <div id="ダイアログ_ヘッダ">
-              <div id="ダイアログ_タイトル">将棋タイム</div>
-              <div id="ダイアログ_閉じるボタン"></div>
-            </div>
-            <div id="ダイアログ_コンテンツ">
-              <div id="ダイアログ_棋譜コピーボタン">棋譜をコピーする</div>
-              <textarea id="ダイアログ_棋譜テキスト" readonly></textarea>
-              <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.3</a></div>
-            </div>
-          </div>
-          <audio id="駒音" src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU3LjI5LjEwMQAAAAAAAAAAAAAA//uQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAOAAAYfAAiIiIiIiIiMzMzMzMzM0RERERERERVVVVVVVVVZmZmZmZmZnd3d3d3d3eIiIiIiIiImZmZmZmZmZmqqqqqqqqqu7u7u7u7u8zMzMzMzMzd3d3d3d3d7u7u7u7u7v////////8AAAAATGF2YzU3LjMyAAAAAAAAAAAAAAAAJAAAAAAAAAAAGHzgKZshAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAABE0tsPsAhG/IvYBgVACIACegDEYCEYAkVMqHsEI75FVgEAJAzeBXwQQAB8xv4ALPGBfgfGYxsY4ALwIYx630Ku+iJxEL/3eCEcDFwoACCf/iIXoiE/u5pTQAABZhAAoAKLgAiXpo75V3eGggohegcXKZBwNIgAI0ACQIAIEIwAYAEO4GwAACIAAQA/0/KfL///t/yYgcxET1Yf854PwcDHg+8ECgIBEPxAqXD3Jy4EOFAxOCA/HBhtylJNFSLvXTPdzzeVza0f/f9zGu//D/QKEPX1/91ZYy17+R4zrr+W/jzHZtvep+Bv+uiI7XPHmiTDKpYymb0zvZbiLUudnh28PgvHveF52mIaAS6drMo+95Tzvr/hupTHlm1fzx/X/a/1C8OvUSjihzKdSPsfNRHnTH3RiIoQOYZYZU8umtOo+iZdYyybEO/iZ5Y5RUwD+V85b/Pr/7ztXbk4bwlr0iluW/C6ZN+evze0/JiJCnWNqVMqazhNozERQj4W9zdFGSKRpxxtiJ4XmyuslM9T+bG56upozv8cF9ekTDY//uSZCeJApdpwwgBGfJRLXhkBCOuCXWnDKCEc8jrACM0EIkwsTrTzgUAEABctda/X9ddZsp/NZnOuEw0fBW6+RuiDRsIcwhASQYRtIrZ4W2JNMSkQhiMdwSzjSkjp/Ix2uZuZERurrsvvFTndaSu7DVnI2I+01CBLsI/v5Zez//1kM75/TW1J//bg7oBWWZRTHHi4pGhIWA7YWXPpzlTd8HlHPYFW69Q6aFVaYO2OiN65boVIzzsaO5qp0tSFMJElAqeOEyW2WttxttEhyXNe20gs4+/xAWMOJKqXqUul2bLj0srMlwba4qQQ1CRfEUk1mhRzqoOyoiFOz+t23/9CgIhQAAsI1yM8yrOBXB58v/nKGSVE2lZkIsZ9v+nws5Fv43ll+jSmdhU/c/4zfNucODm/c/zedfypT/vux7yMx1kcjOlEefYUyM/egyM5ReHvaxynObBleADgLY2JFPRv//+jl8x1yUkkXlWI8pGbnCELNQOLloivOC5c21kVMm8/WwQSz35CIoHhwuEhwNJQTlIC5aExONVaTafykvxLEL4NP/7kmRRCQK2bMOwQRpwTinIcSgjnlWZpQ7Vh4AJnJDjNrCQAOQYTSe03YOThIkoexMPC3VZxDkfeJUjEJygxT7OwMDKX849K9wu2MkCLAvDVBf0cdDaK+U49CyhiGKyBRXqc64+hH0HDjKedfG+QEQ8TMl7xvkYXORkz4fzne6Y7+Gr56e+b43Sv3Z4ye98SskF/e9/TwIkOPm8OHf4w8iZ3H1DvjX98/UuJL+uK4prFpP4DHHh7eS/71qDvEt85v9+klPiPfOcQdX/h/5tj31E1pbYBJJKUclRRAP+1gqKnqyiXyic5csXct61YbtHPzmpALtDYrRznOqYxKCYrbbYyEYT0u3wu1BOyNojOhsLicuHi5w4CCpujpDwqpy14gm2E7lAw1DhVhrB9+2sdafN+rpnFIKb5uTPvol5k4hIc5coYdRqP14PiMQVZf05peHwsKCAim7aJFkwbBy38f51GdtPqIUtmmijTQ8sTOhw/B6CYs8qjeKhWQSXlj1DtGTioiZpPY4z8VBYEXisesfUSnv0eo7U3nD/f977vpk1g43/+5JkM4AFZFrf/mnohFxI/O/NnrCQeQ9p3PYAAOwQ7r+WIAALqdb9rQv7xTDyJe+N/FNXj4pTESJf/+nvr/Wr7tqkHe+/kVBoMJ1rcVVz61e+d0tTXp///////46bdKNzlZwcUA5m9zqYrHuniHZ3aWYNhcMLgBgOD8DwwAIMyCYac+kTNfxLkeA8Mnbm/t/wRTHugLxsJTug0G4CzZdWIO3sqnpP/2ZDEnz3f+05af7H6NqYzT2/////6KTWD//+aAhMCbqy3ZjMBIAABLskRcUNGWeBrG8W4rXZ8vWE0VKxK20ycmKBb6dr288uMictOVrrO1ezq65Zr6u89C6cqenbXORxBqB0srYol1l1rXW19k9s0u+kB67Xm4nYa7Xs/2eQjF2ZrWrK21pmZn/3azPsrVo9YKmmLOg0O5aSFTtYTDVR7EUj+R7GvbUFMAAwAB1iPt4OqADSTCO3d+VSlk////+negEdkNCgq5R5n///////wqN1AUqWDoNLDRETFlPiWt6GREJTEAAAFUgxrGkLqNxyJ0q0weiHoc/WzSLt//uSZA6CBAxbVnnmHHI8AZsfPCwADojXU8YkzcD6Beu89IgoaEp048uEBQouJuTiQoxLOWJIor1F2bgRNLLINcgSVlmm0yh48oKdREG1swTKt1JLLyuSXtH5VnUI22es2UMy5UVK3sqN7dMlkNT3LL+rqX+vBSl/nTPdSMwzFDw0UbwaFG7ldG7niYU5Q0wQIBw2CuNY0qeGmgFj7HerPhIbrl7UvKLGali4SPCnfAIoCoipK2VR7+v/3f////Tp9at9givrhTQCAAHOBuWAkAOCHADEJ0osHY4lYFd0SRNiNGv/5ujDc6ibSloE3EyA1BNdkibicdjZcoHCZGMROzDKvRILNcn7MKwUEsgWQxz4SQ1VRZ1Q1IwXzrWeMi4dF1l5osFmmRZ4sKVEoz1u6x8xmlUlB9Bzp/6yHUTUmQQKhAgTkvcYqMqVMGXrn3wT4IHDpULJA4LANLCDX1KFgcFiMWYRFxVSpRKfyyB4ROPdPN/93//66mq5dSAAAAACxuLdwMdAn+pieGKkUa+QgqsyVXltSrGlvVP8+M+gZY6ELv/7kmQVAgQ5QVLx7DRwRiJ63wHjDI45K0vnpHHBAJErNBYUYh2PjpDUF5MHNHDMvqxJsbl6OCSsX6XPPaUEVOdCk+Hl4+Ry4umxyydaHtPYsvbghXJXS+clmJ5HIyCzmvnvMvXf7/Gv5RDwGFxUXCbCJASvPat+VDSyK3ljxa/S9YNEKiIQiiAAAJbUyHCSuRvl6qjW9Wrgtr5yXVpRv+bsFEhZBx6HnUCFaCQo8VYcJnEC2PcZ4oz//////uJJEzu0KgJ6XKpi6lVYAAAC7jw6QShOFuYkWsEogDsVB3xa2Y/HMaPXFpM41xkkakoJyj2MmWPLMy1RtcaC0oMHR0szBK4Hyj02xFBC6cMyo0nCI7W2s7xfdtbEZ1JQ4AuaZl8talkqzmb/lt0zyjMZQKedu/H9bi0RSW276WEkIEEgO2laE6Qzk6TBO6hk03q0X+zi6kIRO3kOrVO6lsrG0bQDEyrFBtp4ecNqA4p////vJ//2S9C6wCzH1QCsciAgAAAABT/+xQnabiSDIWyVRTCT5oT4VSesrGE7pG5nf9lcU5D/+5JkFAIENDnQeek3gEIkWo8N4yoO0SVHp6RR0RCQ6PwHoGliJ7Djd+dzg/cS6qGVRtavzCW1eppkCr0YwLSYSCcZVlWRCRH68Os7UKgt09ZpJnHnQ8NskS0KRyUJkpmC1MhNPBMpwn++yQcNmDY9gbJA0oNGgdBVhEJA6iV/5a5uyc78t2YxIAJA3vaAoaLIe4YY1ErWsiL3tqZ47WgCN/2SUjl4VzNovbdzqwYM0sIkwQKoaYaXMmBfOqv///8qSZ//ULvoyiADL/95UqdFxHqABTwECsmEQ8xqSmk3OKXGwyeRPvX68+qWmolNgmWXD6XFcJbInkfZXchNTHyzUHrTXhiU5b78bXUUk0L7d5N0VJdJOnJdDoZUpfPbWrKiOWMKZtdnvjgiIOjGNMWeVHT1YaQLoU8XS8yATe0zmYgAAQAYzZzMMWFHtl6j/L4q0REnFqAFpIjEKayvSV40jd4S7tH6ONQR1hEjEgZmIS1UmQJNe+/7zN1Fe7/E/pVmZ4YwAAAAAAuteix82AxT+R7U+TxcdMzew1ipk1YsK7NK//uSZBECA+03TnmvYnBAJHovAeMeD6UZM+ekvgEdI2k0F5TqelIawiVJh6hjtNMbK5MA819jhCHI2LRbQzoRTF2PSz6kqF1wyLBVIg+nCVcjuuxcvZcfSh8t+Ljy+lrbVOLQu1bozLK2F+tZ0AgEq4UEpanbgULuNNu/it3rq0gFRsSqmIAABeFa/JIQrpGtXN6Cd4VsdSObBKwW8LGJpPp+pHARPkXUNgzwsWl3JoOKw2UKkRihVU6q/5391v+gARHgwEAAOH//xvxD4ECK70OAW6LBjo2KvG6qpIPjYFtiNqiZXNogKs00JdObwux+sSia0NeRcKNeWUm7Oot50ox5qGrjNUJPhgqhBOL6r17lSa3cuOiMEEYVVLKiEFRA4nKI4BEfkA6GIDj2HNcr+96yI6iNW+PRUTtqo9VG3+kaIIBUwrFieFvZRDnyrIYlIU8qgvhEs6zng7K+VbddRiMe1juT0f1Wln/Z5B9CzVI/tr+3/09b1VlJpYej7xEAi2yxFaoBi2BgAAABUf//H76JJHwxH+ENrKxMqFp4/DfVN//7kmQOggPbQktp7yxwOeaqfQmFc485BymmvLHBExUmvAWY+K12JZzlISxEtWbKWSr6yiTijQ5JG9Koi+G+aabTjw4T8N00xPh3xaPnrYQ5gWZjFfKl0+XLr4eOoVxtRLMWLQ6tkaV7JsIgyj2UcNQH3fbonfVHMIsS8UcTSRVHdDEgb/xawgAAqD2mVAoc1DvmBZiOhwCdj0qBGUd/+rf//6szPeyPVN3sn/kq7Ko3/2ZL5QeE1jSsZSxbRgHcCABI+r60iAaLAkgGc6JMaSJsM8TNe1hBMpg0kwduKIg/iTJZW6OOaCacBdK9mormcdhMCTHYqRQMB/3f1Y0IP0ephTxb/SEpW2BaVaVMRsH640jYeuKLZH9GOuxVkHlYow4Fv/0ozFKV4kUQpDKAec2ERnd//40AAGaUgQAAAHAnimk4dYgbcLl2jsIjn/6PBtKH+58f4Wi8HEiyC7SCXe2MXHhcJziTqyq/w3eWYUWHEdKav46SDxZtVbYABNCEAAHnKS9vA6QGa8ijV0fv2fecLwa8bcdIHVmFPMjfBexXpMX/+5JkE4IDhTbJYAt5oEMFWZ8B4zwOfMUdgOHtwRQZJjxzCxAQqXrKjICHHMmFCuTJDEHMji+EvZakwWxvqBD4CPMWMrYdo9WaZhincXu2axfCY4r7HcpaYx92nth9r5IiIl2GTCnmxxpIZ/RZQAADNEM6EABLYfFbRoaaU0ZgboXvRxXpMeGSa0dUn6efMKPYJ5QcCDg0qm0AUCi0cHlJSywLxnGFkXtEqqP//v/830AAAoRgJP+JDAE2Ad7ceOKyGhjFbV36wCNI+VJJnzVaXMTk2dnt6A28j9p5pHSTyjzCEx1VE+XwdgGsTKTCysQxgTIu5VmK1j1LlcRsNzc5Ts1HMH9PXNbz5mz4jTBEYdExQKBpv0hoWFUPpAJD6Fd///Z+iQAAUxZiiAL2EU7/pq/JOVCEJiq5UEZyFR/Wu6EsqpVvYWWaCycwmYlrNNQZMsuTc8vlCZhP28rqJZ8PESO/+/ri///+ugPqAyFfKIp1w7aaVf9wBK0swxn2vTB7PdVreDLukaaDNJGRTaShzO0eyHmpN3qdiIVV6uaa3/9V//uSRBwAAtQ1RrALekBSBhkeKY9+CmTBGYaldIE9lWNkFb2w8tEWa1cTZrXNcWYo1dZzWv1GnnpN0KvySfb4v/9TVI/t1LAAgCI0QYA/n8/21AnY2zFvTZWn20GEVmbXi6vz09OVQ3r1k30ywyDViZdOcQ1CGvEkEsRfBS7uuz3WoVaKrvFayy1+31kWuW0tSPv9snR/+r6gBCAihQCgf3q+J463qcnE1T5OD3gWkTs2kWELdYwl2HuREzqzpKBUVmI2CCH2aNcfD6y69u/7f24Wkjc1Lh9RZUhwblRnr/R92zV99n39F1ge6FYEtQABIV/KOUEi27/h5667AH+NeZQJTvacinP0rGLDUzT6abm/Ifx5ZSKa09WA0YlLzxa//Mbd+iStcpQWvUu+ezsM7NKVKUn/07ve6uzqFQBIJOAKBpS+8I98BVOQghuMxb2/Zp/vtbZV6NQfsfDQlNVTKl+0ocXS5kN//nkxCJhjiCSTdtqWKvu1PZooAF7e515pPFJyO7pV6TzbtQAoM/+vmf9JBmUNYKctB6HJb35okjKkI//7kkQziIJ5KsXgLFygUIVotTUttApsqxIgHQXBSBdihAaxogsXwjNEi2TTcU3HFjpoEvTTM71scrSWTApcvavFcVMNufSK1uFEy8cb+YTQ4dfMdpBKpNUQOCOzTmCf/6jj+wLWjmUUmTarFYk2qs2HHwLSEyiWxzNrQho7DjWj77T1AiCDUPGCxNOe0VOvMHndjr8ms2oOMIkkXpODxYgBhVD3C4cawNNAZFBYsgiPjBJ/1L3H0DxPa3ZGHu2bO99a5LMXtvP1YceeZeg6CycBDypxD6YemD/d0TCTTvm0sugdvq3o508KtsVa5ZFSFRkfbxWwo7OgJq0n8XGPRcPIEAAkCgGvoP82AaNv+VFXqLh1+2/i3KaSBNP6STTN1F388YyUTJ+GlOtrS0clqUJQpcPPehy0WOIujUlgLV4u54iARUm4UIkEWngEbaQJFAKSrJnA9vd81dNa7u6tzoe6YVUd/KjGuqEHEtB7js/+2tpQHV2tPC9xfH94sPF6bezUrHBe0bYNPMMKyNJJYYUIDxYaky8iBdDW5HG2AgBCVV//+5JEUAACYirEsAJDIEtFaJIBq4IH2H8LgYRUQSGVYWwTCkCryqXqvWP/X+hRKXyE4v69DZrBhR1QNDg5/Wd/QIgZBV09Wdq4liV2dEp2R063N+IgaBoO/4lBiSChABWKamqzSIQfcucArIt+hqPytlKUpjGNKVjcMBCkMbVv0AhSga+JQ1rcePciVBZ578qCoKuEt2oq6r4lOwaDRGp+o9yNTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTw8DeUXTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uSZEMP8BIAgANAAAgCwBAAcAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=="></audio>
-        </div>
-        `
-    }
-
-
-
-    get css(){
-        return `
+        <style>
         #将棋タイム{
             user-select: none;
             touch-action: manipulation;
@@ -846,6 +794,53 @@ class 将棋タイム extends HTMLElement{
         #駒音{
             display: none;
         }
+        </style>
+        <div id="将棋タイム">
+          <div id="後手名"></div>
+          <div id="局面">
+            <div id="後手駒台">
+              <div id="後手駒台_歩" data-num="0" data-koma="歩_"></div>
+              <div id="後手駒台_香" data-num="0" data-koma="香_"></div>
+              <div id="後手駒台_桂" data-num="0" data-koma="桂_"></div>
+              <div id="後手駒台_銀" data-num="0" data-koma="銀_"></div>
+              <div id="後手駒台_金" data-num="0" data-koma="金_"></div>
+              <div id="後手駒台_角" data-num="0" data-koma="角_"></div>
+              <div id="後手駒台_飛" data-num="0" data-koma="飛_"></div>
+            </div>
+            <div id="将棋盤"></div>
+            <div id="先手駒台">
+              <div id="先手駒台_飛" data-num="0" data-koma="飛"></div>
+              <div id="先手駒台_角" data-num="0" data-koma="角"></div>
+              <div id="先手駒台_金" data-num="0" data-koma="金"></div>
+              <div id="先手駒台_銀" data-num="0" data-koma="銀"></div>
+              <div id="先手駒台_桂" data-num="0" data-koma="桂"></div>
+              <div id="先手駒台_香" data-num="0" data-koma="香"></div>
+              <div id="先手駒台_歩" data-num="0" data-koma="歩"></div>
+            </div>
+          </div>
+          <div id="先手名"></div>
+          <div id="コントローラー">
+            <div id="最初に移動ボタン"></div>
+            <div id="前に移動ボタン"></div>
+            <div id="次に移動ボタン"><div id="変化選択"></div></div>
+            <div id="最後に移動ボタン"></div>
+            <select id="指し手選択"></select>
+            <div id="ダイアログボタン"></div>
+            <div id="反転ボタン"></div>
+          </div>
+          <div id="ダイアログ">
+            <div id="ダイアログ_ヘッダ">
+              <div id="ダイアログ_タイトル">将棋タイム</div>
+              <div id="ダイアログ_閉じるボタン"></div>
+            </div>
+            <div id="ダイアログ_コンテンツ">
+              <div id="ダイアログ_棋譜コピーボタン">棋譜をコピーする</div>
+              <textarea id="ダイアログ_棋譜テキスト" readonly></textarea>
+              <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.3</a></div>
+            </div>
+          </div>
+          <audio id="駒音" src="data:audio/mpeg;base64,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9vd81dNa7u6tzoe6YVUd/KjGuqEHEtB7js/+2tpQHV2tPC9xfH94sPF6bezUrHBe0bYNPMMKyNJJYYUIDxYaky8iBdDW5HG2AgBCVV//+5JEUAACYirEsAJDIEtFaJIBq4IH2H8LgYRUQSGVYWwTCkCryqXqvWP/X+hRKXyE4v69DZrBhR1QNDg5/Wd/QIgZBV09Wdq4liV2dEp2R063N+IgaBoO/4lBiSChABWKamqzSIQfcucArIt+hqPytlKUpjGNKVjcMBCkMbVv0AhSga+JQ1rcePciVBZ578qCoKuEt2oq6r4lOwaDRGp+o9yNTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTw8DeUXTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uSZEMP8BIAgANAAAgCwBAAcAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=="></audio>
+        </div>
         `
     }
 }
@@ -961,29 +956,7 @@ class 将棋タイムグラフ extends HTMLElement{
 
     get html(){
         return `
-        <div id="グラフ">
-          <svg id="svg" viewBox="0,0,0,0">
-            <line id="X軸"    x1="0" x2="0" y1="0" y2="0"></line>
-            <line id="Y軸"    x1="0" x2="0" y1="0" y2="0"></line>
-            <path id="塗り潰し" d=""></path>
-            <polyline id="折れ線" points=""></polyline>
-            <line id="中心線" x1="0" x2="0" y1="0" y2="0"></line>
-            <line id="現在線" x1="0" x2="0" y1="0" y2="0"></line>
-            <g id="g"></g>
-          </svg>
-          <div id="ヒント">
-            <div id="手数"></div>
-            <div id="評価値"></div>
-            <div id="読み筋"></div>
-          </div>
-        </div>
-        `
-    }
-
-
-
-    get css(){
-        return `
+        <style>
         #グラフ{
             position: relative;
             margin: 0 auto;
@@ -1049,6 +1022,23 @@ class 将棋タイムグラフ extends HTMLElement{
             padding: 2px 0;
             font-weight: bold;
         }
+        </style>
+        <div id="グラフ">
+          <svg id="svg" viewBox="0,0,0,0">
+            <line id="X軸"    x1="0" x2="0" y1="0" y2="0"></line>
+            <line id="Y軸"    x1="0" x2="0" y1="0" y2="0"></line>
+            <path id="塗り潰し" d=""></path>
+            <polyline id="折れ線" points=""></polyline>
+            <line id="中心線" x1="0" x2="0" y1="0" y2="0"></line>
+            <line id="現在線" x1="0" x2="0" y1="0" y2="0"></line>
+            <g id="g"></g>
+          </svg>
+          <div id="ヒント">
+            <div id="手数"></div>
+            <div id="評価値"></div>
+            <div id="読み筋"></div>
+          </div>
+        </div>
         `
     }
 }
@@ -1492,21 +1482,19 @@ class 棋譜{
 
 function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
     self.$ = self.attachShadow({mode:'open'})
-    self.$.innerHTML = `<style id="css">${self.css || ''}</style>${self.html || ''}`
+    self.$.innerHTML = self.html || ''
 
     for(const el of self.$.querySelectorAll('[id]')){
         self[`$${el.id}`] = el
     }
 
     for(const name of Object.getOwnPropertyNames(self.constructor.prototype)){
-        if(!name.startsWith('$')){
+        if(typeof self[name] !== 'function'){
             continue
         }
-
+        self[name] = self[name].bind(self)
         const [$id, event] = name.split(/_([^_]*?)$/)
-
-        if(self[$id] && event){
-            self[name] = self.constructor.prototype[name].bind(self)
+        if($id.startsWith('$') && self[$id] && event){
             self[$id].addEventListener(event, self[name])
         }
     }
