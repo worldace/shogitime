@@ -1485,7 +1485,7 @@ function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
         }
         self[name]  = self[name].bind(self)
         const match = name.match(/^(\$.*?)_([^_]+)$/)
-        if(match && match[1]){
+        if(match && self[match[1]]){
             self[match[1]].addEventListener(match[2], self[name])
         }
     }
