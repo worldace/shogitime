@@ -47,8 +47,8 @@ class 将棋タイム extends HTMLElement{
 
 
     $将棋盤_click(event){
-        const {left, width} = this.$将棋盤.getBoundingClientRect();
-        (event.clientX < left+width/2) ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
+        const {left, width} = this.$将棋盤.getBoundingClientRect()
+        event.clientX < left+width/2 ? this.$前に移動ボタン.click() : this.$次に移動ボタン.click()
     }
 
 
