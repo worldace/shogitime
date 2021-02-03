@@ -742,14 +742,6 @@ class 将棋タイム extends HTMLElement{
             transform: translate(0px, 5px);
             box-shadow: 0px 1px 0px 0px;
         }
-        #ダイアログ_棋譜テキスト{
-            position: fixed;
-            right: 100vw;
-            font-size: 16px;
-            display: none;
-            width: 1px;
-            height: 1px;
-        }
         #ダイアログ_フッタ{
             text-align: right;
             font-size: 12px;
@@ -835,7 +827,6 @@ class 将棋タイム extends HTMLElement{
             </div>
             <div id="ダイアログ_コンテンツ">
               <div id="ダイアログ_棋譜コピーボタン">棋譜をコピーする</div>
-              <textarea id="ダイアログ_棋譜テキスト" readonly></textarea>
               <div id="ダイアログ_フッタ"><a href="https://spelunker2.wordpress.com/2018/09/20/shogitime/" target="_blank">将棋タイム Ver1.3</a></div>
             </div>
           </div>
@@ -1493,8 +1484,8 @@ function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
             continue
         }
         self[name]  = self[name].bind(self)
-        const match = name.match(/^(\$[^_]*)_([^_]+)$/)
-        if(match){
+        const match = name.match(/^(\$.*?)_([^_]+)$/)
+        if(match && match[1]){
             self[match[1]].addEventListener(match[2], self[name])
         }
     }
