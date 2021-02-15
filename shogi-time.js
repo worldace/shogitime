@@ -3,7 +3,7 @@
 class 将棋タイム extends HTMLElement{
 
     async connectedCallback(){
-        benry(this)
+        benry(this, ['kif','start','reverse','myname','controller','comment','graph'])
 
         if(!this.kif.includes('\n')){
             this.kif = await 棋譜.ダウンロード(this.kif)
@@ -33,17 +33,6 @@ class 将棋タイム extends HTMLElement{
             this.$グラフ.remove()
         }
     }
-
-
-    static get observedAttributes(){
-        return ['kif', 'start', 'reverse', 'myname', 'controller', 'comment', 'graph']
-    }
-
-
-    attributeChangedCallback(name, oldValue, newValue){
-        this[name] = newValue
-    }
-
 
 
     $将棋盤_click(event){
@@ -843,19 +832,8 @@ class 将棋タイムグラフ extends HTMLElement{
 
     connectedCallback(){
         this.$本体 = document.querySelector(`shogi-time[graph="${this.id}"]`)
-        benry(this)
+        benry(this, ['width','height'])
     }
-
-
-    static get observedAttributes(){
-        return ['width', 'height']
-    }
-
-
-    attributeChangedCallback(name, oldValue, newValue){
-        this[name] = newValue
-    }
-
 
 
     $グラフ_click(event){
@@ -1471,7 +1449,7 @@ class 棋譜{
 
 
 
-function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
+function benry(self, attr = []){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
     self.$ = self.attachShadow({mode:'open'})
     self.$.innerHTML = self.html || ''
 
@@ -1488,6 +1466,10 @@ function benry(self){ // https://qiita.com/economist/items/6c923c255f6b4b7bbf84
         if(match && self[match[1]]){
             self[match[1]].addEventListener(match[2], self[name])
         }
+    }
+
+    for(const name of attr){
+        self[name] = self.getAttribute(name)
     }
 }
 
