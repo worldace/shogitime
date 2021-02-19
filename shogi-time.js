@@ -148,6 +148,7 @@ class 将棋タイム extends HTMLElement{
                 this.$グラフ.描画(this.評価値, 反転)
             }
 
+            this.toggleAttribute('data-reverse', 反転)
             this.描画_指し手選択()
         }
 
